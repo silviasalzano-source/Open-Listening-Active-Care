@@ -14,7 +14,11 @@ export async function requireRole(allowedRoles: Role[]) {
 
   const role = parseRole(user.app_metadata?.role)
 
-  if (!role || !allowedRoles.includes(role)) {
+  if (!role) {
+    redirect('/login')
+  }
+
+  if (!allowedRoles.includes(role)) {
     redirect('/survey')
   }
 

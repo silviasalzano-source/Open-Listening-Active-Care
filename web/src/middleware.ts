@@ -36,6 +36,10 @@ export async function middleware(request: NextRequest) {
 
   const role = parseRole(user.app_metadata?.role)
 
+  if (!role) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
   if (!isRoleAllowed(request.nextUrl.pathname, role)) {
     return NextResponse.redirect(new URL('/survey', request.url))
   }
