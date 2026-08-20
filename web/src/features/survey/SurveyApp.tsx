@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { step1 } from './data'
 import { buildPhase1Flow } from './flow'
+import { Hud } from './screens/Hud'
 import { IntroScreen } from './screens/IntroScreen'
 import { Q1IntroScreen } from './screens/Q1IntroScreen'
 import { QuestionScreen } from './screens/QuestionScreen'
@@ -28,10 +30,14 @@ export function SurveyApp() {
   }
 
   const step = flow[idx]
+  const answeredCount = [answers.clima, answers.termometro, answers.causa, answers.descrizione].filter(
+    (v) => v !== undefined,
+  ).length
 
   return (
     <div className="survey-page">
       <div className="survey-container">
+        {step.kind !== 'intro' && <Hud answered={answeredCount} total={step1.length} />}
         {step.kind === 'intro' && <IntroScreen onStart={goNext} />}
         {step.kind === 'q1intro' && <Q1IntroScreen variant={step.key} onContinue={goNext} />}
         {step.kind === 'q1' && (
