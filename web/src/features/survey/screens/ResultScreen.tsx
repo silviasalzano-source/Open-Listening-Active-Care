@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { mascotBucket } from '../flow'
-import { EnergyMascot, mascotAnimClass } from '../mascots'
+import { EnergyMascot } from '../mascots'
 import type { Phase1Answers } from '../types'
 
 const BUCKET_PHRASES: Record<string, string> = {
@@ -70,9 +70,7 @@ export function ResultScreen({
       <div className="result-mascot-stage">
         {isLow && <div className="result-calm-glow" />}
         <div className={`result-reveal-mascot${revealed.mascot ? ' show' : ''}`}>
-          <div className={`mascot-wrap ${mascotAnimClass(level)}`}>
-            <EnergyMascot level={level} idPrefix="result" />
-          </div>
+          <EnergyMascot level={level} idPrefix="result" />
         </div>
         {isUplifting &&
           CONFETTI_PIECES.map((piece, i) => (
