@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Open Listening · Active Care — web app
 
-## Getting Started
+Scaffold Next.js (App Router, TypeScript) per il pilota. Vedi
+`../docs/architettura-proposta-pilota.md` per l'architettura completa.
 
-First, run the development server:
+## Setup locale
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. `npm install`
+2. Crea un progetto Supabase gratuito su supabase.com (region UE).
+3. Copia `.env.local.example` in `.env.local` e valorizza
+   `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` da
+   *Project Settings → API* del progetto Supabase.
+4. `npm run dev` e apri `http://localhost:3000`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Test
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`npm run test` (Vitest) — copre la logica pura di controllo accessi
+(`src/lib/auth/routeAccess.ts`) e la validazione delle env Supabase
+(`src/lib/supabase/env.ts`). La sessione Supabase vera e propria (login,
+middleware, pagine server) va verificata manualmente con `npm run dev`,
+perché dipende da un progetto Supabase reale.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Collegare Vercel (azione manuale, non scriptabile da qui)
 
-## Learn More
+1. Su vercel.com, importa il repository GitHub del progetto.
+2. **Root Directory**: imposta `web` (l'app non è alla radice del repo).
+3. Aggiungi le stesse variabili d'ambiente di `.env.local` nelle
+   impostazioni del progetto Vercel (Environment Variables).
+4. Da questo momento, ogni push su `main` fa un deploy di produzione, ogni
+   PR ha una preview automatica — non serve una pipeline custom per questo,
+   lo gestisce l'integrazione nativa Vercel-GitHub.
 
-To learn more about Next.js, take a look at the following resources:
+## Cosa manca ancora (fuori scope di questo scaffold)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Porting del contenuto del prototipo HTML in `/survey`.
+- Metriche reali della dashboard `/admin` (da definire con HR).
+- Schema/migrazioni del database Supabase e relativa pipeline di CD — vedi
+  `docs/architettura-proposta-pilota.md` sezione 6 per il modello dati
+  previsto.
+- Provisioning reale di utenti dipendenti/HR (flusso di invito).
