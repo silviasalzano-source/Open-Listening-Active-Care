@@ -31,7 +31,8 @@ export function QuestionMultiIcon({
     <>
       <div className="options">
         {question.options.map((opt) => (
-          <div
+          <button
+            type="button"
             key={opt.label}
             className={`opt-card${value.includes(opt.label) ? ' selected' : ''}`}
             onClick={() => toggle(opt.label)}
@@ -41,7 +42,7 @@ export function QuestionMultiIcon({
               <b>{opt.label}</b>
             </div>
             <div className="opt-check" />
-          </div>
+          </button>
         ))}
       </div>
       {altroActive && (

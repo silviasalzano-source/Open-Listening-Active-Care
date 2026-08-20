@@ -12,7 +12,8 @@ export function QuestionSingleIcon({
   return (
     <div className="options">
       {question.options.map((opt) => (
-        <div
+        <button
+          type="button"
           key={opt.label}
           className={`opt-card${value === opt.label ? ' selected' : ''}`}
           onClick={() => onAnswer(opt.label)}
@@ -23,7 +24,7 @@ export function QuestionSingleIcon({
             {opt.desc ? <span>{opt.desc}</span> : null}
           </div>
           <div className="opt-check" />
-        </div>
+        </button>
       ))}
     </div>
   )

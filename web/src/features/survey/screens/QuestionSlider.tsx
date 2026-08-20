@@ -26,6 +26,7 @@ export function QuestionSlider({
         max={10}
         value={level}
         onChange={(e) => onAnswer(parseInt(e.target.value, 10))}
+        aria-label={question.title}
       />
       <div className="scale-labels">
         <span>Bassa</span>

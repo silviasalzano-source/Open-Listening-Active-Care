@@ -42,7 +42,7 @@ export function QuestionScreen({
           {question.id === 'descrizione' ? 'ULTIMO ANNO' : 'OGGI'}
         </div>
       </div>
-      <div className="q-title">{question.title}</div>
+      <h2 className="q-title">{question.title}</h2>
       {question.sub ? <div className="q-sub">{question.sub}</div> : null}
 
       {question.type === 'single-icon' && (
