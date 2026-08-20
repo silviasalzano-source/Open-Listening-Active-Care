@@ -66,7 +66,7 @@
 .q-sub { color: var(--ink-dim); font-size: 14px; margin-bottom: 22px; line-height: 1.5; }
 
 .options { display: flex; flex-direction: column; gap: 11px; margin-bottom: 20px; }
-.opt-card { display: flex; align-items: center; gap: 14px; padding: 15px; border-radius: 16px; background: var(--card); border: 1.5px solid var(--card-border); cursor: pointer; transition: all .16s ease; text-align: left; box-shadow: 0 1px 3px rgba(42, 35, 56, 0.04); }
+.opt-card { display: flex; align-items: center; gap: 14px; padding: 15px; border-radius: 16px; background: var(--card); border: 1.5px solid var(--card-border); cursor: pointer; transition: all .16s ease; text-align: left; box-shadow: 0 1px 3px rgba(42, 35, 56, 0.04); font-family: inherit; }
 .opt-card:hover { background: var(--card-hover); transform: translateY(-1px); }
 .opt-card.selected { border-color: var(--coral); background: rgba(255, 110, 134, 0.10); box-shadow: 0 0 0 1.5px var(--coral) inset; }
 .opt-icon { font-size: 25px; width: 38px; text-align: center; flex-shrink: 0; }
