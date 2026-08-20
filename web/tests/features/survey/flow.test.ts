@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { FlowStep } from '../../../src/features/survey/types'
 import { buildPhase1Flow, mascotBucket } from '../../../src/features/survey/flow'
 
 describe('buildPhase1Flow', () => {
@@ -26,7 +27,7 @@ describe('buildPhase1Flow', () => {
   it('orders the four phase-1 questions correctly', () => {
     const flow = buildPhase1Flow()
     const questionIds = flow
-      .filter((s): s is { kind: 'q1'; question: { id: string } } => s.kind === 'q1')
+      .filter((s): s is Extract<FlowStep, { kind: 'q1' }> => s.kind === 'q1')
       .map((s) => s.question.id)
     expect(questionIds).toEqual(['clima', 'termometro', 'causa', 'descrizione'])
   })
