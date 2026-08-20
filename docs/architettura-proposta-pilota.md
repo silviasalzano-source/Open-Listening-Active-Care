@@ -110,8 +110,11 @@ soglie di aggregazione, pseudonimizzazione).
 - **Supabase Auth** con provider **email/password** (nativo, non richiede
   sviluppo custom di hashing/gestione sessioni).
 - Due ruoli: `employee` (compila il survey) e `hr_admin` (accede alla
-  dashboard aggregata). Il ruolo è assegnato tramite una tabella `profiles`
-  collegata all'utente Supabase, non deducibile dalla sola credenziale.
+  dashboard aggregata). Il ruolo è salvato in `app_metadata.role`
+  sull'utente Supabase Auth — impostabile solo lato server tramite l'admin
+  API — non deducibile dalla sola credenziale. Essendo nell'`app_metadata`,
+  il ruolo è leggibile direttamente dal JWT di sessione, il che sarà utile
+  per le future policy RLS (`auth.jwt() -> 'app_metadata' -> 'role'`).
 
 ## 5. Autenticazione (fase pilota): username e password
 

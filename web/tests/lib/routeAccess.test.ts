@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getRequiredRoles, isRoleAllowed } from '../../src/lib/auth/routeAccess'
+import { getRequiredRoles, isRoleAllowed, parseRole } from '../../src/lib/auth/routeAccess'
 
 describe('getRequiredRoles', () => {
   it('returns both roles for /survey routes', () => {
@@ -35,5 +35,27 @@ describe('isRoleAllowed', () => {
   it('denies protected routes when there is no role (unauthenticated)', () => {
     expect(isRoleAllowed('/survey', null)).toBe(false)
     expect(isRoleAllowed('/admin', null)).toBe(false)
+  })
+})
+
+describe('parseRole', () => {
+  it("returns 'employee' for 'employee'", () => {
+    expect(parseRole('employee')).toBe('employee')
+  })
+
+  it("returns 'hr_admin' for 'hr_admin'", () => {
+    expect(parseRole('hr_admin')).toBe('hr_admin')
+  })
+
+  it('returns null for an unrecognized string', () => {
+    expect(parseRole('manager')).toBeNull()
+  })
+
+  it('returns null for undefined', () => {
+    expect(parseRole(undefined)).toBeNull()
+  })
+
+  it('returns null for null', () => {
+    expect(parseRole(null)).toBeNull()
   })
 })

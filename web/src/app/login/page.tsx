@@ -14,19 +14,23 @@ export default function LoginPage() {
     event.preventDefault()
     setError(null)
 
-    const supabase = createClient()
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    try {
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-    if (signInError) {
-      setError('Email o password non corrette.')
-      return
+      if (signInError) {
+        setError('Email o password non corrette.')
+        return
+      }
+
+      router.push('/survey')
+      router.refresh()
+    } catch {
+      setError('Errore di configurazione o di rete. Riprova più tardi.')
     }
-
-    router.push('/survey')
-    router.refresh()
   }
 
   return (

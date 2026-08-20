@@ -1,10 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
+import { requireRole } from '@/lib/auth/requireRole'
 
 export default async function AdminDashboardPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user } = await requireRole(['hr_admin'])
 
   return (
     <main>
@@ -13,7 +10,7 @@ export default async function AdminDashboardPage() {
         Placeholder — le metriche mostrate qui saranno definite
         funzionalmente in una fase successiva con HR.
       </p>
-      <p>Accesso effettuato come: {user?.email}</p>
+      <p>Accesso effettuato come: {user.email}</p>
     </main>
   )
 }

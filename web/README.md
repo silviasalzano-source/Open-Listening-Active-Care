@@ -38,3 +38,8 @@ perché dipende da un progetto Supabase reale.
   `docs/architettura-proposta-pilota.md` sezione 6 per il modello dati
   previsto.
 - Provisioning reale di utenti dipendenti/HR (flusso di invito).
+- Migrazione da `middleware.ts` a `proxy.ts`: Next.js ha deprecato la
+  convenzione `middleware.ts` a favore di `proxy.ts` (stessa logica, nome
+  diverso). Nella versione di Next.js attualmente usata funziona ancora, ma
+  va migrata prima di aggiornare alla major che rimuove la vecchia
+  convenzione.
