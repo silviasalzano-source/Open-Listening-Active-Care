@@ -9,9 +9,12 @@
 
 Si propone un'architettura a 3 livelli (frontend / backend / database) ospitata
 sui tier gratuiti di **Vercel** (frontend + backend) e **Supabase**
-(database Postgres + autenticazione), con login Google aziendale obbligatorio
-sia per i dipendenti che compilano il survey sia per l'accesso HR alla
-dashboard dei risultati.
+(database Postgres + autenticazione), con accesso protetto sia per i
+dipendenti che compilano il survey sia per l'HR che consulta la dashboard
+dei risultati. **Per la fase pilota**, la protezione è realizzata con
+**coppie username/password** (non login Google) per entrambi i profili; il
+login Google aziendale resta un'evoluzione possibile per una fase successiva
+(vedi sezione 9).
 
 Il punto chiave dell'architettura è la **separazione tecnica** — non solo
 applicativa — tra i dati della fase nominativa ("My Energy Battery") e quelli
@@ -29,7 +32,9 @@ resta necessaria prima di qualunque raccolta dati reale.
 - Aggiungere un backend e un database persistente (il prototipo attuale non
   salva nulla, gira solo lato client).
 - Proteggere sia il frontend (login dipendenti) sia il backend/dashboard
-  (accesso HR) con **autenticazione Google account aziendale**.
+  (accesso HR) con autenticazione. **Per la fase pilota**: username/password
+  (sezione 5); il login Google account aziendale, valutato inizialmente, resta
+  un'evoluzione per una fase successiva.
 - Rispettare i vincoli già emersi nel progetto (vedi `CLAUDE.md`, sezione 7):
   dati nominativi + benessere = dati sensibili; i manager non devono accedere
   ai dati individuali; soglia minima di anonimato di 5 risposte per segmento
@@ -51,19 +56,14 @@ flowchart LR
     end
 
     subgraph Supabase["Supabase (free tier)"]
-        AUTH["Supabase Auth\n(Google OAuth)"]
+        AUTH["Supabase Auth\n(email/password)"]
         DB[("Postgres\ncon Row Level Security")]
     end
 
-    subgraph Google["Google Cloud / Workspace"]
-        GAUTH["OAuth Consent Screen\n(Internal, dominio aziendale)"]
-    end
-
-    FE -- "1. login Google" --> AUTH
-    AUTH -- "verifica dominio" --> GAUTH
+    FE -- "1. login username/password" --> AUTH
     FE -- "2. richieste API (JWT Supabase)" --> API
     API -- "3. query con RLS" --> DB
-    HR["Browser HR/Admin"] -- "login Google + dashboard" --> FE
+    HR["Browser HR/Admin"] -- "login username/password + dashboard" --> FE
 ```
 
 **Nota sul "backend":** con Next.js su Vercel, frontend e backend condividono
@@ -79,8 +79,16 @@ soglie di aggregazione, pseudonimizzazione).
 - Riprende UI/UX già validate nel prototipo (mascotte SVG, flow domande a
   capitoli, temi caldo/freddo) — porting del markup/CSS/JS esistente in
   componenti React, senza cambiare l'esperienza utente già approvata.
-- Due aree: **survey** (dipendenti, dietro login Google) e **dashboard HR**
-  (dietro login Google con ruolo admin).
+- Due aree distinte, entrambe dietro login username/password (fase pilota):
+  - **Survey** (dipendenti): il flow già validato nel prototipo.
+  - **Dashboard HR** (ruolo `hr_admin`): nuova area amministrativa, non
+    presente nel prototipo attuale, che mostra le metriche calcolate sui
+    dati persistiti a database. Le metriche puntuali (es. andamento clima
+    per reparto, distribuzione risposte per capitolo, trend nel tempo) sono
+    **da definire funzionalmente in un secondo momento** con HR; questa
+    proposta si limita a garantire che l'architettura sottostante (viste
+    aggregate con soglia minima, sezione 6) sia pronta a supportarle senza
+    richiedere modifiche strutturali quando le metriche saranno definite.
 
 ### Backend
 - **API routes** Next.js (funzioni serverless su Vercel).
@@ -99,43 +107,47 @@ soglie di aggregazione, pseudonimizzazione).
   può leggere cosa (vedi sezione 6).
 
 ### Autenticazione
-- **Supabase Auth** con provider **Google OAuth**.
+- **Supabase Auth** con provider **email/password** (nativo, non richiede
+  sviluppo custom di hashing/gestione sessioni).
 - Due ruoli: `employee` (compila il survey) e `hr_admin` (accede alla
   dashboard aggregata). Il ruolo è assegnato tramite una tabella `profiles`
-  collegata all'utente Supabase, non deducibile dal solo login Google.
+  collegata all'utente Supabase, non deducibile dalla sola credenziale.
 
-## 5. Autenticazione Google aziendale
+## 5. Autenticazione (fase pilota): username e password
 
-Due flussi distinti, entrambi passano da Google OAuth ma con scopi diversi:
+Per il pilota si usa **Supabase Auth con provider email/password**, per
+entrambi i profili:
 
-1. **Login dipendente**: il dipendente apre il link del survey, fa login con
-   il proprio account Google aziendale, e questo identifica la sua sessione
-   per la fase nominativa. Sostituisce il campo Nome/Cognome inserito
-   manualmente nel modal "Prima di iniziare" del prototipo attuale.
-2. **Login HR/Admin**: l'HR accede alla dashboard con lo stesso meccanismo di
-   login Google, ma con un ruolo `hr_admin` che dà accesso solo a viste
-   aggregate (mai a risposte individuali — vedi sezione 6).
+1. **Dipendenti**: l'account (email aziendale + password) identifica la
+   sessione per la fase nominativa. Sostituisce il campo Nome/Cognome
+   inserito manualmente nel modal "Prima di iniziare" del prototipo attuale.
+2. **HR/Admin**: stesso meccanismo, ma con ruolo `hr_admin` che dà accesso
+   solo alla dashboard e solo a viste aggregate (mai a risposte individuali
+   — vedi sezione 6).
 
-**Restrizione al dominio aziendale.** Il modo più robusto per garantire che
-*solo* account del dominio aziendale possano autenticarsi è configurare il
-progetto OAuth su Google Cloud Console come **tipo "Interno" (Internal)**,
-opzione disponibile solo se il progetto è associato al Google Workspace
-dell'azienda cliente: in questo caso Google stesso impedisce il login ad
-account esterni al dominio, prima ancora che la richiesta arrivi alla nostra
-app. Questo richiede che l'app OAuth sia creata **dentro** l'organizzazione
-Google Workspace del cliente (non nel nostro account personale), quindi:
+**Provisioning consigliato: invito via link, non password precompilate.**
+Anziché generare e distribuire password temporanee (rischio di trasmissione
+insicura, es. fogli Excel condivisi), si consiglia di usare la funzione di
+**invito** di Supabase Auth: per ogni dipendente/HR si crea l'utente a
+partire dalla sua email aziendale, Supabase invia un link sicuro con cui la
+persona imposta autonomamente la propria password al primo accesso. In
+questo modo nessuno — nemmeno chi fa il provisioning — conosce mai la
+password dell'altro.
 
-> **Prerequisito bloccante**: serve coinvolgere l'IT del cliente per creare
-> (o darci accesso a) un progetto Google Cloud legato al loro Workspace, con
-> consent screen di tipo Internal. È stato segnalato come "da verificare
-> successivamente" — va tracciato come dipendenza prima di iniziare
-> l'implementazione dell'autenticazione.
+**Limiti rispetto a una SSO aziendale**, da tenere presente e da segnalare
+al cliente:
+- Non essendoci un provider di identità aziendale a monte, non c'è modo
+  tecnico di impedire la condivisione di credenziali tra colleghi (con
+  Google SSO l'identità è verificata dal provider aziendale stesso).
+- Nessuna MFA nativa nel piano free di Supabase Auth per email/password
+  (disponibile solo nei piani a pagamento) — accettabile per un pilota a
+  basso rischio, da rivalutare se si estende la platea.
+- Va comunque imposta una policy minima di robustezza password (lunghezza
+  minima, niente password ovvie) configurabile lato Supabase Auth.
 
-In assenza di questo accesso, come fallback temporaneo si può restringere il
-dominio a livello applicativo (verifica del claim `hd` — hosted domain — nel
-token Google, rifiutando lato backend i login con dominio diverso), ma è una
-protezione più debole (aggirabile con più difficoltà ma non impossibile senza
-il controllo Google-side) e va usata solo come misura ponte.
+Questa scelta **rimuove per il pilota** la dipendenza dall'accesso a Google
+Workspace/Cloud Console del cliente, semplificando l'avvio: non serve alcun
+coinvolgimento dell'IT aziendale per l'autenticazione in questa fase.
 
 ## 6. Modello dati e privacy by design
 
@@ -151,7 +163,7 @@ erDiagram
 
     USERS {
         uuid id PK
-        text google_email
+        text email
         text role
     }
     NOMINATIVE_RESPONSES {
@@ -179,7 +191,8 @@ erDiagram
   prototipo), il backend genera uno **pseudonym_id** non riconducibile
   direttamente all'utente nelle query ordinarie.
 - Le risposte della fase 2 (`anonymous_responses`) sono scritte usando solo
-  lo pseudonym_id: nessuna riga di questa tabella contiene l'identità Google.
+  lo pseudonym_id: nessuna riga di questa tabella contiene l'identità
+  dell'utente (email/account).
 - La tabella `anonymous_tokens`, che collega `user_id` a `pseudonym_id`,
   serve **solo** per scopi di audit (es. verificare che ogni dipendente
   abbia completato il survey una sola volta) ed è protetta da una RLS che la
@@ -245,14 +258,28 @@ definitivo). Per limitare il lock-in:
 - Il punto di maggior lock-in è **Supabase Auth**: se si cambia provider di
   identità in futuro, va previsto uno sforzo di migrazione utenti (export
   email + remapping ruoli), da mettere in conto se si cambia stack.
+- **Evoluzione dell'autenticazione**: se il pilota ha successo e si passa a
+  una popolazione più ampia, il login Google aziendale (valutato inizialmente
+  e poi accantonato per il pilota, sezione 5) resta un'evoluzione naturale:
+  identità verificata dal Workspace del cliente, niente password da
+  gestire, MFA ereditata dalle policy aziendali Google. Supabase Auth
+  supporta l'aggiunta del provider Google in un secondo momento senza
+  cambiare lo schema dati (basta collegare gli utenti esistenti al nuovo
+  provider tramite l'email, già usata come identificatore).
 
 ## 10. Rischi e punti aperti
 
-- **Bloccante**: accesso admin al Google Workspace/Cloud Console del cliente
-  per configurare l'OAuth consent screen di tipo Internal (sezione 5) — da
-  verificare con l'IT aziendale prima di iniziare l'implementazione
-  dell'autenticazione.
+- Autenticazione username/password senza SSO aziendale: nessuna garanzia
+  tecnica contro la condivisione di credenziali tra colleghi, nessuna MFA nel
+  piano free (sezione 5) — rischio accettabile per un pilota a basso rischio,
+  da segnalare esplicitamente al cliente come trade-off della scelta.
+  Provisioning consigliato via invito-email per evitare la trasmissione
+  insicura di password temporanee.
 - Validazione DPO non ancora effettuata (sezione 8).
+- Le metriche della dashboard HR (sezione 4) non sono ancora definite dal
+  punto di vista funzionale: l'architettura è pronta a supportarle (viste
+  aggregate con soglia minima), ma vanno scoping con HR prima di poterle
+  implementare.
 - Le liste BU/CDC e fasce di anzianità (domande `bu`/`anzianita` in
   `step2`) restano da confermare col cliente, indipendentemente
   dall'architettura (già annotato in `CLAUDE.md`).
@@ -262,9 +289,10 @@ definitivo). Per limitare il lock-in:
 
 ## 11. Prossimi passi proposti
 
-1. Validare questa proposta con il cliente (architettura + hosting scelto).
-2. Aprire il ticket con l'IT del cliente per l'accesso Google Workspace/Cloud
-   Console (dipendenza bloccante per l'auth).
-3. Avviare in parallelo la validazione DPO sul trattamento dati.
-4. Solo dopo 1–3: iniziare l'implementazione (porting del prototipo a
-   Next.js, schema database, integrazione auth).
+1. Validare questa proposta con il cliente (architettura + hosting scelto,
+   scelta di username/password per il pilota).
+2. Avviare in parallelo la validazione DPO sul trattamento dati.
+3. Definire con HR l'elenco delle metriche da mostrare in dashboard (scoping
+   funzionale, indipendente dall'architettura sottostante).
+4. Solo dopo 1–2: iniziare l'implementazione (porting del prototipo a
+   Next.js, schema database, integrazione auth username/password).
