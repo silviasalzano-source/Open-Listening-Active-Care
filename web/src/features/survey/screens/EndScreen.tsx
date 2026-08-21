@@ -51,7 +51,7 @@ export function EndScreen() {
         <span className="confetti-piece" style={{ left: '94%', animationDelay: '0.6s' }}>⭐</span>
       </div>
       <div className="end-badge">100%</div>
-      <h1>Completato!</h1>
+      <h1>Completato ♥</h1>
     </div>
   )
 }
