@@ -134,7 +134,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .result-title-brand { font-family: var(--font-fredoka), sans-serif; font-weight: 700; font-size: 24px; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .result-card { background: var(--card); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 18px 18px; max-width: 330px; text-align: left; }
 .result-card p { font-size: 14.5px; line-height: 1.65; color: var(--ink); margin: 0 0 8px; }
-.result-card strong { background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
+.result-card strong,
+.end-message strong { background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
 .result-card p:last-child { margin-bottom: 0; }
 .result-screen .btn { margin-top: 4px; }
 .result-reveal { opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .45s ease; }
