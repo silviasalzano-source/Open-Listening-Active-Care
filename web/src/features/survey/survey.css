@@ -214,10 +214,13 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 /* ── End screen ─────────────────────────────────────────────────────────── */
 .end { justify-content: center; align-items: center; text-align: center; min-height: 82vh; gap: 16px; }
 .end h1 { font-size: 26px; }
-.end-stage { position: relative; width: 220px; height: 170px; margin: 0 auto; }
+.end-stage { position: relative; width: 330px; height: 170px; margin: 0 auto; max-width: 100%; }
 .end-hr-duo { width: 100%; height: 100%; overflow: visible; }
 .end-figure { animation: endBounce 1.4s ease-in-out infinite; transform-origin: center bottom; }
 .end-figure-b { animation-delay: 0.25s; }
+.end-figure-c { animation-delay: 0.12s; }
+.end-wave { animation: endWave 0.7s ease-in-out infinite; transform-origin: 188px 76px; }
+@keyframes endWave { 0%,100% { transform: rotate(-18deg); } 50% { transform: rotate(18deg); } }
 @keyframes endBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 .end-thumb { animation: endThumb 1.1s ease-in-out infinite; transform-origin: center; }
 @keyframes endThumb { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-6deg); } }

@@ -4,8 +4,10 @@ export function EndScreen() {
       {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset */}
       <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" />
       <div className="end-stage">
-        <svg className="end-hr-duo" viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="110" cy="160" rx="90" ry="8" fill="rgba(42,35,56,0.06)" />
+        <svg className="end-hr-duo" viewBox="0 0 330 170" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="165" cy="160" rx="145" ry="8" fill="rgba(42,35,56,0.06)" />
+
+          {/* Figure A — sinistra, bionda, maglia corallo, pollice su */}
           <g className="end-figure end-figure-a">
             <rect x="38" y="120" width="10" height="34" rx="3" fill="#2A2338" />
             <rect x="58" y="120" width="10" height="34" rx="3" fill="#2A2338" />
@@ -24,22 +26,46 @@ export function EndScreen() {
               <rect x="5" y="36" width="6" height="14" rx="3" fill="#FCD9A0" />
             </g>
           </g>
-          <g className="end-figure end-figure-b">
-            <rect x="150" y="120" width="10" height="34" rx="3" fill="#2A2338" />
-            <rect x="170" y="120" width="10" height="34" rx="3" fill="#2A2338" />
-            <rect x="142" y="66" width="46" height="60" rx="16" fill="#17B8A6" />
+
+          {/* Figure C — centro, capelli corti grigi, maglia viola, saluto */}
+          <g className="end-figure end-figure-c">
+            <rect x="155" y="120" width="10" height="34" rx="3" fill="#2A2338" />
+            <rect x="175" y="120" width="10" height="34" rx="3" fill="#2A2338" />
+            <rect x="142" y="66" width="46" height="60" rx="16" fill="#9575CD" />
             <rect x="154" y="86" width="22" height="14" rx="3" fill="#fff" />
             <text x="165" y="97" fontSize="9" fontWeight="700" textAnchor="middle" fill="#2A2338" fontFamily="Fredoka, sans-serif">HR</text>
             <circle cx="165" cy="46" r="20" fill="#FCD9A0" />
-            <path d="M145,44 Q145,20 165,20 Q185,20 185,44 Q182,30 165,30 Q148,30 145,44Z" fill="#5B3A29" />
-            <path d="M143,40 Q140,60 148,70" fill="none" stroke="#5B3A29" strokeWidth="8" strokeLinecap="round" />
-            <path d="M187,40 Q190,60 182,70" fill="none" stroke="#5B3A29" strokeWidth="8" strokeLinecap="round" />
+            {/* Capelli corti e grigi — solo calotta, senza ciocche laterali lunghe */}
+            <path d="M145,44 Q145,26 165,26 Q185,26 185,44 Q182,32 165,32 Q148,32 145,44Z" fill="#9E9E9E" />
+            <path d="M143,40 Q141,52 147,60" fill="none" stroke="#9E9E9E" strokeWidth="7" strokeLinecap="round" />
+            <path d="M187,40 Q189,52 183,60" fill="none" stroke="#9E9E9E" strokeWidth="7" strokeLinecap="round" />
             <circle cx="158" cy="48" r="2.4" fill="#2A2338" /><circle cx="172" cy="48" r="2.4" fill="#2A2338" />
-            <path d="M158,56 Q165,61 172,56" fill="none" stroke="#2A2338" strokeWidth="2.2" strokeLinecap="round" />
+            <path d="M158,56 Q165,62 172,56" fill="none" stroke="#2A2338" strokeWidth="2.2" strokeLinecap="round" />
+            {/* Braccio che saluta */}
+            <g className="end-wave">
+              <path d="M188,76 Q206,56 200,38" fill="none" stroke="#9575CD" strokeWidth="10" strokeLinecap="round" />
+              <circle cx="199" cy="34" r="7" fill="#FCD9A0" />
+              <rect x="195" y="22" width="6" height="14" rx="3" fill="#FCD9A0" />
+            </g>
+          </g>
+
+          {/* Figure B — destra, capelli castani, maglia teal, pollice su */}
+          <g className="end-figure end-figure-b">
+            <rect x="262" y="120" width="10" height="34" rx="3" fill="#2A2338" />
+            <rect x="282" y="120" width="10" height="34" rx="3" fill="#2A2338" />
+            <rect x="254" y="66" width="46" height="60" rx="16" fill="#17B8A6" />
+            <rect x="266" y="86" width="22" height="14" rx="3" fill="#fff" />
+            <text x="277" y="97" fontSize="9" fontWeight="700" textAnchor="middle" fill="#2A2338" fontFamily="Fredoka, sans-serif">HR</text>
+            <circle cx="277" cy="46" r="20" fill="#FCD9A0" />
+            <path d="M257,44 Q257,20 277,20 Q297,20 297,44 Q294,30 277,30 Q260,30 257,44Z" fill="#5B3A29" />
+            <path d="M255,40 Q252,60 260,70" fill="none" stroke="#5B3A29" strokeWidth="8" strokeLinecap="round" />
+            <path d="M299,40 Q302,60 294,70" fill="none" stroke="#5B3A29" strokeWidth="8" strokeLinecap="round" />
+            <circle cx="270" cy="48" r="2.4" fill="#2A2338" /><circle cx="284" cy="48" r="2.4" fill="#2A2338" />
+            <path d="M270,56 Q277,61 284,56" fill="none" stroke="#2A2338" strokeWidth="2.2" strokeLinecap="round" />
             <g className="end-thumb" style={{ animationDelay: '0.2s' }}>
-              <path d="M186,78 Q202,70 206,52" fill="none" stroke="#17B8A6" strokeWidth="10" strokeLinecap="round" />
-              <circle cx="207" cy="48" r="7" fill="#FCD9A0" />
-              <rect x="203" y="36" width="6" height="14" rx="3" fill="#FCD9A0" />
+              <path d="M298,78 Q314,70 318,52" fill="none" stroke="#17B8A6" strokeWidth="10" strokeLinecap="round" />
+              <circle cx="319" cy="48" r="7" fill="#FCD9A0" />
+              <rect x="315" y="36" width="6" height="14" rx="3" fill="#FCD9A0" />
             </g>
           </g>
         </svg>
