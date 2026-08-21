@@ -52,7 +52,7 @@
 .intro h1 span { background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .intro p { color: var(--ink-dim); font-size: 15px; line-height: 1.55; max-width: 340px; }
 .intro p span { font-weight: 700; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.intro-logo { width: 110px; opacity: 0.9; margin-bottom: 6px; }
+.intro-logo { width: 150px; opacity: 0.9; margin-bottom: 6px; }
 .battery-hero { width: 108px; height: 180px; border: 5px solid rgba(42, 35, 56, 0.5); border-radius: 22px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 7px; background: rgba(42, 35, 56, 0.03); }
 .battery-hero::after { content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 40px; height: 12px; background: rgba(42, 35, 56, 0.5); border-radius: 6px 6px 0 0; }
 .battery-hero-fill { width: 100%; height: 14%; border-radius: 12px; background: linear-gradient(180deg, var(--coral), var(--amber)); animation: pulseFill 2.4s ease-in-out infinite alternate; }

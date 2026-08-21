@@ -2,7 +2,8 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
   return (
     <div className="survey-screen intro">
       {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
-      <img src="/ot-logo.png" alt="OT Consulting" className="intro-logo" />
+      {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
+      <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" />
       <div className="intro-badge">Open Listening · Active Care</div>
       <div className="battery-hero">
         <div className="battery-hero-fill" />
