@@ -216,7 +216,7 @@ function chapterMascotSvgMarkup(type: MascotType): string {
       <circle cx="96" cy="60" r="4.5" fill="var(--teal,#17B8A6)"/>
       <line x1="172" y1="20" x2="172" y2="4" stroke="#2A2338" stroke-width="3"/>
       <polygon points="172,4 192,10 172,16" fill="var(--magenta,#FF3D8A)"/>
-      <g class="chm-walk-a" transform="translate(14,112)">
+      <g class="chm-walk-a" transform="translate(14,126)">
         <rect x="0" y="0" width="34" height="40" rx="12" fill="hsl(150,60%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="3.5"/>
         <rect x="10" y="-10" width="14" height="12" rx="4" fill="var(--teal,#17B8A6)"/>
         <circle cx="10" cy="18" r="4" fill="#2A2338"/><circle cx="24" cy="18" r="4" fill="#2A2338"/>
