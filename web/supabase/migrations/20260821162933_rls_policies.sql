@@ -161,5 +161,9 @@ using (
   exists (select 1 from public.submissions s where s.id = submission_id and s.user_id = auth.uid())
 );
 
+-- Revoke INSERT/UPDATE/DELETE to keep SELECT (used by nominative_responses_history_select_own)
+-- but ensure only the SECURITY DEFINER trigger from Task 4 can ever write history rows
+revoke insert, update, delete on public.nominative_responses_history from anon, authenticated;
+
 -- anonymous_tokens e anonymous_responses: nessuna policy per authenticated/anon
 -- (vedi commento in testa al file) — solo service_role vi accede.

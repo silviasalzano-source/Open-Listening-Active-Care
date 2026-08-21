@@ -17,9 +17,8 @@ Scaffold Next.js (App Router, TypeScript) per il pilota. Vedi
 `npm run test` (Vitest) — copre la logica pura di controllo accessi
 (`src/lib/auth/routeAccess.ts`), la validazione delle env Supabase
 (`src/lib/supabase/env.ts`) e la logica di apertura/chiusura delle finestre
-di campagna (`src/lib/campaigns/windows.ts`). La sessione Supabase vera e
-propria (login,
-middleware, pagine server) va verificata manualmente con `npm run dev`,
+di campagna (`src/lib/campaigns/windows.ts`). La sessione Supabase vera e propria
+(login, middleware, pagine server) va verificata manualmente con `npm run dev`,
 perché dipende da un progetto Supabase reale.
 
 ## Migrazioni database
