@@ -1,4 +1,93 @@
-import type { Phase1Question } from './types'
+import type { Phase1Question, Phase2Question, ChapterKey, ChapterDef, MascotType } from './types'
+
+export const chapters: Record<ChapterKey, ChapterDef & { mascot: MascotType }> = {
+  profilo: { mascot: 'commute', title: 'Area e ruolo', desc: 'Qualche informazione di contesto su di te.' },
+  relazioni: { mascot: 'talk', title: 'Le tue relazioni sul lavoro', desc: 'Colleghi, referente diretto, HR e management.' },
+  crescita: { mascot: 'growth', title: 'Autonomia e crescita', desc: 'Come lavori ogni giorno e dove ti porta il tuo percorso.' },
+  valori: { mascot: 'tech', title: 'Tecnologia e Valori', desc: "Qual è la tua percezione del ruolo di OT in questi ambiti?" },
+  energia2: { mascot: 'flow', title: 'Carico ed energia', desc: 'Sostenibilità del lavoro e possibilità di recupero.' },
+  riflessione: { mascot: 'timeline', title: 'Prospettive', desc: 'Desideriamo conoscere ancora qualcos\'altro…' },
+  chiusura: { mascot: 'finish', title: 'Ultimo step', desc: '' },
+}
+
+type Step2Item = Phase2Question & { chapter: ChapterKey | null }
+
+export const step2: Step2Item[] = [
+  {
+    id: 'bu',
+    chapter: 'profilo',
+    type: 'single',
+    title: 'La tua area di appartenenza',
+    sub: 'BU / CDC principale',
+    options: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Amministrazione', 'Servizi Generali'],
+  },
+  {
+    id: 'anzianita',
+    chapter: null,
+    type: 'single',
+    title: 'Da quanto tempo sei in azienda?',
+    options: ['< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni'],
+  },
+  {
+    id: 'ruolo',
+    chapter: null,
+    type: 'single',
+    title: 'Il tuo ruolo',
+    options: ['Manager', 'Worker'],
+  },
+  { id: 'relazioni_q', chapter: 'relazioni', type: 'likert5', title: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive' },
+  { id: 'referente_crescita', chapter: null, type: 'likert5', title: 'Il/la mio/a diretto referente mi supporta nella mia crescita professionale' },
+  { id: 'referente_obiettivi', chapter: null, type: 'likert5', title: 'Il/la mio/a diretto referente dà obiettivi strutturati' },
+  { id: 'hr_access', chapter: null, type: 'likert5', title: "L'HR è un punto di riferimento accessibile e disponibile quando ne ho bisogno" },
+  { id: 'hr_valore', chapter: null, type: 'likert5', title: "Riconosco un valore reale nel supporto che l'HR mi offre" },
+  { id: 'mgmt_trasp', chapter: null, type: 'likert5', title: 'Il management aziendale comunica in modo trasparente la strategia e le priorità' },
+  { id: 'mgmt_fiducia', chapter: null, type: 'likert5', title: 'Ho fiducia nelle scelte strategiche del management' },
+  { id: 'jc_task', chapter: 'crescita', type: 'likert5', title: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti' },
+  { id: 'jc_schemi', chapter: null, type: 'likert5', title: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard nel mio lavoro' },
+  { id: 'sv_crescita', chapter: null, type: 'likert5', title: 'Sto crescendo professionalmente grazie al mio percorso in azienda' },
+  { id: 'sv_investimento', chapter: null, type: 'likert5', title: "Percepisco che l'azienda investe concretamente su di me e sul mio futuro professionale" },
+  { id: 'engagement', chapter: 'valori', type: 'likert5', title: 'Mi identifico nei valori e nel modo di lavorare di OT' },
+  { id: 'tecnologia', chapter: null, type: 'likert5', title: "OT investe in modo adeguato nell'innovazione tecnologica" },
+  { id: 'stress_carico', chapter: 'energia2', type: 'likert5', title: 'Il carico di lavoro che gestisco quotidianamente è sostenibile' },
+  { id: 'stress_recupero', chapter: null, type: 'likert5', title: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero' },
+  {
+    id: 'priorita',
+    chapter: 'riflessione',
+    type: 'multi',
+    max: 3,
+    title: 'Cosa vorresti cambiare per incrementare la tua soddisfazione lavorativa?',
+    sub: 'Scegli fino a 3 opzioni',
+    options: [
+      'Costruire ottime relazioni con i colleghi in un ambiente più accogliente',
+      'Avere obiettivi SMART stabiliti con il/la responsabile',
+      'Avere un ottimo rapporto con il mio responsabile',
+      'Ottenere feedback da responsabili e/o colleghi per migliorare',
+      'Avere formazione ad hoc per il mio percorso',
+      'Avere una crescita professionale',
+      'Avere maggiore inclusione e rispetto delle mie unicità',
+      'Altro',
+    ],
+    hasInputOn: 'Altro',
+  },
+  {
+    id: 'open_listening',
+    chapter: null,
+    type: 'likert5',
+    optional: true,
+    alert: 'Rispondi solo se hai partecipato alla sessione di Open Listening 2025',
+    scaleLabels: ['Molto insoddisfacente', 'Molto soddisfacente'],
+    title: "Rispetto all'ultimo Open Listening, sono state messe in atto azioni concrete?",
+    sub: '',
+  },
+  { id: 'soddisfazione', chapter: 'chiusura', type: 'likert5', title: 'Il lavoro che svolgo ogni giorno mi appassiona' },
+  {
+    id: 'nps',
+    chapter: null,
+    type: 'nps',
+    title: 'Quanto raccomanderesti OT come un buon posto di lavoro?',
+    sub: 'A un amico, familiare o ex collega — da 0 a 10',
+  },
+]
 
 export const step1: Phase1Question[] = [
   {
