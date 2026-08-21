@@ -126,3 +126,150 @@ export function Q1IntroMascot({ variant }: { variant: 'team' | 'anno' }) {
     <div className="q1intro-mascot" dangerouslySetInnerHTML={{ __html: q1IntroMascotSvgMarkup(variant) }} />
   )
 }
+
+import type { MascotType } from './types'
+
+function chapterMascotSvgMarkup(type: MascotType): string {
+  if (type === 'commute') {
+    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+      <g class="chm-walk-a">
+        <rect x="26" y="46" width="52" height="66" rx="16" fill="hsl(340,70%,93%)" stroke="hsl(340,60%,55%)" stroke-width="4"/>
+        <rect x="42" y="34" width="20" height="16" rx="5" fill="hsl(340,60%,55%)"/>
+        <path d="M40,64 Q31,58 34,50" fill="none" stroke="hsl(340,60%,45%)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="42" cy="72" r="4.5" fill="#2A2338"/><circle cx="62" cy="72" r="4.5" fill="#2A2338"/>
+        <path d="M42,86 Q52,94 62,86" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+        <rect x="34" y="108" width="10" height="26" rx="3" fill="hsl(340,60%,55%)"/>
+        <rect x="60" y="108" width="10" height="26" rx="3" fill="hsl(340,60%,45%)"/>
+        <rect x="18" y="86" width="16" height="14" rx="3" fill="#8B5E34"/>
+      </g>
+      <g class="chm-walk-b">
+        <rect x="142" y="50" width="52" height="62" rx="16" fill="hsl(195,70%,93%)" stroke="hsl(195,60%,50%)" stroke-width="4"/>
+        <rect x="158" y="38" width="20" height="16" rx="5" fill="hsl(195,60%,50%)"/>
+        <circle cx="158" cy="76" r="4.5" fill="#2A2338"/><circle cx="178" cy="76" r="4.5" fill="#2A2338"/>
+        <path d="M158,90 Q168,98 178,90" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+        <rect x="150" y="108" width="10" height="26" rx="3" fill="hsl(195,60%,50%)"/>
+        <rect x="176" y="108" width="10" height="26" rx="3" fill="hsl(195,60%,40%)"/>
+        <rect x="194" y="90" width="16" height="14" rx="3" fill="#8B5E34"/>
+      </g>
+    </svg>`
+  }
+  if (type === 'talk') {
+    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="66" width="46" height="58" rx="14" fill="hsl(28,80%,92%)" stroke="hsl(28,70%,55%)" stroke-width="4"/>
+      <circle cx="34" cy="92" r="4" fill="#2A2338"/><circle cx="52" cy="92" r="4" fill="#2A2338"/>
+      <path d="M34,104 Q43,109 52,104" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="154" y="66" width="46" height="58" rx="14" fill="hsl(210,80%,93%)" stroke="hsl(210,60%,55%)" stroke-width="4"/>
+      <circle cx="168" cy="92" r="4" fill="#2A2338"/><circle cx="186" cy="92" r="4" fill="#2A2338"/>
+      <path d="M168,104 Q177,109 186,104" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="82" y="34" width="56" height="70" rx="18" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
+      <rect x="102" y="20" width="16" height="16" rx="5" fill="var(--teal,#17B8A6)"/>
+      <circle cx="98" cy="64" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="98" cy="64" r="3" fill="#2A2338"/>
+      <circle cx="122" cy="64" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="122" cy="64" r="3" fill="#2A2338"/>
+      <path d="M100,82 Q110,90 120,82" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+      <g class="chm-bubble"><ellipse cx="46" cy="46" rx="16" ry="12" fill="#fff" stroke="#2A2338" stroke-width="2"/><text x="46" y="50" font-size="13" text-anchor="middle">···</text></g>
+      <g class="chm-bubble" style="animation-delay:0.4s"><ellipse cx="176" cy="46" rx="16" ry="12" fill="#fff" stroke="#2A2338" stroke-width="2"/><text x="176" y="50" font-size="13" text-anchor="middle">!</text></g>
+    </svg>`
+  }
+  if (type === 'growth') {
+    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20,132 Q55,118 58,94 Q60,70 96,60 Q132,50 138,30 Q142,18 172,20" fill="none" stroke="hsl(255,15%,85%)" stroke-width="14" stroke-linecap="round"/>
+      <path class="chm-road-dash" d="M20,132 Q55,118 58,94 Q60,70 96,60 Q132,50 138,30 Q142,18 172,20" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 10"/>
+      <circle cx="58" cy="94" r="4.5" fill="var(--teal,#17B8A6)"/>
+      <circle cx="96" cy="60" r="4.5" fill="var(--teal,#17B8A6)"/>
+      <line x1="172" y1="20" x2="172" y2="4" stroke="#2A2338" stroke-width="3"/>
+      <polygon points="172,4 192,10 172,16" fill="var(--magenta,#FF3D8A)"/>
+      <g class="chm-walk-a" transform="translate(14,100)">
+        <rect x="0" y="0" width="34" height="40" rx="12" fill="hsl(150,60%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="3.5"/>
+        <rect x="10" y="-10" width="14" height="12" rx="4" fill="var(--teal,#17B8A6)"/>
+        <circle cx="10" cy="18" r="4" fill="#2A2338"/><circle cx="24" cy="18" r="4" fill="#2A2338"/>
+        <path d="M10,28 Q17,33 24,28" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+    </svg>`
+  }
+  if (type === 'tech') {
+    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+      <rect x="82" y="42" width="56" height="70" rx="18" fill="hsl(265,55%,93%)" stroke="var(--magenta,#FF3D8A)" stroke-width="4.5"/>
+      <rect x="102" y="28" width="16" height="16" rx="5" fill="var(--magenta,#FF3D8A)"/>
+      <circle cx="98" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="98" cy="72" r="3" fill="#2A2338"/>
+      <circle cx="122" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="122" cy="72" r="3" fill="#2A2338"/>
+      <path d="M100,90 Q110,98 120,90" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+      <g class="chm-gear">
+        <circle cx="182" cy="46" r="17" fill="none" stroke="#8B7FA8" stroke-width="5"/>
+        <circle cx="182" cy="46" r="6" fill="#8B7FA8"/>
+        <path d="M182,25 L182,15 M182,67 L182,77 M161,46 L151,46 M203,46 L213,46 M167,31 L160,24 M197,31 L204,24 M167,61 L160,68 M197,61 L204,68" stroke="#8B7FA8" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <path class="chm-wifi" d="M28,58 Q46,38 64,58" fill="none" stroke="var(--cyan,#2E86DE)" stroke-width="4" stroke-linecap="round"/>
+      <path class="chm-wifi" d="M36,66 Q46,54 56,66" fill="none" stroke="var(--cyan,#2E86DE)" stroke-width="4" stroke-linecap="round" style="animation-delay:0.2s"/>
+      <circle cx="46" cy="76" r="3.5" fill="var(--cyan,#2E86DE)"/>
+    </svg>`
+  }
+  if (type === 'flow') {
+    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+      <rect x="82" y="40" width="56" height="76" rx="18" fill="hsl(40,70%,93%)" stroke="var(--amber,#FFB648)" stroke-width="4.5"/>
+      <rect x="102" y="26" width="16" height="16" rx="5" fill="var(--amber,#FFB648)"/>
+      <rect x="90" y="74" width="40" height="34" rx="6" fill="hsl(40,80%,80%)" opacity="0.6"/>
+      <circle cx="98" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="98" cy="72" r="3" fill="#2A2338"/>
+      <circle cx="122" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="122" cy="72" r="3" fill="#2A2338"/>
+      <path d="M100,92 Q110,100 120,92" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+      <g class="chm-arrow-in">
+        <path d="M46,50 L46,86" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M34,74 L46,90 L58,74" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <g class="chm-arrow-out">
+        <path d="M174,86 L174,50" stroke="var(--coral,#FF6E86)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M162,62 L174,46 L186,62" fill="none" stroke="var(--coral,#FF6E86)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>`
+  }
+  if (type === 'timeline') {
+    return `<svg viewBox="0 0 240 190" xmlns="http://www.w3.org/2000/svg">
+      <rect x="82" y="14" width="76" height="92" rx="22" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="5"/>
+      <rect x="110" y="0" width="20" height="16" rx="5" fill="var(--teal,#17B8A6)"/>
+      <g class="chm-eyes-scan">
+        <circle cx="108" cy="58" r="10" fill="#fff" stroke="#2A2338" stroke-width="2.5"/><circle cx="108" cy="58" r="4" fill="#2A2338"/>
+        <circle cx="132" cy="58" r="10" fill="#fff" stroke="#2A2338" stroke-width="2.5"/><circle cx="132" cy="58" r="4" fill="#2A2338"/>
+      </g>
+      <path d="M108,84 Q120,92 132,84" fill="none" stroke="#2A2338" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="30" y1="150" x2="210" y2="150" stroke="#FFD400" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="50" cy="150" r="6" fill="hsl(255,15%,68%)"/>
+      <text x="50" y="172" font-size="12" text-anchor="middle" fill="var(--ink-dim,#6b6478)" font-family="Fredoka, sans-serif">Passato</text>
+      <circle cx="120" cy="150" r="8" fill="var(--magenta,#FF3D8A)"/>
+      <text x="120" y="134" font-size="13" font-weight="700" text-anchor="middle" fill="var(--magenta,#FF3D8A)" font-family="Fredoka, sans-serif">Presente</text>
+      <line x1="190" y1="150" x2="190" y2="122" stroke="#2A2338" stroke-width="3"/>
+      <rect x="190" y="122" width="6" height="6" fill="#2A2338"/><rect x="196" y="122" width="6" height="6" fill="#fff" stroke="#2A2338" stroke-width="1"/>
+      <rect x="190" y="128" width="6" height="6" fill="#fff" stroke="#2A2338" stroke-width="1"/><rect x="196" y="128" width="6" height="6" fill="#2A2338"/>
+      <text x="190" y="172" font-size="12" font-weight="700" text-anchor="middle" fill="var(--ink,#2A2338)" font-family="Fredoka, sans-serif">Futuro</text>
+    </svg>`
+  }
+  // finish
+  return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+    <line x1="24" y1="128" x2="196" y2="128" stroke="hsl(255,15%,80%)" stroke-width="4"/>
+    <rect x="150" y="30" width="6" height="98" fill="#2A2338"/>
+    <g>
+      <rect x="156" y="30" width="14" height="10" fill="#2A2338"/>
+      <rect x="170" y="30" width="14" height="10" fill="#fff" stroke="#2A2338" stroke-width="1"/>
+      <rect x="156" y="40" width="14" height="10" fill="#fff" stroke="#2A2338" stroke-width="1"/>
+      <rect x="170" y="40" width="14" height="10" fill="#2A2338"/>
+    </g>
+    <g class="chm-finish-run">
+      <rect x="60" y="70" width="48" height="60" rx="16" fill="hsl(150,60%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
+      <rect x="76" y="58" width="16" height="14" rx="4" fill="var(--teal,#17B8A6)"/>
+      <circle cx="76" cy="94" r="6" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="76" cy="94" r="2.6" fill="#2A2338"/>
+      <circle cx="96" cy="94" r="6" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="96" cy="94" r="2.6" fill="#2A2338"/>
+      <path d="M78,110 Q84,116 90,110" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+      <path d="M50,110 Q40,105 44,96" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round"/>
+      <path d="M118,120 Q128,110 122,100" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g class="chm-dust"><circle cx="46" cy="120" r="3" fill="#C9C4D6"/><circle cx="38" cy="124" r="2.4" fill="#C9C4D6"/></g>
+  </svg>`
+}
+
+export function ChapterMascot({ type }: { type: MascotType }) {
+  const isLarge = type === 'timeline'
+  return (
+    <div
+      className={`chapter-mascot-stage${isLarge ? ' large' : ''}`}
+      dangerouslySetInnerHTML={{ __html: chapterMascotSvgMarkup(type) }}
+    />
+  )
+}
