@@ -83,7 +83,10 @@ export function EndScreen() {
       </div>
       <div className="end-badge">100%</div>
       <h1>Completato ♥</h1>
-      <p className="end-message">Ti contatteremo per fissare il nostro incontro di ascolto, grazie ancora per il tuo contributo.</p>
+      <p className="end-message">
+        Ti contatteremo presto per fissare il nostro <strong>incontro di ascolto</strong>.{' '}
+        <strong>Grazie</strong> ancora per il tuo <strong>prezioso contributo</strong>!
+      </p>
     </div>
   )
 }
