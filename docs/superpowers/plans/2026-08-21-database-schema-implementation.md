@@ -822,12 +822,12 @@ export function isEditOpen(campaign: SurveyCampaignWindow, now: Date): boolean {
 - [ ] **Step 4: Esegui i test e verifica che passino**
 
 Run: `cd web && npm run test -- campaigns-windows`
-Expected: PASS, 6 test superati
+Expected: PASS, 7 test superati
 
 - [ ] **Step 5: Esegui l'intera suite per verificare che non ci siano regressioni**
 
 Run: `cd web && npm run test`
-Expected: PASS, tutti i test esistenti + i 6 nuovi
+Expected: PASS, tutti i test esistenti + i 7 nuovi
 
 - [ ] **Step 6: Commit**
 

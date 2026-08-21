@@ -90,9 +90,11 @@ nominative_responses_history       -- popolata via trigger prima di ogni UPDATE
   replaced_at     timestamptz default now()
 ```
 
-- Al primo completamento, l'app crea `submissions` (`status = 'submitted'`,
-  `submitted_at = now()`) e le righe corrispondenti in
-  `nominative_responses`.
+- Al primo avvio della compilazione, l'app crea `submissions` con
+  `status = 'in_progress'` (il default), poi scrive via via le righe di
+  risposta in `nominative_responses` man mano che il dipendente procede, e
+  solo quando tutte le risposte obbligatorie sono presenti marca
+  `submissions` con `status = 'submitted'` e `submitted_at = now()`.
 - Il GUID (`submissions.id`) viene mostrato al dipendente come riferimento
   della propria compilazione (schermata di conferma finale), **non** come
   token d'accesso: l'apertura di una vista di modifica resta sempre dietro
@@ -167,6 +169,13 @@ anonymous_responses                 -- nessuna colonna user_id, mai
   già prevede che siano le API, non il frontend, il punto di enforcement
   delle regole di business — quindi il porting è "spostare la regola da RLS
   a codice applicativo", non riprogettare lo schema.
+- Un secondo pezzo non portabile 1:1 è il riferimento diretto allo schema
+  `auth` di Supabase: due tabelle usano `references auth.users(id)`, e le
+  policy/la funzione condivisa usano `auth.uid()`/`auth.jwt()`. Portare lo
+  schema su un altro stack richiede quindi anche una tabella utenti locale
+  e un'identità fornita dall'applicazione (es. un `user_id` passato dalle
+  API dopo la propria autenticazione), non solo spostare la logica RLS al
+  livello applicativo.
 
 ## 7. Fuori scope (rimandato al piano di implementazione)
 

@@ -18,6 +18,15 @@ alter table public.nominative_responses_history enable row level security;
 alter table public.anonymous_tokens enable row level security;
 alter table public.anonymous_responses enable row level security;
 
+alter table public.survey_campaigns force row level security;
+alter table public.submissions force row level security;
+alter table public.nominative_responses force row level security;
+alter table public.nominative_responses_history force row level security;
+alter table public.anonymous_tokens force row level security;
+alter table public.anonymous_responses force row level security;
+
+revoke all on public.anonymous_tokens, public.anonymous_responses from anon, authenticated;
+
 -- ---- survey_campaigns ----
 
 create policy "campaigns_select_authenticated"
@@ -56,16 +65,38 @@ to authenticated
 using (user_id = auth.uid())
 with check (user_id = auth.uid());
 
+-- Le policy sopra sono per-riga: senza restrizioni di colonna, un utente
+-- potrebbe comunque cambiare campaign_id o status della propria riga via
+-- UPDATE (bypassando la finestra di modifica o "riassegnando" la
+-- compilazione a un'altra campagna). I GRANT per colonna sotto si
+-- compongono con le policy RLS sopra: la riga deve comunque passare RLS,
+-- E il client può scrivere solo le colonne elencate qui.
+revoke update on public.submissions from authenticated;
+grant update (status, submitted_at) on public.submissions to authenticated;
+
 -- ---- funzione condivisa: può scrivere una risposta nominativa ora? ----
 -- True se: la compilazione è "in_progress" ed è dentro la finestra di
 -- compilazione della campagna, OPPURE è già "submitted" e la campagna ha
 -- una finestra di modifica aperta (edit_window_*) che include "now()".
+--
+-- IMPORTANTE per chi scriverà il codice applicativo: l'ordine di scrittura
+-- corretto per una prima compilazione è:
+--   1. INSERT in submissions con status='in_progress' (default)
+--   2. INSERT/UPDATE delle risposte in nominative_responses (permesso
+--      perché status è 'in_progress' ed è dentro la finestra di
+--      compilazione)
+--   3. solo alla fine, UPDATE submissions set status='submitted',
+--      submitted_at=now()
+-- Creare la submission già con status='submitted' e poi tentare di
+-- scrivere le risposte FALLISCE (RLS nega l'insert, perché la funzione
+-- sotto richiede una edit_window aperta per le submission già 'submitted').
 
 create or replace function public.can_write_nominative_response(p_submission_id uuid)
 returns boolean
 language sql
 stable
 security invoker
+set search_path = public, pg_temp
 as $$
   select exists (
     select 1
@@ -105,6 +136,12 @@ on public.nominative_responses for update
 to authenticated
 using (public.can_write_nominative_response(submission_id))
 with check (public.can_write_nominative_response(submission_id));
+
+-- Stesso motivo del blocco su submissions: senza restrizione di colonna,
+-- un utente potrebbe ri-agganciare la propria risposta a un'altra
+-- submission_id o cambiare question_id via UPDATE.
+revoke update on public.nominative_responses from authenticated;
+grant update (answer) on public.nominative_responses to authenticated;
 
 -- ---- nominative_responses_history ----
 -- Nota: la funzione trigger del Task 4 (log_nominative_response_history)
