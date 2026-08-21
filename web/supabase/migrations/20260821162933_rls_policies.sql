@@ -1,0 +1,131 @@
+-- web/supabase/migrations/20260821162933_rls_policies.sql
+
+-- =========================================================================
+-- anonymous_tokens e anonymous_responses: RLS abilitata SENZA alcuna policy
+-- per i ruoli authenticated/anon. È intenzionale: nessuna richiesta
+-- autenticata dal client (employee o hr_admin) può leggere o scrivere
+-- queste due tabelle. Solo il service_role (usato esclusivamente da codice
+-- server-side fidato, mai esposto al browser) può toccarle, perché in
+-- Supabase service_role bypassa RLS di default. Questo garantisce che il
+-- collegamento utente -> pseudonimo non sia mai raggiungibile da una query
+-- lato client, nemmeno per un bug in altre policy.
+-- =========================================================================
+
+alter table public.survey_campaigns enable row level security;
+alter table public.submissions enable row level security;
+alter table public.nominative_responses enable row level security;
+alter table public.nominative_responses_history enable row level security;
+alter table public.anonymous_tokens enable row level security;
+alter table public.anonymous_responses enable row level security;
+
+-- ---- survey_campaigns ----
+
+create policy "campaigns_select_authenticated"
+on public.survey_campaigns for select
+to authenticated
+using (true);
+
+create policy "campaigns_write_hr_admin"
+on public.survey_campaigns for all
+to authenticated
+using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'hr_admin')
+with check ((auth.jwt() -> 'app_metadata' ->> 'role') = 'hr_admin');
+
+-- ---- submissions ----
+
+create policy "submissions_select_own"
+on public.submissions for select
+to authenticated
+using (user_id = auth.uid());
+
+create policy "submissions_insert_own_in_window"
+on public.submissions for insert
+to authenticated
+with check (
+  user_id = auth.uid()
+  and exists (
+    select 1 from public.survey_campaigns c
+    where c.id = campaign_id
+      and now() between c.compilation_window_start and c.compilation_window_end
+  )
+);
+
+create policy "submissions_update_own"
+on public.submissions for update
+to authenticated
+using (user_id = auth.uid())
+with check (user_id = auth.uid());
+
+-- ---- funzione condivisa: può scrivere una risposta nominativa ora? ----
+-- True se: la compilazione è "in_progress" ed è dentro la finestra di
+-- compilazione della campagna, OPPURE è già "submitted" e la campagna ha
+-- una finestra di modifica aperta (edit_window_*) che include "now()".
+
+create or replace function public.can_write_nominative_response(p_submission_id uuid)
+returns boolean
+language sql
+stable
+security invoker
+as $$
+  select exists (
+    select 1
+    from public.submissions s
+    join public.survey_campaigns c on c.id = s.campaign_id
+    where s.id = p_submission_id
+      and s.user_id = auth.uid()
+      and (
+        (s.status = 'in_progress'
+          and now() between c.compilation_window_start and c.compilation_window_end)
+        or (s.status = 'submitted'
+          and c.edit_window_start is not null
+          and now() between c.edit_window_start and c.edit_window_end)
+      )
+  );
+$$;
+
+comment on function public.can_write_nominative_response is
+  'True se l''utente autenticato può scrivere una risposta per questa submission ora: compilazione in corso dentro la finestra di compilazione, oppure già inviata e dentro la finestra di modifica aperta da HR.';
+
+-- ---- nominative_responses ----
+
+create policy "nominative_responses_select_own"
+on public.nominative_responses for select
+to authenticated
+using (
+  exists (select 1 from public.submissions s where s.id = submission_id and s.user_id = auth.uid())
+);
+
+create policy "nominative_responses_insert_own_in_window"
+on public.nominative_responses for insert
+to authenticated
+with check (public.can_write_nominative_response(submission_id));
+
+create policy "nominative_responses_update_own_in_window"
+on public.nominative_responses for update
+to authenticated
+using (public.can_write_nominative_response(submission_id))
+with check (public.can_write_nominative_response(submission_id));
+
+-- ---- nominative_responses_history ----
+-- Nota: il trigger del Task 4 gira come SECURITY INVOKER (default), quindi
+-- il suo INSERT nello storico è a sua volta soggetto a RLS con i privilegi
+-- della sessione che ha eseguito l'UPDATE originale — serve quindi una
+-- policy INSERT per authenticated, altrimenti il trigger stesso violerebbe
+-- la RLS quando un employee modifica una risposta.
+
+create policy "nominative_responses_history_select_own"
+on public.nominative_responses_history for select
+to authenticated
+using (
+  exists (select 1 from public.submissions s where s.id = submission_id and s.user_id = auth.uid())
+);
+
+create policy "nominative_responses_history_insert_via_trigger"
+on public.nominative_responses_history for insert
+to authenticated
+with check (
+  exists (select 1 from public.submissions s where s.id = submission_id and s.user_id = auth.uid())
+);
+
+-- anonymous_tokens e anonymous_responses: nessuna policy per authenticated/anon
+-- (vedi commento in testa al file) — solo service_role vi accede.
