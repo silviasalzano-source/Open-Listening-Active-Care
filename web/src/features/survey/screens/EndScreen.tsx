@@ -35,10 +35,15 @@ export function EndScreen() {
             <rect x="154" y="86" width="22" height="14" rx="3" fill="#fff" />
             <text x="165" y="97" fontSize="9" fontWeight="700" textAnchor="middle" fill="#2A2338" fontFamily="Fredoka, sans-serif">HR</text>
             <circle cx="165" cy="46" r="20" fill="#FCD9A0" />
-            {/* Capelli corti e grigi — solo calotta, senza ciocche laterali lunghe */}
-            <path d="M145,44 Q145,26 165,26 Q185,26 185,44 Q182,32 165,32 Q148,32 145,44Z" fill="#9E9E9E" />
-            <path d="M143,40 Q141,52 147,60" fill="none" stroke="#9E9E9E" strokeWidth="7" strokeLinecap="round" />
-            <path d="M187,40 Q189,52 183,60" fill="none" stroke="#9E9E9E" strokeWidth="7" strokeLinecap="round" />
+            {/* Capelli a spazzola — top piatto con ciuffi dritti e lati corti */}
+            <rect x="147" y="28" width="36" height="14" rx="2" fill="#9E9E9E" />
+            <line x1="153" y1="28" x2="153" y2="20" stroke="#9E9E9E" strokeWidth="4" strokeLinecap="round" />
+            <line x1="160" y1="28" x2="160" y2="19" stroke="#9E9E9E" strokeWidth="4" strokeLinecap="round" />
+            <line x1="167" y1="28" x2="167" y2="19" stroke="#9E9E9E" strokeWidth="4" strokeLinecap="round" />
+            <line x1="174" y1="28" x2="174" y2="19" stroke="#9E9E9E" strokeWidth="4" strokeLinecap="round" />
+            <line x1="181" y1="28" x2="181" y2="20" stroke="#9E9E9E" strokeWidth="4" strokeLinecap="round" />
+            <rect x="144" y="36" width="5" height="14" rx="2" fill="#9E9E9E" />
+            <rect x="184" y="36" width="5" height="14" rx="2" fill="#9E9E9E" />
             <circle cx="158" cy="48" r="2.4" fill="#2A2338" /><circle cx="172" cy="48" r="2.4" fill="#2A2338" />
             <path d="M158,56 Q165,62 172,56" fill="none" stroke="#2A2338" strokeWidth="2.2" strokeLinecap="round" />
             {/* Braccio che saluta */}
