@@ -30,10 +30,10 @@ const CLIMA_PHRASES: Record<string, string> = {
 }
 
 const TREND_PHRASES: Record<string, string> = {
-  'Energia in Crescita':      'la stai **facendo crescere**, passo dopo passo',
-  'Energia Stabile':          'la stai **mantenendo** su un binario stabile',
-  'Energia in Ricarica':      'sente il bisogno di una **pausa per ricaricarsi**',
-  'Energia in Assestamento':  'la stai **riequilibrando** su basi nuove',
+  'Energia in Crescita':      'la tua **energia** sta **crescendo**, passo dopo passo',
+  'Energia Stabile':          'la tua **energia** si **mantiene** su un binario stabile',
+  'Energia in Ricarica':      'la tua **energia** ha bisogno di una **pausa** per ricaricarsi',
+  'Energia in Assestamento':  'la tua **energia** si sta **riequilibrando** su basi nuove',
 }
 
 const CONFETTI_PIECES = ['✨', '⭐', '✨', '⭐', '✨']
@@ -117,6 +117,7 @@ export function ResultScreen({
         {trendText && (
           <p>Guardando ai mesi passati, <BoldText text={trendText} />.</p>
         )}
+
 
         {/* Cause come chip visivi */}
         {causa.length > 0 && (
