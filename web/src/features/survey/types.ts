@@ -93,6 +93,7 @@ export type ChapterDef = {
 
 export type FlowStep =
   | { kind: 'intro' }
+  | { kind: 'focus' }
   | { kind: 'q1intro'; key: 'team' | 'anno' }
   | { kind: 'q1'; question: Phase1Question }
   | { kind: 'result' }

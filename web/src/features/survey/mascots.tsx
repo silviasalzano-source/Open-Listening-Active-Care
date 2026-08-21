@@ -127,6 +127,44 @@ export function Q1IntroMascot({ variant }: { variant: 'team' | 'anno' }) {
   )
 }
 
+export function FocusMascot() {
+  const svg = `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Cavo dalla presa alla batteria -->
+    <path d="M34,110 Q34,130 70,130 Q90,130 90,115" stroke="#8B7FA8" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- Presa elettrica -->
+    <rect x="10" y="88" width="48" height="36" rx="10" fill="#E8E4F2" stroke="#8B7FA8" stroke-width="3"/>
+    <rect x="24" y="96" width="6" height="12" rx="2" fill="#8B7FA8"/>
+    <rect x="38" y="96" width="6" height="12" rx="2" fill="#8B7FA8"/>
+    <!-- Batteria corpo -->
+    <rect x="70" y="42" width="72" height="88" rx="18" fill="hsl(45,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="4"/>
+    <!-- Terminale batteria -->
+    <rect x="96" y="30" width="20" height="14" rx="4" fill="var(--amber,#FFB648)"/>
+    <!-- Fill batteria (parziale) -->
+    <rect x="74" y="96" width="64" height="30" rx="0" fill="hsl(45,80%,78%)" opacity="0.5" clip-path="url(#batt-clip)"/>
+    <clipPath id="batt-clip"><rect x="70" y="42" width="72" height="88" rx="18"/></clipPath>
+    <!-- Barre energia interne -->
+    <rect x="82" y="100" width="10" height="22" rx="3" fill="var(--amber,#FFB648)" opacity="0.7"/>
+    <rect x="97" y="94" width="10" height="28" rx="3" fill="var(--amber,#FFB648)" opacity="0.85"/>
+    <rect x="112" y="88" width="10" height="34" rx="3" fill="var(--amber,#FFB648)"/>
+    <!-- Occhi (sguardo in su, pensieroso) -->
+    <circle cx="92" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/>
+    <circle cx="92" cy="68" r="3" fill="#2A2338"/>
+    <circle cx="118" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/>
+    <circle cx="118" cy="68" r="3" fill="#2A2338"/>
+    <!-- Sopracciglia pensierose -->
+    <path d="M84,62 Q91,58 98,62" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M110,62 Q117,58 124,62" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Bocca neutra / pensierosa -->
+    <path d="M94,84 Q106,88 118,84" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Bubble pensiero -->
+    <circle cx="144" cy="54" r="3" fill="#C9C4D6" class="q1i-think-dot" style="animation-delay:0s"/>
+    <circle cx="154" cy="42" r="5" fill="#C9C4D6" class="q1i-think-dot" style="animation-delay:0.2s"/>
+    <ellipse cx="168" cy="28" rx="16" ry="12" fill="#fff" stroke="#C9C4D6" stroke-width="2" class="q1i-think-bubble"/>
+    <text x="168" y="33" font-size="13" text-anchor="middle" fill="#8B7FA8" font-family="Fredoka, sans-serif" class="q1i-think-bubble">···</text>
+  </svg>`
+  return <div className="q1intro-mascot" dangerouslySetInnerHTML={{ __html: svg }} />
+}
+
 import type { MascotType } from './types'
 
 function chapterMascotSvgMarkup(type: MascotType): string {

@@ -2,7 +2,7 @@ import type { FlowStep, Phase2Question, ChapterKey } from './types'
 import { step1, step2, chapters } from './data'
 
 export function buildPhase1Flow(): FlowStep[] {
-  const flow: FlowStep[] = [{ kind: 'intro' }]
+  const flow: FlowStep[] = [{ kind: 'intro' }, { kind: 'focus' }]
 
   for (const question of step1) {
     if (question.id === 'clima') {

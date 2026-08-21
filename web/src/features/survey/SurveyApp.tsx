@@ -9,6 +9,7 @@ import { Q1IntroScreen } from './screens/Q1IntroScreen'
 import { QuestionScreen } from './screens/QuestionScreen'
 import { ResultScreen } from './screens/ResultScreen'
 import { TransitionScreen } from './screens/TransitionScreen'
+import { FocusScreen } from './screens/FocusScreen'
 import { ChapterScreen } from './screens/ChapterScreen'
 import { ChapterSetScreen } from './screens/ChapterSetScreen'
 import { EndScreen } from './screens/EndScreen'
@@ -52,6 +53,8 @@ export function SurveyApp() {
 
         {step.kind === 'intro' && <IntroScreen onStart={goNext} />}
 
+        {step.kind === 'focus' && <FocusScreen onContinue={goNext} onBack={goBack} />}
+
         {step.kind === 'q1intro' && <Q1IntroScreen variant={step.key} onContinue={goNext} />}
 
         {step.kind === 'q1' && (
@@ -72,7 +75,7 @@ export function SurveyApp() {
           <ResultScreen answers={phase1Answers} onContinue={goNext} />
         )}
 
-        {step.kind === 'transition' && <TransitionScreen onContinue={goNext} />}
+        {step.kind === 'transition' && <TransitionScreen onContinue={goNext} onBack={goBack} />}
 
         {step.kind === 'chapter' && (
           <ChapterScreen

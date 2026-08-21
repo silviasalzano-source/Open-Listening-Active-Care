@@ -1,4 +1,4 @@
-export function TransitionScreen({ onContinue }: { onContinue: () => void }) {
+export function TransitionScreen({ onContinue, onBack }: { onContinue: () => void; onBack: () => void }) {
   return (
     <div className="survey-screen transition">
       <div className="lock-wrap">🔒</div>
@@ -16,6 +16,9 @@ export function TransitionScreen({ onContinue }: { onContinue: () => void }) {
       </svg>
       <button className="btn cool" onClick={onContinue}>
         Continua in anonimato →
+      </button>
+      <button className="btn ghost" onClick={onBack} style={{ marginTop: 8 }}>
+        Indietro
       </button>
       <div className="microcopy">
         I dati verranno analizzati solo in forma aggregata, mai persona per persona.
