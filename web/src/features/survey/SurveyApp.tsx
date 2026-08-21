@@ -55,7 +55,7 @@ export function SurveyApp() {
 
         {step.kind === 'focus' && <FocusScreen onContinue={goNext} onBack={goBack} />}
 
-        {step.kind === 'q1intro' && <Q1IntroScreen variant={step.key} onContinue={goNext} />}
+        {step.kind === 'q1intro' && <Q1IntroScreen variant={step.key} onContinue={goNext} onBack={goBack} />}
 
         {step.kind === 'q1' && (
           <QuestionScreen
