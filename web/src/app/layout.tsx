@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fredoka, Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,6 +12,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-fredoka",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
 export const metadata: Metadata = {
   title: "Open Listening · Active Care",
   description:
@@ -20,7 +31,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="it" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="it"
+      className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable}`}
+    >
       <body>{children}</body>
     </html>
   );
