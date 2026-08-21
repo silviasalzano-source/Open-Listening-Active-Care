@@ -1,6 +1,8 @@
 export function EndScreen() {
   return (
     <div className="survey-screen end">
+      {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset */}
+      <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" />
       <div className="end-stage">
         <svg className="end-hr-duo" viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="110" cy="160" rx="90" ry="8" fill="rgba(42,35,56,0.06)" />
