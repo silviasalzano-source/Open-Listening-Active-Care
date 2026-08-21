@@ -2,7 +2,7 @@ export function TransitionScreen({ onContinue }: { onContinue: () => void }) {
   return (
     <div className="survey-screen transition">
       <div className="lock-wrap">🔒</div>
-      <h2>Da qui in poi, in totale anonimato</h2>
+      <h2>Da ora in poi, in totale anonimato</h2>
       <p>
         Le prossime domande non sono collegate al tuo profilo: nessuno in azienda potrà
         risalire a chi ha risposto cosa.
