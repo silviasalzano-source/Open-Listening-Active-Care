@@ -107,23 +107,20 @@ using (public.can_write_nominative_response(submission_id))
 with check (public.can_write_nominative_response(submission_id));
 
 -- ---- nominative_responses_history ----
--- Nota: il trigger del Task 4 gira come SECURITY INVOKER (default), quindi
--- il suo INSERT nello storico è a sua volta soggetto a RLS con i privilegi
--- della sessione che ha eseguito l'UPDATE originale — serve quindi una
--- policy INSERT per authenticated, altrimenti il trigger stesso violerebbe
--- la RLS quando un employee modifica una risposta.
+-- Nota: la funzione trigger del Task 4 (log_nominative_response_history)
+-- gira come SECURITY DEFINER, quindi il suo INSERT nello storico bypassa
+-- del tutto la RLS, indipendentemente dai privilegi della sessione che ha
+-- eseguito l'UPDATE originale. Per questo NON esiste (e non deve esistere)
+-- nessuna policy INSERT su questa tabella per authenticated/anon: nessun
+-- client può scrivere direttamente in nominative_responses_history, solo il
+-- trigger può farlo. Questo preserva l'integrità dello storico come audit
+-- trail, evitando che un employee possa inserire righe di storico fabbricate
+-- chiamando direttamente le API REST di Supabase.
 
 create policy "nominative_responses_history_select_own"
 on public.nominative_responses_history for select
 to authenticated
 using (
-  exists (select 1 from public.submissions s where s.id = submission_id and s.user_id = auth.uid())
-);
-
-create policy "nominative_responses_history_insert_via_trigger"
-on public.nominative_responses_history for insert
-to authenticated
-with check (
   exists (select 1 from public.submissions s where s.id = submission_id and s.user_id = auth.uid())
 );
 
