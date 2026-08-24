@@ -80,6 +80,8 @@ export function SurveyApp() {
         {step.kind === 'chapter' && (
           <ChapterScreen
             def={step.def}
+            chapterIndex={flow.slice(0, idx + 1).filter(s => s.kind === 'chapter').length}
+            chapterTotal={flow.filter(s => s.kind === 'chapter').length}
             onBack={goBack}
             onContinue={goNext}
           />
