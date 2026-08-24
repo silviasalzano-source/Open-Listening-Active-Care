@@ -166,10 +166,10 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .survey-page.phase-cool .likert-btn.selected { background: linear-gradient(135deg, var(--teal), var(--cyan)); color: #0E2530; }
 
 /* ── Chapter intro screen ───────────────────────────────────────────────── */
-.chapter { justify-content: center; align-items: center; text-align: center; min-height: 64vh; gap: 14px; }
-.chapter h2 { font-size: 23px; }
-.chapter p { color: var(--ink-dim); font-size: 14px; max-width: 300px; line-height: 1.6; }
-.chapter-mascot-stage { width: 210px; height: 140px; margin-top: 16px; }
+.chapter { justify-content: center; align-items: center; text-align: center; min-height: 64vh; gap: 6px; }
+.chapter h2 { font-size: 23px; margin-top: 10px; }
+.chapter p { color: var(--ink); font-size: 15px; max-width: 300px; line-height: 1.65; margin-top: 6px; }
+.chapter-mascot-stage { width: 210px; height: 140px; margin-top: 16px; margin-bottom: 8px; }
 .chapter-mascot-stage.large { width: 270px; height: 190px; }
 .chapter-mascot-stage svg { width: 100%; height: 100%; overflow: visible; }
 
