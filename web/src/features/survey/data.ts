@@ -19,7 +19,13 @@ export const step2: Step2Item[] = [
     type: 'single',
     title: 'La tua area di appartenenza',
     sub: 'BU / CDC principale',
-    options: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Amministrazione', 'Servizi Generali'],
+    options: [
+      'Operation & Delivery (tutti i team di lavoro, SYS, APA, ...)',
+      'Sales & Marketing',
+      'IT (interno, helpdesk...)',
+      'HR (HR payroll; Recruiting & Development; Language Specialist)',
+      'Servizi generali (Amministrazione, Office Coordinator)',
+    ],
   },
   {
     id: 'anzianita',
