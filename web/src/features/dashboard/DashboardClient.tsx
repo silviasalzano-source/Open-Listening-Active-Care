@@ -386,7 +386,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             </div>
 
             <div className="db-section-hdr">
-              <span className="db-section-pill warm">☀️ My Energy Battery</span>
               <span className="db-section-title">Energia oggi e nell'anno</span>
             </div>
 
