@@ -181,6 +181,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
+  const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'high'>('all')
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -255,12 +256,16 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const ANZS = ['Tutte le anzianità', '< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const RUOLI = ['Tutti i ruoli', 'Manager', 'Worker']
 
-  const q1Individuals = all.filter(r => {
-    const fullName = `${r.nome ?? ''} ${r.cognome ?? ''}`.toLowerCase()
-    const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
-    const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
-    return searchMatch && buMatch
-  })
+  const q1Individuals = all
+    .filter(r => {
+      const fullName = `${r.nome ?? ''} ${r.cognome ?? ''}`.toLowerCase()
+      const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
+      const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
+      const t = r.termometro ?? 0
+      const energyMatch = q1EnergyFilter === 'all' || (q1EnergyFilter === 'low' && t <= 4) || (q1EnergyFilter === 'high' && t >= 8)
+      return searchMatch && buMatch && energyMatch
+    })
+    .sort((a, b) => (a.termometro ?? 0) - (b.termometro ?? 0))
 
   async function askAI(q: string) {
     if (!q.trim()) return
@@ -561,17 +566,28 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   {BUS.map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
+              <div className="db-energy-pills">
+                {([['all', 'Tutti'], ['low', '🔴 Energia bassa'], ['high', '🟢 Energia alta']] as const).map(([val, label]) => (
+                  <button key={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
+                    {label}
+                  </button>
+                ))}
+                <span className="db-sort-note">↑ ordinate per energia</span>
+              </div>
 
               {q1Individuals.length === 0 ? (
                 <div className="db-individual-empty">Nessun rispondente trovato per questa ricerca.</div>
               ) : (
                 <div className="db-individual-list">
                   {q1Individuals.map((r, i) => {
-                    const termColor = (r.termometro ?? 0) >= 8 ? '#17B8A6' : (r.termometro ?? 0) >= 5 ? '#FFB648' : '#FF6E86'
+                    const t = r.termometro ?? 0
+                    const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#FFB648' : '#FF6E86'
+                    const avatarBg = t >= 8 ? 'rgba(23,184,166,.15)' : t >= 5 ? 'rgba(255,182,72,.18)' : 'rgba(255,110,134,.15)'
+                    const avatarColor = t >= 8 ? '#0A7A6B' : t >= 5 ? '#9B5E00' : '#B8003A'
                     const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
                     return (
                       <div key={i} className="db-individual-row">
-                        <div className="db-individual-avatar">
+                        <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor }}>
                           {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
                         </div>
                         <div className="db-individual-info">
