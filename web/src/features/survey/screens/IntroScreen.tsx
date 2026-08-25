@@ -1,4 +1,11 @@
+'use client'
+
+import { useState } from 'react'
+import { DashboardLoginModal } from './DashboardLoginModal'
+
 export function IntroScreen({ onStart }: { onStart: () => void }) {
+  const [showLogin, setShowLogin] = useState(false)
+
   return (
     <div className="survey-screen intro">
       {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
@@ -19,15 +26,17 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
       <button className="btn" onClick={onStart}>
         Iniziamo
       </button>
-      <a href="/admin" className="intro-db-btn" title="Accesso Dashboard HR">
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <button className="intro-db-btn" onClick={() => setShowLogin(true)} title="Accesso Dashboard HR">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="3" y="18" width="5" height="10" rx="2" fill="#FFB648"/>
           <rect x="10" y="12" width="5" height="16" rx="2" fill="#FF6E86"/>
           <rect x="17" y="7" width="5" height="21" rx="2" fill="#17B8A6"/>
           <rect x="24" y="14" width="5" height="14" rx="2" fill="#2E86DE"/>
         </svg>
         <span className="intro-db-label">Dashboard HR</span>
-      </a>
+      </button>
+
+      {showLogin && <DashboardLoginModal onClose={() => setShowLogin(false)} />}
     </div>
   )
 }
