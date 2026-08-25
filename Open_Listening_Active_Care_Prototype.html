@@ -291,6 +291,228 @@
 
   ::selection{ background: var(--coral); color:#fff;}
   @media (max-width:380px){ .nps-grid{ grid-template-columns:repeat(6,1fr);} }
+
+  /* =================== DASHBOARD / LOGIN =================== */
+  #loginModal{
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(20,14,8,0.65); align-items:center; justify-content:center;
+    padding:24px; backdrop-filter:blur(3px);
+  }
+  #loginModal.show{ display:flex; }
+  .login-card{
+    background:#fff; border-radius:24px; padding:32px 28px 28px;
+    width:100%; max-width:340px;
+    box-shadow:0 24px 60px rgba(42,35,56,0.22); animation:modalIn 0.25s ease;
+  }
+  .login-logo-row{ display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .login-card h3{ font-size:20px; margin:0 0 5px; font-family:'Fredoka',sans-serif; }
+  .login-card p{ font-size:13px; color:var(--ink-dim); margin:0 0 18px; }
+  .login-field{ display:flex; flex-direction:column; gap:5px; margin-bottom:12px; }
+  .login-label{ font-size:11px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.6px; }
+  .login-input{
+    padding:11px 13px; border-radius:12px; border:1.5px solid rgba(42,35,56,0.15);
+    font-size:14px; font-family:inherit; color:var(--ink); background:#FAF8F6;
+    box-sizing:border-box; width:100%; transition:border-color 0.2s;
+  }
+  .login-input:focus{ outline:none; border-color:var(--teal); background:#fff; }
+  .login-error{ font-size:12.5px; color:var(--coral); margin-bottom:8px; display:none; font-weight:500; }
+  .login-error.show{ display:block; }
+  .login-close-link{
+    display:block; text-align:center; margin-top:12px; font-size:12.5px;
+    color:var(--ink-dim); cursor:pointer; text-decoration:underline;
+  }
+  .login-close-link:hover{ color:var(--ink); }
+
+  /* Dashboard button on intro */
+  .intro-db-btn{
+    position:absolute; bottom:24px; right:20px; cursor:pointer;
+    background:none; border:none; padding:6px; opacity:0.38;
+    transition:opacity 0.2s, transform 0.2s; border-radius:10px;
+  }
+  .intro-db-btn:hover{ opacity:0.82; transform:scale(1.08); background:rgba(42,35,56,0.05); }
+  .intro-db-label{
+    font-size:9.5px; font-family:'Fredoka',sans-serif; font-weight:600;
+    color:var(--ink-dim); letter-spacing:0.4px; text-transform:uppercase;
+    display:block; margin-top:4px; text-align:center;
+  }
+
+  /* Already completed notice in modal */
+  .modal-done-notice{
+    display:none; background:rgba(23,184,166,0.12); border:1px solid rgba(23,184,166,0.25);
+    border-radius:12px; padding:11px 14px; font-size:13px; color:var(--teal);
+    margin-bottom:10px; font-weight:500; text-align:center;
+  }
+  .modal-done-notice.show{ display:block; }
+
+  /* ---- Dashboard page ---- */
+  #dashboardPage{
+    display:none; position:fixed; inset:0; z-index:150;
+    background:var(--bg-page); overflow-y:auto;
+    font-family:'Inter',sans-serif;
+  }
+  #dashboardPage.show{ display:block; }
+  .db-header{
+    position:sticky; top:0; z-index:10;
+    background:rgba(237,235,245,0.95); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(42,35,56,0.08);
+    padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .db-header-left{ display:flex; align-items:center; gap:12px; }
+  .db-hdr-brand{ font-family:'Fredoka',sans-serif; font-size:13px; font-weight:600; color:var(--ink-dim); letter-spacing:0.4px; text-transform:uppercase; }
+  .db-hdr-brand b{ color:var(--ink); }
+  .db-hdr-divider{ width:1px; height:22px; background:rgba(42,35,56,0.12); }
+  .db-hdr-title{ font-family:'Fredoka',sans-serif; font-size:15px; font-weight:600; color:var(--ink); }
+  .db-header-right{ display:flex; align-items:center; gap:10px; }
+  .db-user-chip{
+    display:flex; align-items:center; gap:6px;
+    background:#fff; border:1px solid rgba(42,35,56,0.10);
+    border-radius:100px; padding:5px 12px;
+    font-size:12.5px; font-weight:500; color:var(--ink);
+  }
+  .db-logout-btn{
+    background:none; border:none; cursor:pointer; font-size:12.5px;
+    color:var(--ink-dim); font-family:inherit; padding:6px 10px; border-radius:8px; transition:background 0.15s;
+  }
+  .db-logout-btn:hover{ background:rgba(42,35,56,0.06); color:var(--ink); }
+  .db-content{ max-width:1100px; margin:0 auto; padding:24px 20px 60px; }
+
+  /* Tabs */
+  .db-tabs{ display:flex; gap:6px; margin-bottom:22px; background:#fff; border-radius:14px; padding:5px; box-shadow:0 2px 10px rgba(42,35,56,0.07); flex-wrap:wrap; }
+  .db-tab{ padding:9px 18px; border-radius:10px; border:none; background:transparent; cursor:pointer; font-family:'Fredoka',sans-serif; font-size:13.5px; font-weight:600; color:var(--ink-dim); transition:all 0.2s; }
+  .db-tab.active{ background:linear-gradient(90deg,var(--teal),var(--cyan)); color:#fff; }
+  .db-tab.warm.active{ background:linear-gradient(90deg,var(--amber),var(--coral)); color:var(--ink); }
+
+  /* Filters bar */
+  .db-filters{
+    display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap;
+    background:#fff; border-radius:16px; padding:16px 20px; margin-bottom:22px;
+    box-shadow:0 2px 12px rgba(42,35,56,0.07);
+  }
+  .db-filter-group{ display:flex; flex-direction:column; gap:4px; flex:1; min-width:130px; }
+  .db-filter-label{ font-size:10.5px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.7px; }
+  .db-filter-select{
+    padding:9px 28px 9px 12px; border-radius:10px;
+    border:1.5px solid rgba(42,35,56,0.12);
+    font-size:13px; font-family:inherit; color:var(--ink);
+    background:#FAFAF9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%232A2338' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+    appearance:none; cursor:pointer;
+  }
+  .db-filter-select:focus{ outline:none; border-color:var(--teal); }
+  .db-n-badge{
+    background:rgba(23,184,166,0.12); color:var(--teal);
+    border-radius:100px; padding:6px 14px;
+    font-size:13px; font-weight:600; font-family:'Fredoka',sans-serif;
+    white-space:nowrap;
+  }
+  .db-n-badge.warn{ background:rgba(255,110,134,0.12); color:var(--coral); }
+
+  /* Privacy warning */
+  .db-privacy-warn{
+    display:none; background:rgba(255,110,134,0.10);
+    border:1px solid rgba(255,110,134,0.25);
+    border-radius:12px; padding:12px 16px;
+    font-size:13px; color:var(--coral); margin-bottom:20px; text-align:center; font-weight:500;
+  }
+  .db-privacy-warn.show{ display:block; }
+
+  /* Overview row */
+  .db-overview-row{
+    display:grid; gap:14px;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    margin-bottom:24px;
+  }
+  .db-ov-card{ background:#fff; border-radius:16px; padding:18px 18px 14px; box-shadow:0 2px 10px rgba(42,35,56,0.07); }
+  .db-ov-label{ font-size:10.5px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.7px; margin-bottom:6px; }
+  .db-ov-num{ font-family:'Fredoka',sans-serif; font-size:32px; font-weight:700; line-height:1; color:var(--ink); }
+  .db-ov-num.teal{ color:var(--teal); }
+  .db-ov-num.amber{ color:#C07A00; }
+  .db-ov-sub{ font-size:11px; color:var(--ink-dim); margin-top:4px; }
+
+  /* Section */
+  .db-section{ margin-bottom:28px; }
+  .db-section-hdr{ display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  .db-section-pill{
+    display:inline-flex; align-items:center; gap:5px;
+    padding:4px 12px; border-radius:100px;
+    font-family:'Fredoka',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:0.2px;
+  }
+  .db-section-pill.warm{ background:rgba(255,182,72,0.18); color:#C07A00; }
+  .db-section-pill.cool{ background:rgba(23,184,166,0.15); color:var(--teal); }
+  .db-section-title{ font-family:'Fredoka',sans-serif; font-size:18px; font-weight:600; color:var(--ink); }
+
+  /* Card grid */
+  .db-grid{ display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); }
+  .db-grid.wide{ grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
+
+  /* Construct card */
+  .db-card{ background:#fff; border-radius:18px; padding:20px; box-shadow:0 2px 12px rgba(42,35,56,0.07); }
+  .db-card-eyebrow{ font-size:10.5px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:3px; }
+  .db-card-title{ font-family:'Fredoka',sans-serif; font-size:15.5px; font-weight:600; color:var(--ink); margin-bottom:10px; line-height:1.25; }
+  .db-score-row{ display:flex; align-items:baseline; gap:8px; margin-bottom:8px; }
+  .db-score-num{ font-family:'Fredoka',sans-serif; font-size:38px; font-weight:700; line-height:1; letter-spacing:-1px; }
+  .db-score-num.red{ color:var(--coral); }
+  .db-score-num.amber{ color:var(--amber); }
+  .db-score-num.green{ color:var(--teal); }
+  .db-score-denom{ font-family:'Fredoka',sans-serif; font-size:14px; font-weight:500; color:var(--ink-dim); }
+
+  /* Likert strip */
+  .db-strip{ display:flex; height:8px; border-radius:4px; overflow:hidden; gap:1.5px; margin-bottom:6px; }
+  .db-strip-seg{ height:100%; border-radius:2px; }
+  .s1{ background:var(--coral); } .s2{ background:#F5A080; } .s3{ background:var(--amber); }
+  .s4{ background:#72D1CB; } .s5{ background:var(--teal); }
+  .db-strip-legend{ display:flex; gap:8px; flex-wrap:wrap; }
+  .db-strip-leg-item{ display:flex; align-items:center; gap:4px; font-size:10.5px; color:var(--ink-dim); }
+  .db-leg-dot{ width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+  /* Detail items inside card */
+  .db-item-list{ margin-top:12px; display:flex; flex-direction:column; gap:7px; border-top:1px solid rgba(42,35,56,0.07); padding-top:10px; }
+  .db-item-row{ display:flex; align-items:center; gap:8px; }
+  .db-item-text{ font-size:11.5px; color:var(--ink-dim); flex:1; line-height:1.3; }
+  .db-item-score{ font-family:'Fredoka',sans-serif; font-size:14px; font-weight:600; min-width:26px; text-align:right; }
+  .db-item-score.red{ color:var(--coral); } .db-item-score.amber{ color:var(--amber); } .db-item-score.green{ color:var(--teal); }
+  .db-item-mini-strip{ display:flex; height:5px; border-radius:3px; overflow:hidden; gap:1px; width:56px; flex-shrink:0; }
+
+  /* Dist bar */
+  .db-dist-list{ display:flex; flex-direction:column; gap:9px; }
+  .db-dist-row{ display:flex; align-items:center; gap:8px; }
+  .db-dist-icon{ font-size:15px; flex-shrink:0; width:20px; }
+  .db-dist-label{ font-size:12.5px; flex:1; color:var(--ink); }
+  .db-dist-bar-wrap{ width:100px; height:10px; border-radius:5px; background:rgba(42,35,56,0.08); overflow:hidden; flex-shrink:0; }
+  .db-dist-bar{ height:100%; border-radius:5px; transition:width 0.4s ease; }
+  .db-dist-pct{ font-family:'Fredoka',sans-serif; font-size:12.5px; font-weight:600; min-width:34px; text-align:right; color:var(--ink-dim); }
+
+  /* Multi-select bar */
+  .db-multi-list{ display:flex; flex-direction:column; gap:7px; }
+  .db-multi-row{ display:flex; align-items:center; gap:7px; }
+  .db-multi-icon{ font-size:14px; flex-shrink:0; width:20px; }
+  .db-multi-label{ font-size:12px; flex:1; color:var(--ink); line-height:1.25; }
+  .db-multi-bar-wrap{ width:80px; height:7px; border-radius:4px; background:rgba(42,35,56,0.08); overflow:hidden; flex-shrink:0; }
+  .db-multi-bar{ height:100%; border-radius:4px; background:var(--amber); }
+  .db-multi-bar.cool{ background:var(--teal); }
+  .db-multi-pct{ font-family:'Fredoka',sans-serif; font-size:12px; font-weight:600; min-width:32px; text-align:right; color:var(--ink-dim); }
+
+  /* NPS */
+  .db-nps-score{ font-family:'Fredoka',sans-serif; font-size:52px; font-weight:700; line-height:1; letter-spacing:-2px; margin-bottom:4px; }
+  .db-nps-score.neg{ color:var(--coral); } .db-nps-score.low-nps{ color:var(--amber); } .db-nps-score.high{ color:var(--teal); }
+  .db-nps-bar-wrap{ display:flex; height:10px; border-radius:5px; overflow:hidden; margin-top:12px; gap:2px; }
+  .db-nps-bar-d{ background:var(--coral); border-radius:5px 0 0 5px; }
+  .db-nps-bar-p{ background:var(--amber); }
+  .db-nps-bar-pro{ background:var(--teal); border-radius:0 5px 5px 0; }
+  .db-nps-segs{ display:flex; gap:8px; margin-top:12px; }
+  .db-nps-seg{ text-align:center; flex:1; padding:10px 6px 8px; border-radius:12px; background:rgba(42,35,56,0.04); }
+  .db-nps-seg-num{ font-family:'Fredoka',sans-serif; font-size:20px; font-weight:700; }
+  .db-nps-seg.pro .db-nps-seg-num{ color:var(--teal); }
+  .db-nps-seg.pas .db-nps-seg-num{ color:var(--amber); }
+  .db-nps-seg.det .db-nps-seg-num{ color:var(--coral); }
+  .db-nps-seg-label{ font-size:10px; color:var(--ink-dim); margin-top:3px; }
+
+  @media(max-width:600px){
+    .db-header{ padding:10px 16px; flex-wrap:wrap; }
+    .db-content{ padding:16px 12px 50px; }
+    .db-filters{ padding:12px 14px; }
+    .db-hdr-title{ display:none; }
+  }
 </style>
 </head>
 <body>
@@ -328,12 +550,63 @@
             <span class="modal-callout-icon">🔒</span>
             <span>Al termine di questa prima parte, troverai una sezione completamente anonima, pensata per comprendere meglio cosa influenza la tua energia.</span>
           </div>
+          <div class="modal-done-notice" id="modalDoneNotice">✅ Hai già completato il questionario. Grazie!</div>
           <button class="btn" id="modalOkBtn" disabled>Ho capito, inizio ⚡</button>
         </div>
       </div>
     </div>
 
   </div>
+</div>
+
+<!-- ===== Login Modal ===== -->
+<div id="loginModal">
+  <div class="login-card">
+    <div class="login-logo-row">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="20" width="8" height="10" rx="2.5" fill="#17B8A6" opacity="0.75"/>
+        <rect x="13" y="14" width="8" height="16" rx="2.5" fill="#FFB648" opacity="0.85"/>
+        <rect x="24" y="7" width="8" height="23" rx="2.5" fill="#FF6E86" opacity="0.85"/>
+        <line x1="2" y1="32" x2="32" y2="32" stroke="#2A2338" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+      </svg>
+      <div>
+        <div class="db-hdr-brand" style="font-size:12px"><b>Open Listening</b> · Active Care</div>
+        <div style="font-size:10.5px; color:var(--ink-dim);">OT Consulting</div>
+      </div>
+    </div>
+    <h3>Dashboard HR</h3>
+    <p>Inserisci le credenziali per accedere ai risultati della survey.</p>
+    <div class="login-field">
+      <label class="login-label">Utente</label>
+      <input type="text" id="loginUser" class="login-input" placeholder="es. hr@otconsulting.com" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label class="login-label">Password</label>
+      <input type="password" id="loginPwd" class="login-input" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="login-error" id="loginError">Credenziali non corrette. Riprova.</div>
+    <button class="btn cool" id="loginSubmitBtn">Accedi alla dashboard</button>
+    <span class="login-close-link" id="loginCloseBtn">Annulla</span>
+  </div>
+</div>
+
+<!-- ===== Dashboard Page ===== -->
+<div id="dashboardPage">
+  <div class="db-header">
+    <div class="db-header-left">
+      <div class="db-hdr-brand"><b>Open Listening</b> · Active Care</div>
+      <div class="db-hdr-divider"></div>
+      <div class="db-hdr-title">Dashboard HR</div>
+    </div>
+    <div class="db-header-right">
+      <div class="db-user-chip" id="dbUserChip">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M1 13c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span id="dbUserName">—</span>
+      </div>
+      <button class="db-logout-btn" id="dbLogoutBtn">Esci →</button>
+    </div>
+  </div>
+  <div class="db-content" id="dbContent"></div>
 </div>
 
 <script>
@@ -498,7 +771,16 @@ const modalOkBtn = document.getElementById('modalOkBtn');
 const modalNomeInput = document.getElementById('modalNome');
 const modalCognomeInput = document.getElementById('modalCognome');
 function checkModalFields(){
-  modalOkBtn.disabled = !(modalNomeInput.value.trim() && modalCognomeInput.value.trim());
+  const nome = modalNomeInput.value.trim();
+  const cognome = modalCognomeInput.value.trim();
+  const noticeEl = document.getElementById('modalDoneNotice');
+  if(nome && cognome && isAlreadyCompleted(nome, cognome)){
+    noticeEl.classList.add('show');
+    modalOkBtn.disabled = true;
+  } else {
+    noticeEl.classList.remove('show');
+    modalOkBtn.disabled = !(nome && cognome);
+  }
 }
 modalNomeInput.addEventListener('input', checkModalFields);
 modalCognomeInput.addEventListener('input', checkModalFields);
@@ -506,6 +788,7 @@ modalOkBtn.onclick = ()=>{
   if(modalOkBtn.disabled) return;
   userNome = modalNomeInput.value.trim();
   userCognome = modalCognomeInput.value.trim();
+  if(isAlreadyCompleted(userNome, userCognome)) return;
   document.getElementById('privacyModal').classList.remove('show');
   idx++; render();
 };
@@ -639,6 +922,18 @@ function renderIntro(el){
     <button class="btn" id="startBtn">Iniziamo</button>
   `;
   el.querySelector('#startBtn').onclick = ()=>{ document.getElementById('privacyModal').classList.add('show'); };
+  // Dashboard access button
+  const dbBtn = document.createElement('button');
+  dbBtn.className = 'intro-db-btn';
+  dbBtn.title = 'Accesso Dashboard HR';
+  dbBtn.innerHTML = `<svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="20" width="7" height="9" rx="2" fill="var(--teal)" opacity="0.8"/>
+    <rect x="12.5" y="14" width="7" height="15" rx="2" fill="var(--amber)" opacity="0.85"/>
+    <rect x="23" y="7" width="7" height="22" rx="2" fill="var(--coral)" opacity="0.8"/>
+    <line x1="2" y1="31" x2="30" y2="31" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+  </svg><span class="intro-db-label">HR</span>`;
+  dbBtn.onclick = openLoginModal;
+  el.appendChild(dbBtn);
 }
 
 function renderQ1Intro(el, key){
@@ -1085,6 +1380,7 @@ function renderTransition(el){
 }
 
 function renderEnd(el){
+  saveCompletedSurvey();
   el.classList.add('end');
   el.innerHTML = `
     <div class="end-stage">
@@ -1319,6 +1615,452 @@ function renderQ(el, q, phase){
 }
 
 render();
+
+/* ======================= DASHBOARD & PERSISTENZA ======================= */
+
+const DB_CREDENTIALS = [
+  { user: 'hr@otconsulting.com', pwd: 'OpenListening2025', name: 'HR Team' },
+  { user: 'admin', pwd: 'admin', name: 'Admin' }
+];
+const LS_KEY = 'ol_responses';
+const LS_SEED_KEY = 'ol_seeded';
+
+/* Pseudo-random deterministico per i dati mock */
+function mkRng(seed) {
+  let s = seed >>> 0;
+  return {
+    next(min, max) {
+      s = Math.imul(s, 1664525) + 1013904223 | 0;
+      return min + ((s >>> 0) % (max - min + 1));
+    },
+    pick(arr) { return arr[this.next(0, arr.length - 1)]; },
+    pickN(arr, n) {
+      const avail = [...arr]; const r = [];
+      for (let i = 0; i < Math.min(n, avail.length); i++) {
+        const ix = this.next(0, avail.length - 1);
+        r.push(avail.splice(ix, 1)[0]);
+      }
+      return r;
+    }
+  };
+}
+
+function generateMockData() {
+  const rng = mkRng(42);
+  const BUs  = ['Operation & Delivery','Operation & Delivery','Operation & Delivery','Operation & Delivery','Sales & Marketing','IT (interno, helpdesk)','HR','Amministrazione','Servizi Generali'];
+  const ANZs  = ['< 1 anno','1-2 anni','1-2 anni','3-4 anni','3-4 anni','3-4 anni','5-6 anni','5-6 anni','7-8-9 anni','>= 10 anni'];
+  const RUOLI = ['Worker','Worker','Worker','Worker','Worker','Manager'];
+  const CLIMI = ['Soleggiato','Parzialmente nuvoloso','Parzialmente nuvoloso','Parzialmente nuvoloso','Piovoso','Piovoso','Temporalesco'];
+  const CAUSE = ['Carico di lavoro','Relazioni con colleghi','Rapporto con il/la responsabile','Crescita e sviluppo professionale','Motivi personali/extra-lavorativi','Strumenti e organizzazione'];
+  const DESCR = ['Energia in Crescita','Energia in Crescita','Energia Stabile','Energia Stabile','Energia Stabile','Energia in Ricarica','Energia in Ricarica','Energia in Assestamento'];
+  const PRIO  = ['Costruire ottime relazioni con i colleghi in un ambiente più accogliente','Avere obiettivi SMART stabiliti con il/la responsabile','Avere un ottimo rapporto con il mio responsabile','Ottenere feedback da responsabili e/o colleghi per migliorare','Avere formazione ad hoc per il mio percorso','Avere una crescita professionale','Avere maggiore inclusione e rispetto delle mie unicità'];
+  const NOMI  = ['Marco','Laura','Andrea','Sofia','Luca','Giulia','Paolo','Anna','Matteo','Chiara','Federico','Valentina','Stefano','Martina','Alessandro','Sara','Davide','Francesca','Giovanni','Elena'];
+  const COG   = ['Rossi','Ferrari','Esposito','Bianchi','Romano','Russo','Colombo','Ricci','Marino','Greco','Bruno','Lombardi','Gallo','Conti','Costa','Fontana','Barbieri','Rizzo','Moretti','De Angelis'];
+
+  const data = [];
+  for (let i = 0; i < 60; i++) {
+    const term = rng.next(3, 9);
+    const base = term > 6 ? rng.next(3, 5) : rng.next(2, 4);
+    const li = (off) => Math.min(5, Math.max(1, base + rng.next(-1, 1) + (off || 0)));
+    const mm = String(rng.next(2, 6)).padStart(2,'0');
+    const dd = String(rng.next(1, 28)).padStart(2,'0');
+    const hh = String(rng.next(8, 18)).padStart(2,'0');
+    const mi = String(rng.next(0, 59)).padStart(2,'0');
+    data.push({
+      nome: rng.pick(NOMI), cognome: rng.pick(COG),
+      completedAt: `2025-${mm}-${dd}T${hh}:${mi}:00`,
+      bu: rng.pick(BUs), anzianita: rng.pick(ANZs), ruolo: rng.pick(RUOLI),
+      clima: rng.pick(CLIMI), termometro: term, causa: rng.pickN(CAUSE, rng.next(1,2)),
+      descrizione: rng.pick(DESCR),
+      relazioni_q: li(0), referente_crescita: li(0), referente_obiettivi: li(-1),
+      hr_access: li(0), hr_valore: li(0), mgmt_trasp: li(-1), mgmt_fiducia: li(-1),
+      jc_task: li(0), jc_schemi: li(0), sv_crescita: li(0), sv_investimento: li(-1),
+      engagement: li(1), tecnologia: li(-1), stress_carico: li(-1), stress_recupero: li(-1),
+      open_listening: rng.next(0,3) > 0 ? li(0) : null,
+      priorita: rng.pickN(PRIO, rng.next(1, 3)),
+      soddisfazione: li(1), nps: term > 6 ? rng.next(7,10) : rng.next(3,8)
+    });
+  }
+  return data;
+}
+
+function seedLocalStorage() {
+  if (localStorage.getItem(LS_SEED_KEY)) return;
+  localStorage.setItem(LS_KEY, JSON.stringify(generateMockData()));
+  localStorage.setItem(LS_SEED_KEY, '1');
+}
+seedLocalStorage();
+
+function getAllResponses() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e) { return []; }
+}
+
+function isAlreadyCompleted(nome, cognome) {
+  const key = (nome + cognome).toLowerCase().replace(/\s/g,'');
+  return getAllResponses().some(r => (r.nome + r.cognome).toLowerCase().replace(/\s/g,'') === key);
+}
+
+function saveCompletedSurvey() {
+  if (!userNome) return;
+  if (isAlreadyCompleted(userNome, userCognome)) return;
+  const all = getAllResponses();
+  all.push({
+    nome: userNome, cognome: userCognome,
+    completedAt: new Date().toISOString(),
+    bu: answers.bu, anzianita: answers.anzianita, ruolo: answers.ruolo,
+    clima: answers.clima, termometro: answers.termometro, causa: answers.causa || [],
+    descrizione: answers.descrizione,
+    relazioni_q: answers.relazioni_q, referente_crescita: answers.referente_crescita,
+    referente_obiettivi: answers.referente_obiettivi, hr_access: answers.hr_access,
+    hr_valore: answers.hr_valore, mgmt_trasp: answers.mgmt_trasp, mgmt_fiducia: answers.mgmt_fiducia,
+    jc_task: answers.jc_task, jc_schemi: answers.jc_schemi,
+    sv_crescita: answers.sv_crescita, sv_investimento: answers.sv_investimento,
+    engagement: answers.engagement, tecnologia: answers.tecnologia,
+    stress_carico: answers.stress_carico, stress_recupero: answers.stress_recupero,
+    open_listening: answers.open_listening || null, priorita: answers.priorita || [],
+    soddisfazione: answers.soddisfazione, nps: answers.nps
+  });
+  localStorage.setItem(LS_KEY, JSON.stringify(all));
+}
+
+/* ---- Login ---- */
+let currentDbUser = null;
+
+function openLoginModal() {
+  document.getElementById('loginModal').classList.add('show');
+  document.getElementById('loginError').classList.remove('show');
+  setTimeout(() => document.getElementById('loginUser').focus(), 100);
+}
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.remove('show');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPwd').value = '';
+}
+function validateLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPwd').value;
+  const match = DB_CREDENTIALS.find(c => c.user === u && c.pwd === p);
+  if (match) { currentDbUser = match; closeLoginModal(); openDashboard(); }
+  else { document.getElementById('loginError').classList.add('show'); }
+}
+document.getElementById('loginSubmitBtn').onclick = validateLogin;
+document.getElementById('loginPwd').addEventListener('keydown', e => { if(e.key==='Enter') validateLogin(); });
+document.getElementById('loginUser').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPwd').focus(); });
+document.getElementById('loginCloseBtn').onclick = closeLoginModal;
+document.getElementById('loginModal').addEventListener('click', e => { if(e.target.id==='loginModal') closeLoginModal(); });
+
+/* ---- Dashboard ---- */
+let dbTab = 'q1';
+
+function openDashboard() {
+  document.getElementById('dashboardPage').classList.add('show');
+  document.getElementById('dbUserName').textContent = currentDbUser ? currentDbUser.name : '—';
+  renderDashboard();
+}
+document.getElementById('dbLogoutBtn').onclick = () => {
+  document.getElementById('dashboardPage').classList.remove('show');
+};
+
+/* Chart helpers */
+function avg(arr) {
+  const v = arr.filter(x => x != null);
+  return v.length ? v.reduce((s,x) => s+x, 0) / v.length : 0;
+}
+function scoreClass(v) { return v < 2.6 ? 'red' : v < 3.6 ? 'amber' : 'green'; }
+function buildDistrib(vals) {
+  const d = {1:0,2:0,3:0,4:0,5:0};
+  vals.filter(v=>v!=null).forEach(v => { if(v>=1&&v<=5) d[v]++; });
+  return d;
+}
+function strip(distrib) {
+  const total = Object.values(distrib).reduce((a,b)=>a+b,0) || 1;
+  return [1,2,3,4,5].map(k =>
+    `<div class="db-strip-seg s${k}" style="width:${(distrib[k]/total*100).toFixed(1)}%"></div>`
+  ).join('');
+}
+function miniStrip(distrib) {
+  const total = Object.values(distrib).reduce((a,b)=>a+b,0) || 1;
+  return [1,2,3,4,5].map(k =>
+    `<div class="db-strip-seg s${k}" style="width:${(distrib[k]/total*100).toFixed(1)}%"></div>`
+  ).join('');
+}
+
+function likertCard(title, eyebrow, items, data) {
+  const allVals = items.flatMap(it => data.map(r => r[it.key]).filter(v => v!=null));
+  if (!allVals.length) return `<div class="db-card"><div class="db-card-eyebrow">${eyebrow}</div><div class="db-card-title">${title}</div><p style="font-size:12px;color:var(--ink-dim);margin-top:8px">Dati non disponibili.</p></div>`;
+  const avgScore = avg(allVals);
+  const cls = scoreClass(avgScore);
+  const legendHTML = `<div class="db-strip-legend">
+    <span class="db-strip-leg-item"><span class="db-leg-dot" style="background:var(--coral)"></span>1–2</span>
+    <span class="db-strip-leg-item"><span class="db-leg-dot" style="background:var(--amber)"></span>3</span>
+    <span class="db-strip-leg-item"><span class="db-leg-dot" style="background:var(--teal)"></span>4–5</span>
+  </div>`;
+  let detailHTML = '';
+  if (items.length > 1) {
+    detailHTML = `<div class="db-item-list">` + items.map(it => {
+      const vals = data.map(r=>r[it.key]).filter(v=>v!=null);
+      const a = avg(vals); const c = scoreClass(a);
+      return `<div class="db-item-row">
+        <div class="db-item-text">${it.short || it.label}</div>
+        <div class="db-item-mini-strip">${miniStrip(buildDistrib(vals))}</div>
+        <div class="db-item-score ${c}">${a.toFixed(1)}</div>
+      </div>`;
+    }).join('') + `</div>`;
+  } else {
+    detailHTML = `<p style="font-size:11.5px;color:var(--ink-dim);line-height:1.45;margin-bottom:8px;">${items[0].label}</p>`;
+  }
+  return `<div class="db-card">
+    <div class="db-card-eyebrow">${eyebrow}</div>
+    <div class="db-card-title">${title}</div>
+    <div class="db-score-row"><span class="db-score-num ${cls}">${avgScore.toFixed(1)}</span><span class="db-score-denom">/ 5</span></div>
+    <div class="db-strip">${strip(buildDistrib(allVals))}</div>
+    ${legendHTML}${detailHTML}
+  </div>`;
+}
+
+function renderDashboard() {
+  const buF    = document.getElementById('dbFBu')?.value    || '';
+  const anzF   = document.getElementById('dbFAnz')?.value   || '';
+  const ruoloF = document.getElementById('dbFRuolo')?.value || '';
+  const content = document.getElementById('dbContent');
+  content.innerHTML = `
+    <div class="db-tabs">
+      <button class="db-tab warm${dbTab==='q1'?' active':''}" id="dbTab1">🔋 My Energy Battery</button>
+      <button class="db-tab${dbTab==='q2'?' active':''}" id="dbTab2">⚡ Fattori Energy Battery</button>
+    </div>
+    <div id="dbTabBody"></div>`;
+  document.getElementById('dbTab1').onclick = () => { dbTab='q1'; renderDashboard(); };
+  document.getElementById('dbTab2').onclick = () => { dbTab='q2'; renderDashboard(); };
+  if (dbTab === 'q1') renderTabQ1(document.getElementById('dbTabBody'));
+  else renderTabQ2(document.getElementById('dbTabBody'), {buF, anzF, ruoloF});
+}
+
+function renderTabQ1(container) {
+  const all = getAllResponses();
+  const N = all.length;
+  const termVals = all.map(r=>r.termometro).filter(v=>v!=null);
+  const termAvg = avg(termVals);
+  const termColor = termAvg>=7?'var(--teal)':termAvg>=5?'var(--amber)':'var(--coral)';
+
+  /* Clima */
+  const climaOpts = [{icon:'☀️',label:'Soleggiato',col:'#F5C842'},{icon:'⛅',label:'Parzialmente nuvoloso',col:'#90B8D4'},{icon:'🌧️',label:'Piovoso',col:'#4A9ED4'},{icon:'⛈️',label:'Temporalesco',col:'#6E4CAB'}];
+  const climaCount = {};
+  all.forEach(r => { if(r.clima) climaCount[r.clima]=(climaCount[r.clima]||0)+1; });
+  const climaBars = climaOpts.map(o => {
+    const n = climaCount[o.label]||0; const pct = N>0?Math.round(n/N*100):0;
+    return `<div class="db-dist-row"><div class="db-dist-icon">${o.icon}</div><div class="db-dist-label">${o.label}</div><div class="db-dist-bar-wrap"><div class="db-dist-bar" style="width:${pct}%;background:${o.col}"></div></div><div class="db-dist-pct">${pct}%</div></div>`;
+  }).join('');
+
+  /* Termometro histogram */
+  const termHist = {};
+  for(let i=1;i<=10;i++) termHist[i]=0;
+  termVals.forEach(v=>{ termHist[v]=(termHist[v]||0)+1; });
+  const maxH = Math.max(...Object.values(termHist),1);
+  const termBars = [1,2,3,4,5,6,7,8,9,10].map(i => {
+    const h = Math.round(termHist[i]/maxH*40);
+    const c = i<=4?'var(--coral)':i<=7?'var(--amber)':'var(--teal)';
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="height:${h}px;width:100%;background:${c};border-radius:3px 3px 0 0;min-height:2px;transition:height .4s"></div><div style="font-size:9.5px;font-family:'Fredoka',sans-serif;color:var(--ink-dim)">${i}</div></div>`;
+  }).join('');
+
+  /* Cause */
+  const causeIco = {'Carico di lavoro':'🔋','Relazioni con colleghi':'🤝','Rapporto con il/la responsabile':'🎯','Crescita e sviluppo professionale':'🌱','Motivi personali/extra-lavorativi':'🏠','Strumenti e organizzazione':'🛠️'};
+  const causeCount = {};
+  all.forEach(r=>(r.causa||[]).forEach(c=>{causeCount[c]=(causeCount[c]||0)+1;}));
+  const causeSorted = Object.entries(causeCount).sort((a,b)=>b[1]-a[1]);
+  const maxC = Math.max(...causeSorted.map(e=>e[1]),1);
+  const causeBars = causeSorted.map(([lbl,n])=>{
+    const pct=Math.round(n/N*100); const bar=Math.round(n/maxC*100);
+    return `<div class="db-multi-row"><div class="db-multi-icon">${causeIco[lbl]||'•'}</div><div class="db-multi-label">${lbl}</div><div class="db-multi-bar-wrap"><div class="db-multi-bar" style="width:${bar}%"></div></div><div class="db-multi-pct">${pct}%</div></div>`;
+  }).join('');
+
+  /* Descrizione */
+  const descrOpts = [{icon:'⚡',label:'Energia in Crescita',col:'var(--teal)'},{icon:'🔋',label:'Energia Stabile',col:'var(--cyan)'},{icon:'🪫',label:'Energia in Ricarica',col:'var(--amber)'},{icon:'🌱',label:'Energia in Assestamento',col:'var(--coral)'}];
+  const descrCount = {};
+  all.forEach(r=>{if(r.descrizione) descrCount[r.descrizione]=(descrCount[r.descrizione]||0)+1;});
+  const descrBars = descrOpts.map(o=>{
+    const n=descrCount[o.label]||0; const pct=N>0?Math.round(n/N*100):0;
+    return `<div class="db-dist-row"><div class="db-dist-icon">${o.icon}</div><div class="db-dist-label">${o.label}</div><div class="db-dist-bar-wrap"><div class="db-dist-bar" style="width:${pct}%;background:${o.col}"></div></div><div class="db-dist-pct">${pct}%</div></div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="db-overview-row">
+      <div class="db-ov-card"><div class="db-ov-label">Rispondenti totali</div><div class="db-ov-num">${N}</div><div class="db-ov-sub">survey completate</div></div>
+      <div class="db-ov-card"><div class="db-ov-label">Energia media</div><div class="db-ov-num ${termAvg>=7?'teal':termAvg>=5?'amber':''}" style="${termAvg<5?'color:var(--coral)':''}">${termAvg.toFixed(1)}<span style="font-size:14px;font-weight:500;color:var(--ink-dim)">/10</span></div><div class="db-ov-sub">termometro oggi</div></div>
+    </div>
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill warm">🌤️ My Energy Battery</span><span class="db-section-title">Energia oggi e nell'anno</span></div>
+      <div class="db-grid wide">
+        <div class="db-card">
+          <div class="db-card-eyebrow">Clima del team · Oggi</div>
+          <div class="db-card-title">Che tempo fa nel tuo team?</div>
+          <div class="db-dist-list">${climaBars}</div>
+        </div>
+        <div class="db-card">
+          <div class="db-card-eyebrow">Termometro energetico · Oggi</div>
+          <div class="db-card-title">Il livello di energia attuale</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+            <svg width="68" height="68" viewBox="0 0 68 68">
+              <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(42,35,56,0.08)" stroke-width="9"/>
+              <circle cx="34" cy="34" r="28" fill="none" stroke="${termColor}" stroke-width="9"
+                stroke-dasharray="${(termAvg/10*175.9).toFixed(1)} 175.9"
+                stroke-dashoffset="44" stroke-linecap="round" transform="rotate(-90 34 34)"/>
+              <text x="34" y="39" text-anchor="middle" font-family="Fredoka,sans-serif" font-size="15" font-weight="700" fill="${termColor}">${termAvg.toFixed(1)}</text>
+            </svg>
+            <div>
+              <div style="font-size:11px;color:var(--ink-dim);margin-bottom:8px">${termVals.length} risposte</div>
+              <span style="font-size:11px;background:rgba(255,110,134,0.10);color:var(--coral);padding:3px 8px;border-radius:6px;font-weight:600;display:inline-block;margin-bottom:4px">${termVals.filter(v=>v<=4).length} bassa (1–4)</span><br>
+              <span style="font-size:11px;background:rgba(255,182,72,0.15);color:#C07A00;padding:3px 8px;border-radius:6px;font-weight:600;display:inline-block;margin-bottom:4px">${termVals.filter(v=>v>=5&&v<=7).length} media (5–7)</span><br>
+              <span style="font-size:11px;background:rgba(23,184,166,0.12);color:var(--teal);padding:3px 8px;border-radius:6px;font-weight:600;display:inline-block">${termVals.filter(v=>v>=8).length} alta (8–10)</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:3px;height:50px">${termBars}</div>
+        </div>
+        <div class="db-card">
+          <div class="db-card-eyebrow">Cause dell'energia · Oggi</div>
+          <div class="db-card-title">Cosa influenza di più l'energia?</div>
+          <div class="db-multi-list">${causeBars||'<p style="font-size:12px;color:var(--ink-dim)">Nessun dato</p>'}</div>
+        </div>
+        <div class="db-card">
+          <div class="db-card-eyebrow">Descrizione energia · Ultimo anno</div>
+          <div class="db-card-title">Come è andata quest'anno?</div>
+          <div class="db-dist-list">${descrBars}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderTabQ2(container, filters) {
+  const all = getAllResponses();
+  const buF    = filters?.buF    ?? '';
+  const anzF   = filters?.anzF   ?? '';
+  const ruoloF = filters?.ruoloF ?? '';
+
+  let data = all;
+  if (buF && buF !== 'Tutte le aree')       data = data.filter(r=>r.bu===buF);
+  if (anzF && anzF !== 'Tutte le anzianità') data = data.filter(r=>r.anzianita===anzF);
+  if (ruoloF && ruoloF !== 'Tutti i ruoli') data = data.filter(r=>r.ruolo===ruoloF);
+  const N = data.length;
+  const ok = N >= 5;
+
+  const selBu    = (v) => ['Tutte le aree','Operation & Delivery','Sales & Marketing','IT (interno, helpdesk)','HR','Amministrazione','Servizi Generali'].map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+  const selAnz   = (v) => ['Tutte le anzianità','< 1 anno','1-2 anni','3-4 anni','5-6 anni','7-8-9 anni','>= 10 anni'].map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+  const selRuolo = (v) => ['Tutti i ruoli','Manager','Worker'].map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+
+  /* NPS */
+  const npsVals = data.map(r=>r.nps).filter(v=>v!=null);
+  const det=npsVals.filter(v=>v<=6).length, pas=npsVals.filter(v=>v>=7&&v<=8).length, pro=npsVals.filter(v=>v>=9).length;
+  const npsScore = npsVals.length ? Math.round((pro-det)/npsVals.length*100) : null;
+  const npsColorClass = npsScore===null?'':(npsScore>30?'high':npsScore>0?'low-nps':'neg');
+
+  /* Priorità */
+  const prioCount={};
+  data.forEach(r=>(r.priorita||[]).forEach(p=>{prioCount[p]=(prioCount[p]||0)+1;}));
+  const prioSorted=Object.entries(prioCount).sort((a,b)=>b[1]-a[1]);
+  const maxP=Math.max(...prioSorted.map(e=>e[1]),1);
+  const prioBars=prioSorted.slice(0,7).map(([lbl,n])=>{
+    const pct=N>0?Math.round(n/N*100):0; const bar=Math.round(n/maxP*100);
+    return `<div class="db-multi-row"><div class="db-multi-label">${lbl}</div><div class="db-multi-bar-wrap" style="width:110px"><div class="db-multi-bar cool" style="width:${bar}%"></div></div><div class="db-multi-pct">${pct}%</div></div>`;
+  }).join('');
+
+  /* Open Listening */
+  const olVals = data.map(r=>r.open_listening).filter(v=>v!=null);
+  const olCard = olVals.length >= 3
+    ? likertCard('Percezione azioni concrete','Follow-up Open Listening 2025',[{label:'Rispetto all\'ultimo Open Listening, ritieni che siano state messe in atto azioni concrete?',key:'open_listening'}],data)
+    : `<div class="db-card"><div class="db-card-eyebrow">Follow-up Open Listening 2025</div><div class="db-card-title">Percezione di azioni concrete</div><p style="font-size:12px;color:var(--ink-dim);margin-top:8px">Risponde solo chi ha partecipato all'Open Listening: dati insufficienti per questo filtro (${olVals.length} risposta/e).</p></div>`;
+
+  const soddVals=data.map(r=>r.soddisfazione).filter(v=>v!=null);
+  const soddAvg=avg(soddVals);
+
+  container.innerHTML = `
+    <div class="db-filters">
+      <div class="db-filter-group"><div class="db-filter-label">Area organizzativa</div>
+        <select id="dbFBu" class="db-filter-select" onchange="renderDashboard()">${selBu(buF||'Tutte le aree')}</select></div>
+      <div class="db-filter-group"><div class="db-filter-label">Anzianità</div>
+        <select id="dbFAnz" class="db-filter-select" onchange="renderDashboard()">${selAnz(anzF||'Tutte le anzianità')}</select></div>
+      <div class="db-filter-group"><div class="db-filter-label">Ruolo</div>
+        <select id="dbFRuolo" class="db-filter-select" onchange="renderDashboard()">${selRuolo(ruoloF||'Tutti i ruoli')}</select></div>
+      <div class="db-n-badge${!ok?' warn':''}">${N} rispondent${N===1?'e':'i'}</div>
+    </div>
+    ${!ok?`<div class="db-privacy-warn show">⚠️ Meno di 5 rispondenti per questa selezione di filtri — i dati aggregati non vengono mostrati per garantire l'anonimato.</div>`:''}
+    ${ok?`
+    <div class="db-overview-row">
+      <div class="db-ov-card"><div class="db-ov-label">Rispondenti</div><div class="db-ov-num">${N}</div><div class="db-ov-sub">filtro attivo</div></div>
+      <div class="db-ov-card"><div class="db-ov-label">NPS Score</div>
+        <div class="db-ov-num ${npsScore!==null&&npsScore>0?'teal':''}" style="${npsScore!==null&&npsScore<=0?'color:var(--coral)':''}">${npsScore!==null?(npsScore>0?'+':'')+npsScore:'—'}</div>
+        <div class="db-ov-sub">promotori – detrattori</div></div>
+      <div class="db-ov-card"><div class="db-ov-label">Passione per il lavoro</div>
+        <div class="db-ov-num ${scoreClass(soddAvg)==='green'?'teal':scoreClass(soddAvg)==='amber'?'amber':''}" style="${scoreClass(soddAvg)==='red'?'color:var(--coral)':''}">${soddAvg.toFixed(1)}<span style="font-size:14px;font-weight:500;color:var(--ink-dim)">/5</span></div>
+        <div class="db-ov-sub">media soddisfazione</div></div>
+    </div>
+
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill cool">🤝 Relazioni</span><span class="db-section-title">Le tue relazioni sul lavoro</span></div>
+      <div class="db-grid">
+        ${likertCard('Relazioni interpersonali','Colleghi',[{label:'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive',key:'relazioni_q'}],data)}
+        ${likertCard('Supporto del Manager','Referente diretto',[{label:'Mi supporta nella mia crescita professionale',short:'Supporto alla crescita',key:'referente_crescita'},{label:'Dà obiettivi strutturati',short:'Obiettivi strutturati',key:'referente_obiettivi'}],data)}
+        ${likertCard('Supporto HR','Risorse Umane',[{label:'È accessibile e disponibile quando ne ho bisogno',short:'Accessibilità e disponibilità',key:'hr_access'},{label:'Riconosco un valore reale nel supporto HR',short:'Valore percepito del supporto',key:'hr_valore'}],data)}
+        ${likertCard('Supporto Management','Management',[{label:'Comunica in modo trasparente la strategia e le priorità',short:'Trasparenza comunicativa',key:'mgmt_trasp'},{label:'Ho fiducia nelle scelte strategiche del management',short:'Fiducia nella strategia',key:'mgmt_fiducia'}],data)}
+      </div>
+    </div>
+
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill cool">🌱 Crescita</span><span class="db-section-title">Autonomia e crescita professionale</span></div>
+      <div class="db-grid">
+        ${likertCard('Jobcrafting','Autonomia e iniziativa',[{label:'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti',short:'Task crafting (proattività)',key:'jc_task'},{label:'Mi sento libero/a di sperimentare soluzioni diverse',short:'Libertà di sperimentare',key:'jc_schemi'}],data)}
+        ${likertCard('Sviluppo professionale','Carriera',[{label:'Sto crescendo professionalmente grazie al mio percorso in azienda',short:'Crescita percepita',key:'sv_crescita'},{label:"Percepisco che l'azienda investe concretamente su di me",short:'Investimento aziendale percepito',key:'sv_investimento'}],data)}
+      </div>
+    </div>
+
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill cool">💡 Valori & Tech</span><span class="db-section-title">Tecnologia e valori aziendali</span></div>
+      <div class="db-grid">
+        ${likertCard('Engagement','Identificazione con i valori aziendali',[{label:'Mi identifico nei valori e nel modo di lavorare di OT',key:'engagement'}],data)}
+        ${likertCard('Tecnologia','Percezione investimento in innovazione',[{label:"OT investe in modo adeguato nell'innovazione tecnologica",key:'tecnologia'}],data)}
+      </div>
+    </div>
+
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill cool">⚡ Stress</span><span class="db-section-title">Carico ed energia lavorativa</span></div>
+      <div class="db-grid">
+        ${likertCard('Stress','Sostenibilità e recupero',[{label:'Il carico di lavoro che gestisco quotidianamente è sostenibile',short:'Sostenibilità del carico',key:'stress_carico'},{label:'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero',short:'Stacco e recupero',key:'stress_recupero'}],data)}
+      </div>
+    </div>
+
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill cool">🔭 Prospettive</span><span class="db-section-title">Follow-up e priorità di miglioramento</span></div>
+      <div class="db-grid wide">
+        ${olCard}
+        <div class="db-card">
+          <div class="db-card-eyebrow">Priorità di miglioramento</div>
+          <div class="db-card-title">Cosa vorresti cambiare?</div>
+          <div class="db-multi-list">${prioBars||'<p style="font-size:12px;color:var(--ink-dim);margin-top:8px">Nessun dato</p>'}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="db-section">
+      <div class="db-section-hdr"><span class="db-section-pill cool">🏁 Ultimo step</span><span class="db-section-title">Soddisfazione e NPS</span></div>
+      <div class="db-grid">
+        ${likertCard('Passione per il lavoro','Soddisfazione lavorativa',[{label:'Il lavoro che svolgo ogni giorno mi appassiona',key:'soddisfazione'}],data)}
+        ${npsVals.length ? `<div class="db-card">
+          <div class="db-card-eyebrow">NPS · Employee Net Promoter Score</div>
+          <div class="db-card-title">Quanto raccomanderesti OT come posto di lavoro?</div>
+          <div class="db-nps-score ${npsColorClass}">${npsScore!==null?(npsScore>0?'+':'')+npsScore:'—'}</div>
+          <div class="db-nps-bar-wrap">
+            <div class="db-nps-bar-d" style="width:${npsVals.length?Math.round(det/npsVals.length*100):0}%"></div>
+            <div class="db-nps-bar-p" style="width:${npsVals.length?Math.round(pas/npsVals.length*100):0}%"></div>
+            <div class="db-nps-bar-pro" style="width:${npsVals.length?Math.round(pro/npsVals.length*100):0}%"></div>
+          </div>
+          <div class="db-nps-segs">
+            <div class="db-nps-seg det"><div class="db-nps-seg-num">${det}</div><div class="db-nps-seg-label">Detrattori (0–6)</div></div>
+            <div class="db-nps-seg pas"><div class="db-nps-seg-num">${pas}</div><div class="db-nps-seg-label">Passivi (7–8)</div></div>
+            <div class="db-nps-seg pro"><div class="db-nps-seg-num">${pro}</div><div class="db-nps-seg-label">Promotori (9–10)</div></div>
+          </div>
+        </div>` : ''}
+      </div>
+    </div>
+    `:''}`;
+}
 </script>
 </body>
 </html>
