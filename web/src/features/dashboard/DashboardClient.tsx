@@ -405,6 +405,15 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             <div className="db-row-2col">
               <div className="db-card">
                 <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
+                {(() => {
+                  const neg = (climaCount['Piovoso'] ?? 0) + (climaCount['Temporalesco'] ?? 0)
+                  const negPct = all.length ? Math.round(neg / all.length * 100) : 0
+                  return negPct >= 40
+                    ? <div className="db-alert red">🔴 Attenzione — {negPct}% del team vive un clima difficile</div>
+                    : negPct >= 20
+                    ? <div className="db-alert amber">⚠️ Da monitorare — {negPct}% segnala clima sotto pressione</div>
+                    : <div className="db-alert green">✅ Clima nella norma — {100 - negPct}% positivo</div>
+                })()}
                 <div className="db-card-title">Che tempo fa nel tuo team?</div>
 
                 <div className="db-dist-list">
@@ -436,6 +445,12 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
               <div className="db-card">
                 <div className="db-clima-badge">⚡ Termometro energetico · Oggi</div>
+                {termAvg < 5
+                  ? <div className="db-alert red">🔴 Energia critica — media {termAvg.toFixed(1)}/10, intervento consigliato</div>
+                  : termAvg < 6.5
+                  ? <div className="db-alert amber">⚠️ Energia media — {termVals.filter(v => v <= 4).length} persone sotto soglia (1–4)</div>
+                  : <div className="db-alert green">✅ Energia buona — {termVals.filter(v => v >= 8).length} persone su {termVals.length} ad alta energia</div>
+                }
                 <div className="db-card-title">Il livello di energia attuale</div>
                 <div className="db-gauge-row">
                   <div className="db-gauge">
@@ -460,6 +475,14 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
             <div className="db-card">
               <div className="db-clima-badge">🔍 Cause dell'energia · Oggi</div>
+              {causeTop[0] && (() => {
+                const [topCausa, topN] = causeTop[0]
+                const topPct = all.length ? Math.round(topN / all.length * 100) : 0
+                const isNeg = ['Carico di lavoro', 'Rapporto con il/la responsabile'].includes(topCausa)
+                return isNeg
+                  ? <div className="db-alert red">🔴 "{topCausa}" è la causa principale ({topPct}%) — priorità di intervento</div>
+                  : <div className="db-alert amber">⚠️ Causa prevalente: "{topCausa}" ({topPct}%) — tienila d&apos;occhio</div>
+              })()}
               <div className="db-card-title">Cosa influenza di più l'energia?</div>
               <div className="db-dist-list">
                 {causeTop.map(([label, count]) => (
@@ -470,6 +493,14 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
             <div className="db-card">
               <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
+              {(() => {
+                const recuperoPct = 100 - descrPositivoPct
+                return recuperoPct >= 50
+                  ? <div className="db-alert red">🔴 {recuperoPct}% in fase di recupero o assestamento — anno difficile per molti</div>
+                  : recuperoPct >= 30
+                  ? <div className="db-alert amber">⚠️ {recuperoPct}% ha vissuto un anno faticoso — monitorare nei colloqui</div>
+                  : <div className="db-alert green">✅ {descrPositivoPct}% descrive un anno positivo (Crescita o Stabile)</div>
+              })()}
               <div className="db-card-title">Come è andata quest'anno?</div>
 
               <div className="db-dist-list">
