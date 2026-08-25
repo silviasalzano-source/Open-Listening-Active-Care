@@ -442,7 +442,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             </div>
 
             <div className="db-card">
-              <div className="db-card-eyebrow">DESCRIZIONE ENERGIA · ULTIMO ANNO</div>
+              <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
               <div className="db-card-title">Come è andata quest'anno?</div>
               <div className="db-dist-list">
                 {descOpts.map(o => (
