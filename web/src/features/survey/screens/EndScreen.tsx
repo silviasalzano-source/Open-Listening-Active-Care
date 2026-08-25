@@ -1,4 +1,4 @@
-export function EndScreen() {
+export function EndScreen({ onRestart }: { onRestart?: () => void }) {
   return (
     <div className="survey-screen end">
       {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset */}
@@ -87,6 +87,11 @@ export function EndScreen() {
         Ti contatteremo presto per fissare il nostro <strong>incontro di ascolto</strong>.{' '}
         <strong>Grazie</strong> ancora per il tuo <strong>prezioso contributo</strong>!
       </p>
+      {onRestart && (
+        <button className="btn ghost end-restart" onClick={onRestart}>
+          ↩ Ricomincia (solo prototipo)
+        </button>
+      )}
     </div>
   )
 }

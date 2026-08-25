@@ -111,7 +111,14 @@ export function SurveyApp() {
           />
         )}
 
-        {step.kind === 'end' && <EndScreen />}
+        {step.kind === 'end' && (
+          <EndScreen onRestart={() => {
+            setIdx(0)
+            setPhase1Answers({})
+            setPhase2Answers({})
+            setShowNameModal(false)
+          }} />
+        )}
       </div>
     </div>
     </>
