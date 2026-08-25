@@ -23,8 +23,7 @@ interface SurveyResponse {
   mgmt_fiducia?: number
   jc_task?: number
   jc_schemi?: number
-  sv_crescita?: number
-  sv_investimento?: number
+  sv_crescita?: string[]
   engagement?: number
   tecnologia?: number
   stress_carico?: number
@@ -74,6 +73,7 @@ function generateMockData(): SurveyResponse[] {
   const descrs = ['Crescita', 'Stabile', 'Ricarica', 'Assestamento']
   const causeOpts = ['Carico di lavoro', 'Relazioni con colleghi', 'Rapporto con il/la responsabile', 'Crescita e sviluppo professionale', 'Strumenti e organizzazione', 'Motivi personali/extra-lavorativi']
   const prioOpts = ['Maggiore chiarezza sugli obiettivi', 'Più supporto dal/dalla responsabile', 'Migliori strumenti di lavoro', 'Più opportunità di crescita', 'Migliorare il clima del team', 'Più equilibrio vita-lavoro']
+  const crescitaOpts = ["Le opportunità offerte dall'azienda (formazione, progetti, ruoli)", 'Il supporto del mio responsabile diretto', 'Il confronto con i colleghi', 'La mia iniziativa personale', 'Percorsi di formazione esterni', 'Non sento di stare crescendo professionalmente']
   const nomi = ['Marco', 'Sara', 'Luca', 'Anna', 'Giuseppe', 'Maria', 'Antonio', 'Francesca', 'Davide', 'Elena', 'Matteo', 'Giulia']
   const cognomi = ['Rossi', 'Bianchi', 'Ferrari', 'Esposito', 'Romano', 'Colombo', 'Ricci', 'Marino', 'Greco', 'Bruno']
   const res: SurveyResponse[] = []
@@ -90,8 +90,8 @@ function generateMockData(): SurveyResponse[] {
       referente_obiettivi: rng.next(1, 5), hr_access: rng.next(1, 5),
       hr_valore: rng.next(1, 5), mgmt_trasp: rng.next(1, 5),
       mgmt_fiducia: rng.next(1, 5), jc_task: rng.next(1, 5),
-      jc_schemi: rng.next(1, 5), sv_crescita: rng.next(1, 5),
-      sv_investimento: rng.next(1, 5), engagement: rng.next(1, 5),
+      jc_schemi: rng.next(1, 5), sv_crescita: rng.pickN(crescitaOpts, rng.next(1, 2)),
+      engagement: rng.next(1, 5),
       tecnologia: rng.next(1, 5), stress_carico: rng.next(1, 5),
       stress_recupero: rng.next(1, 5),
       open_listening: rng.next(0, 1) > 0 ? rng.next(1, 5) : undefined,
@@ -249,6 +249,10 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const prioCount: Record<string, number> = {}
   filtered.forEach(r => r.priorita?.forEach(p => { prioCount[p] = (prioCount[p] ?? 0) + 1 }))
   const prioTop = Object.entries(prioCount).sort((a, b) => b[1] - a[1])
+
+  const crescitaCount: Record<string, number> = {}
+  filtered.forEach(r => r.sv_crescita?.forEach(p => { crescitaCount[p] = (crescitaCount[p] ?? 0) + 1 }))
+  const crescitaTop = Object.entries(crescitaCount).sort((a, b) => b[1] - a[1])
 
   const soddAvg = avg(filtered.map(r => r.soddisfazione))
 
@@ -782,12 +786,15 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                     { label: 'Riesco a lavorare in modo che si adatti alle mie competenze', short: 'Adattamento competenze', key: 'jc_schemi' },
                   ]}
                   data={filtered} />
-                <LikertCard title="Sviluppo professionale" eyebrow="CRESCITA"
-                  items={[
-                    { label: 'Ho opportunità concrete di crescere professionalmente in OT', short: 'Opportunità crescita', key: 'sv_crescita' },
-                    { label: 'OT investe nel mio sviluppo professionale', short: 'Investimento OT', key: 'sv_investimento' },
-                  ]}
-                  data={filtered} />
+                <div className="db-card">
+                  <div className="db-card-eyebrow">CRESCITA</div>
+                  <div className="db-card-title">A cosa attribuiscono la loro crescita professionale?</div>
+                  <div className="db-dist-list">
+                    {crescitaTop.length ? crescitaTop.map(([label, count]) => (
+                      <DistBar key={label} label={label} count={count} total={N} color="#FFB648" />
+                    )) : <p className="db-empty">Nessun dato</p>}
+                  </div>
+                </div>
                 <LikertCard title="Engagement" eyebrow="COINVOLGIMENTO"
                   items={[{ label: 'Mi sento coinvolto/a e motivato/a nel mio lavoro quotidiano', short: 'Coinvolgimento', key: 'engagement' }]}
                   data={filtered} />
