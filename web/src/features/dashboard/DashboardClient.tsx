@@ -181,7 +181,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
-  const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'high'>('all')
+  const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'mid' | 'high'>('all')
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -262,7 +262,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
       const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
       const t = r.termometro ?? 0
-      const energyMatch = q1EnergyFilter === 'all' || (q1EnergyFilter === 'low' && t <= 4) || (q1EnergyFilter === 'high' && t >= 8)
+      const energyMatch = q1EnergyFilter === 'all' || (q1EnergyFilter === 'low' && t <= 4) || (q1EnergyFilter === 'mid' && t >= 5 && t <= 7) || (q1EnergyFilter === 'high' && t >= 8)
       return searchMatch && buMatch && energyMatch
     })
     .sort((a, b) => (a.termometro ?? 0) - (b.termometro ?? 0))
@@ -567,7 +567,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </select>
               </div>
               <div className="db-energy-pills">
-                {([['all', 'Tutti'], ['low', '🔴 Energia bassa'], ['high', '🟢 Energia alta']] as const).map(([val, label]) => (
+                {([['all', 'Tutti'], ['low', '🔴 Energia bassa'], ['mid', '🟡 Energia media'], ['high', '🟢 Energia alta']] as const).map(([val, label]) => (
                   <button key={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
                     {label}
                   </button>
