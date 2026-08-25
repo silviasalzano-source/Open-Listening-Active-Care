@@ -301,56 +301,116 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   }
 
   function downloadReport(r: SurveyResponse) {
-    const termColor = (r.termometro ?? 0) >= 8 ? '#17B8A6' : (r.termometro ?? 0) >= 5 ? '#FFB648' : '#FF6E86'
+    const t = r.termometro ?? 0
+    const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
+    const termLabel = t >= 8 ? 'Alta' : t >= 5 ? 'Media' : 'Bassa'
+    const termBg = t >= 8 ? '#E8FAF7' : t >= 5 ? '#EEF2FF' : '#FFF0F3'
     const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
     const descrLabel: Record<string, string> = { 'Crescita': '⚡ Energia in Crescita', 'Stabile': '🔋 Energia Stabile', 'Ricarica': '🔌 Energia in Ricarica', 'Assestamento': '🌱 Energia in Assestamento' }
+
+    // Spunti di conversazione generati dai dati
+    const spunti: string[] = []
+    if (t <= 4) spunti.push('Energia bassa: inizia chiedendo come sta davvero, senza presupporre nulla. Dai spazio prima di entrare nei dettagli.')
+    if (t >= 5 && t <= 7) spunti.push('Energia nella media: esplora cosa potrebbe aumentarla o cosa la frena. Chiedi cosa manca per sentirsi davvero bene al lavoro.')
+    if ((r.causa ?? []).includes('Carico di lavoro')) spunti.push('Ha citato il carico di lavoro come fattore: chiedi se ci sono priorità da rivedere insieme o attività da redistribuire.')
+    if ((r.causa ?? []).includes('Rapporto con il/la responsabile')) spunti.push('Ha citato il rapporto con il/la responsabile: ascolta senza difendersi, fai domande aperte e prenditi del tempo per capire la prospettiva.')
+    if ((r.causa ?? []).includes('Mancanza di crescita professionale') || (r.causa ?? []).includes('Crescita e sviluppo professionale')) spunti.push('La crescita professionale è un tema presente: chiedi dove si vede tra 1-2 anni e cosa potrebbe aiutarla/lo ad arrivarci.')
+    if (r.descrizione === 'Ricarica' || r.descrizione === 'Assestamento') spunti.push('L'ultimo anno è stato faticoso: chiedi cosa l\'ha sostenuta/o nei momenti difficili e cosa si aspetta dal prossimo periodo.')
+    if (r.clima === 'Temporalesco' || r.clima === 'Piovoso') spunti.push('Il clima del team è percepito come difficile: esplora se ci sono dinamiche relazionali o organizzative da affrontare.')
+    if (r.descrizione === 'Crescita') spunti.push('Descrive un anno di crescita: valorizzalo, chiedi cosa ha reso possibile questo risultato e come mantenerlo.')
+    if (spunti.length === 0) spunti.push('Inizia con una domanda aperta: "Come stai vivendo questo periodo al lavoro?" — lascia che sia lei/lui a scegliere il punto di partenza.')
+
+    const barFill = Math.round((t / 10) * 100)
+
     const html = `<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Report ${r.nome} ${r.cognome}</title>
 <style>
-  body { font-family: -apple-system, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 24px; color: #2A2338; }
-  h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; }
-  .sub { color: #6B5F7A; font-size: 14px; margin: 0 0 32px; }
-  .badge { display: inline-block; background: #FFF3DC; color: #C47800; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600; letter-spacing: .05em; margin-bottom: 8px; }
-  .section { border: 1px solid #EDE8F5; border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; }
-  .section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #9A93A8; margin: 0 0 6px; }
-  .section-q { font-size: 14px; color: #6B5F7A; margin: 0 0 10px; }
-  .answer { font-size: 18px; font-weight: 700; color: #2A2338; margin: 0; }
-  .answer-big { font-size: 32px; font-weight: 800; color: ${termColor}; margin: 0; }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag { background: #F4F1FA; border-radius: 20px; padding: 4px 14px; font-size: 14px; font-weight: 500; }
-  .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
-  .meta-chip { background: #F4F1FA; border-radius: 8px; padding: 4px 12px; font-size: 12px; }
-  footer { margin-top: 40px; font-size: 12px; color: #9A93A8; border-top: 1px solid #EDE8F5; padding-top: 16px; }
-  @media print { body { margin: 20px; } }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 680px; margin: 40px auto; padding: 0 28px; color: #2A2338; line-height: 1.5; }
+  .header-badge { display: inline-block; background: #FFF3DC; color: #C47800; border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; letter-spacing: .08em; margin-bottom: 14px; }
+  h1 { font-size: 26px; font-weight: 800; margin: 0 0 4px; }
+  .sub { color: #9A93A8; font-size: 13px; margin: 0 0 20px; }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .meta-chip { background: #F4F1FA; border-radius: 8px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: #6B5F7A; }
+  .hero { background: ${termBg}; border-radius: 20px; padding: 24px 28px; margin-bottom: 20px; display: flex; align-items: center; gap: 28px; }
+  .hero-score { font-size: 56px; font-weight: 900; color: ${termColor}; line-height: 1; }
+  .hero-score span { font-size: 20px; font-weight: 400; color: #9A93A8; }
+  .hero-right { flex: 1; }
+  .hero-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #9A93A8; margin-bottom: 6px; }
+  .hero-status { font-size: 18px; font-weight: 700; color: ${termColor}; margin-bottom: 10px; }
+  .bar-wrap { background: #E8E4F0; border-radius: 100px; height: 8px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 100px; background: ${termColor}; width: ${barFill}%; }
+  .bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: #9A93A8; margin-top: 4px; }
+  .hero-vs { font-size: 12px; color: #9A93A8; margin-top: 8px; }
+  .hero-vs strong { color: #2A2338; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .section { border: 1px solid #EDE8F5; border-radius: 16px; padding: 18px 20px; }
+  .section.full { grid-column: 1 / -1; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; color: #9A93A8; margin: 0 0 5px; text-transform: uppercase; }
+  .section-q { font-size: 12px; color: #9A93A8; margin: 0 0 10px; }
+  .answer { font-size: 17px; font-weight: 700; color: #2A2338; margin: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tag { background: #F4F1FA; border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 500; }
+  .spunti { background: #F8F6FF; border: 1px solid #DDD6F8; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; }
+  .spunti-title { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #6B5F7A; margin: 0 0 14px; text-transform: uppercase; }
+  .spunto { display: flex; gap: 10px; margin-bottom: 10px; font-size: 14px; line-height: 1.5; }
+  .spunto:last-child { margin-bottom: 0; }
+  .spunto-dot { width: 6px; height: 6px; border-radius: 50%; background: #9B8ECC; margin-top: 7px; flex-shrink: 0; }
+  .note-box { border: 1.5px dashed #CCC8D8; border-radius: 16px; padding: 20px 24px; min-height: 120px; margin-bottom: 20px; }
+  .note-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #9A93A8; margin: 0 0 10px; text-transform: uppercase; }
+  footer { margin-top: 24px; font-size: 11px; color: #9A93A8; border-top: 1px solid #EDE8F5; padding-top: 14px; display: flex; justify-content: space-between; }
+  @media print { body { margin: 16px; } .note-box { min-height: 160px; } }
 </style></head><body>
-<div class="badge">OPEN LISTENING · ACTIVE CARE — Report individuale</div>
+<div class="header-badge">OPEN LISTENING · ACTIVE CARE — Report one-to-one</div>
 <h1>${r.nome ?? ''} ${r.cognome ?? ''}</h1>
-<p class="sub">Generato il ${new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+<p class="sub">Generato il ${new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' })} · Documento riservato HR</p>
 <div class="meta">
   ${r.bu ? `<span class="meta-chip">📍 ${r.bu}</span>` : ''}
   ${r.ruolo ? `<span class="meta-chip">👤 ${r.ruolo}</span>` : ''}
   ${r.anzianita ? `<span class="meta-chip">📅 ${r.anzianita}</span>` : ''}
 </div>
-<div class="section">
-  <div class="section-label">CLIMA DEL TEAM · OGGI</div>
-  <div class="section-q">Che tempo fa nel tuo team?</div>
-  <p class="answer">${climaEmoji[r.clima ?? ''] ?? ''} ${r.clima ?? '—'}</p>
+
+<div class="hero">
+  <div class="hero-score">${t}<span>/10</span></div>
+  <div class="hero-right">
+    <div class="hero-label">TERMOMETRO ENERGETICO · OGGI</div>
+    <div class="hero-status">Energia ${termLabel}</div>
+    <div class="bar-wrap"><div class="bar-fill"></div></div>
+    <div class="bar-labels"><span>1</span><span>5</span><span>10</span></div>
+    <div class="hero-vs">Media del team: <strong>${termAvg.toFixed(1)}/10</strong> · Scarto: <strong style="color:${t >= termAvg ? '#17B8A6' : '#FF6E86'}">${t >= termAvg ? '+' : ''}${(t - termAvg).toFixed(1)}</strong></div>
+  </div>
 </div>
-<div class="section">
-  <div class="section-label">TERMOMETRO ENERGETICO · OGGI</div>
-  <div class="section-q">Il livello di energia attuale (1–10)</div>
-  <p class="answer-big">${r.termometro ?? '—'}<span style="font-size:16px;color:#6B5F7A;font-weight:400">/10</span></p>
+
+<div class="grid">
+  <div class="section">
+    <div class="section-label">Clima del team · Oggi</div>
+    <div class="section-q">Che tempo fa nel tuo team?</div>
+    <p class="answer">${climaEmoji[r.clima ?? ''] ?? ''} ${r.clima ?? '—'}</p>
+  </div>
+  <div class="section">
+    <div class="section-label">Descrizione energia · Ultimo anno</div>
+    <div class="section-q">Come descriveresti la tua energia quest'anno?</div>
+    <p class="answer">${r.descrizione ? descrLabel[r.descrizione] ?? r.descrizione : '—'}</p>
+  </div>
+  <div class="section full">
+    <div class="section-label">Cause dell'energia · Oggi</div>
+    <div class="section-q">Cosa influenza di più la tua energia ora?</div>
+    <div class="tags">${(r.causa ?? []).map(c => `<span class="tag">${c}</span>`).join('') || '<span style="color:#9A93A8">—</span>'}</div>
+  </div>
 </div>
-<div class="section">
-  <div class="section-label">CAUSE DELL'ENERGIA · OGGI</div>
-  <div class="section-q">Cosa influenza di più la tua energia ora?</div>
-  <div class="tags">${(r.causa ?? []).map(c => `<span class="tag">${c}</span>`).join('') || '<span style="color:#9A93A8">—</span>'}</div>
+
+<div class="spunti">
+  <div class="spunti-title">💬 Spunti per il colloquio</div>
+  ${spunti.map(s => `<div class="spunto"><div class="spunto-dot"></div><div>${s}</div></div>`).join('')}
 </div>
-<div class="section">
-  <div class="section-label">DESCRIZIONE ENERGIA · ULTIMO ANNO</div>
-  <div class="section-q">Come descriveresti la tua energia quest'anno?</div>
-  <p class="answer">${r.descrizione ? descrLabel[r.descrizione] ?? r.descrizione : '—'}</p>
+
+<div class="note-box">
+  <div class="note-title">📝 Note HR — da compilare durante il colloquio</div>
 </div>
-<footer>OT Consulting — Open Listening · Active Care &nbsp;·&nbsp; Documento riservato per uso interno HR</footer>
+
+<footer>
+  <span>OT Consulting — Open Listening · Active Care</span>
+  <span>Uso interno riservato · Non distribuire</span>
+</footer>
 </body></html>`
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -567,8 +627,8 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </select>
               </div>
               <div className="db-energy-pills">
-                {([['all', 'Tutti'], ['low', '🔴 Energia bassa'], ['mid', '🟡 Energia media'], ['high', '🟢 Energia alta']] as const).map(([val, label]) => (
-                  <button key={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
+                {([['all', 'Tutti'], ['low', '🔴 Energia bassa'], ['mid', '🔵 Energia media'], ['high', '🟢 Energia alta']] as const).map(([val, label]) => (
+                  <button key={val} data-val={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
                     {label}
                   </button>
                 ))}

@@ -147,6 +147,7 @@
 }
 .db-energy-pill:hover { border-color: #FFB648; color: #9B5E00; }
 .db-energy-pill.active { background: #2A2338; color: #fff; border-color: #2A2338; }
+.db-energy-pill[data-val="mid"].active { background: #4B6BCC; border-color: #4B6BCC; }
 .db-sort-note {
   font-size: 11px;
   color: rgba(42,35,56,.35);
