@@ -408,131 +408,130 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             </div>
 
             <div className="db-row-2col">
-              <div className="db-card">
-                <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
-                {(() => {
-                  const neg = (climaCount['Piovoso'] ?? 0) + (climaCount['Temporalesco'] ?? 0)
-                  const negPct = all.length ? Math.round(neg / all.length * 100) : 0
-                  return negPct >= 40
-                    ? <div className="db-alert red">🔴 Attenzione — {negPct}% del team vive un clima difficile</div>
-                    : negPct >= 20
-                    ? <div className="db-alert amber">⚠️ Da monitorare — {negPct}% segnala clima sotto pressione</div>
-                    : <div className="db-alert green">✅ Clima nella norma — {100 - negPct}% positivo</div>
-                })()}
-                <div className="db-card-title">Che tempo fa nel tuo team?</div>
-
-                <div className="db-dist-list">
-                  {climaOpts.map(o => {
-                    const n = climaCount[o.label] ?? 0
-                    const pct = all.length ? Math.round(n / all.length * 100) : 0
-                    return (
-                      <div key={o.label} className="db-dist-row icon">
-                        <span className="db-dist-icon">{o.icon}</span>
-                        <span className="db-dist-label">{o.label}</span>
-                        <div className="db-dist-track">
-                          <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
-                        </div>
-                        <span className="db-dist-count">{n}</span>
-                        <span className="db-dist-pct">{pct}%</span>
-                      </div>
-                    )
-                  })}
-                </div>
-                <div className="db-card-insight">
-                  {climaPositivoPct >= 60
-                    ? `✅ La maggioranza del team (${climaPositivoPct}%) vive un clima sereno. Il clima prevalente è "${climaTop.label}".`
-                    : climaPositivoPct >= 40
-                    ? `⚠️ Il clima è misto: ${climaPositivoPct}% positivo, ${100 - climaPositivoPct}% sotto pressione. Vale la pena approfondire.`
-                    : `🔴 Solo il ${climaPositivoPct}% del team vive un clima positivo. Situazione da monitorare con priorità.`
-                  }
-                </div>
-              </div>
-
-              <div className="db-card">
-                <div className="db-clima-badge">⚡ Termometro energetico · Oggi</div>
-                {termAvg < 5
-                  ? <div className="db-alert red">🔴 Energia critica — media {termAvg.toFixed(1)}/10, intervento consigliato</div>
-                  : termAvg < 6.5
-                  ? <div className="db-alert amber">⚠️ Energia media — {termVals.filter(v => v <= 4).length} persone sotto soglia (1–4)</div>
-                  : <div className="db-alert green">✅ Energia buona — {termVals.filter(v => v >= 8).length} persone su {termVals.length} ad alta energia</div>
-                }
-                <div className="db-card-title">Il livello di energia attuale</div>
-                <div className="db-gauge-row">
-                  <div className="db-gauge">
-                    <svg viewBox="0 0 100 100" width="90" height="90">
-                      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="10" />
-                      <circle cx="50" cy="50" r="42" fill="none"
-                        stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
-                        strokeWidth="10" strokeDasharray={`${(termAvg / 10) * 264} 264`}
-                        strokeLinecap="round" transform="rotate(-90 50 50)" />
-                      <text x="50" y="55" textAnchor="middle" fontSize="20" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
-                    </svg>
-                  </div>
-                  <div className="db-gauge-legend">
-                    <span className="db-gauge-sub">{termVals.length} risposte</span>
-                    <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa (1–4)</span>
-                    <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media (5–7)</span>
-                    <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta (8–10)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="db-card">
-              <div className="db-clima-badge">🔍 Cause dell'energia · Oggi</div>
-              {causeTop[0] && (() => {
-                const [topCausa, topN] = causeTop[0]
-                const topPct = all.length ? Math.round(topN / all.length * 100) : 0
-                const isNeg = ['Carico di lavoro', 'Rapporto con il/la responsabile'].includes(topCausa)
-                return isNeg
-                  ? <div className="db-alert red">🔴 "{topCausa}" è la causa principale ({topPct}%) — priorità di intervento</div>
-                  : <div className="db-alert amber">⚠️ Causa prevalente: "{topCausa}" ({topPct}%) — tienila d&apos;occhio</div>
-              })()}
-              <div className="db-card-title">Cosa influenza di più l'energia?</div>
-              <div className="db-dist-list">
-                {causeTop.map(([label, count]) => (
-                  <DistBar key={label} label={label} count={count} total={all.length} color="#FFB648" />
-                ))}
-              </div>
-            </div>
-
-            <div className="db-card">
-              <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
               {(() => {
-                const recuperoPct = 100 - descrPositivoPct
-                return recuperoPct >= 50
-                  ? <div className="db-alert red">🔴 {recuperoPct}% in fase di recupero o assestamento — anno difficile per molti</div>
-                  : recuperoPct >= 30
-                  ? <div className="db-alert amber">⚠️ {recuperoPct}% ha vissuto un anno faticoso — monitorare nei colloqui</div>
-                  : <div className="db-alert green">✅ {descrPositivoPct}% descrive un anno positivo (Crescita o Stabile)</div>
-              })()}
-              <div className="db-card-title">Come è andata quest'anno?</div>
-
-              <div className="db-dist-list">
-                {descOpts.map(o => {
-                  const n = descrCount[o.key] ?? 0
-                  const pct = all.length ? Math.round(n / all.length * 100) : 0
-                  return (
-                    <div key={o.label} className="db-dist-row">
-                      <span className="db-dist-label">{o.icon} {o.label}</span>
-                      <div className="db-dist-track">
-                        <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
-                      </div>
-                      <span className="db-dist-count">{n}</span>
-                      <span className="db-dist-pct">{pct}%</span>
+                const neg = (climaCount['Piovoso'] ?? 0) + (climaCount['Temporalesco'] ?? 0)
+                const negPct = all.length ? Math.round(neg / all.length * 100) : 0
+                const sev = negPct >= 40 ? 'red' : negPct >= 20 ? 'amber' : 'green'
+                const statusText = sev === 'red'
+                  ? `${negPct}% riporta clima difficile`
+                  : sev === 'amber'
+                  ? `${negPct}% segnala pressione — monitora`
+                  : `${100 - negPct}% vive un clima positivo`
+                return (
+                  <div className={`db-card alert-${sev}`}>
+                    <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
+                    <div className="db-card-title">Che tempo fa nel tuo team?</div>
+                    <div className="db-card-status">{statusText}</div>
+                    <div className="db-dist-list">
+                      {climaOpts.map(o => {
+                        const n = climaCount[o.label] ?? 0
+                        const pct = all.length ? Math.round(n / all.length * 100) : 0
+                        return (
+                          <div key={o.label} className="db-dist-row icon">
+                            <span className="db-dist-icon">{o.icon}</span>
+                            <span className="db-dist-label">{o.label}</span>
+                            <div className="db-dist-track">
+                              <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
+                            </div>
+                            <span className="db-dist-count">{n}</span>
+                            <span className="db-dist-pct">{pct}%</span>
+                          </div>
+                        )
+                      })}
                     </div>
-                  )
-                })}
-              </div>
-              <div className="db-card-insight">
-                {descrPositivoPct >= 60
-                  ? `✅ Il ${descrPositivoPct}% del team descrive il proprio anno con energia positiva (Crescita o Stabile). Lo stato prevalente è "${descrTop.label}".`
-                  : descrPositivoPct >= 40
-                  ? `⚠️ Il team è diviso: ${descrPositivoPct}% in energia positiva, ${100 - descrPositivoPct}% in una fase di recupero o assestamento.`
-                  : `🔴 La maggioranza (${100 - descrPositivoPct}%) ha vissuto un anno in Ricarica o Assestamento. Potrebbe indicare un periodo di stress prolungato.`
-                }
-              </div>
+                  </div>
+                )
+              })()}
+
+              {(() => {
+                const sev = termAvg < 5 ? 'red' : termAvg < 6.5 ? 'amber' : 'green'
+                const statusText = sev === 'red'
+                  ? `Media ${termAvg.toFixed(1)}/10 — livello critico`
+                  : sev === 'amber'
+                  ? `${termVals.filter(v => v <= 4).length} persone sotto soglia (1–4)`
+                  : `${termVals.filter(v => v >= 8).length} persone ad alta energia (8–10)`
+                return (
+                  <div className={`db-card alert-${sev}`}>
+                    <div className="db-clima-badge">⚡ Termometro energetico · Oggi</div>
+                    <div className="db-card-title">Il livello di energia attuale</div>
+                    <div className="db-card-status">{statusText}</div>
+                    <div className="db-gauge-row">
+                      <div className="db-gauge">
+                        <svg viewBox="0 0 100 100" width="90" height="90">
+                          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="10" />
+                          <circle cx="50" cy="50" r="42" fill="none"
+                            stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
+                            strokeWidth="10" strokeDasharray={`${(termAvg / 10) * 264} 264`}
+                            strokeLinecap="round" transform="rotate(-90 50 50)" />
+                          <text x="50" y="55" textAnchor="middle" fontSize="20" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
+                        </svg>
+                      </div>
+                      <div className="db-gauge-legend">
+                        <span className="db-gauge-sub">{termVals.length} risposte</span>
+                        <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa (1–4)</span>
+                        <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media (5–7)</span>
+                        <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta (8–10)</span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
+
+            {(() => {
+              const [topCausa, topN] = causeTop[0] ?? ['—', 0]
+              const topPct = all.length ? Math.round(topN / all.length * 100) : 0
+              const isNeg = ['Carico di lavoro', 'Rapporto con il/la responsabile'].includes(topCausa)
+              const sev = isNeg ? 'red' : 'amber'
+              const statusText = isNeg
+                ? `"${topCausa}" è la causa principale (${topPct}%)`
+                : `Causa prevalente: "${topCausa}" (${topPct}%)`
+              return (
+                <div className={`db-card alert-${sev}`}>
+                  <div className="db-clima-badge">🔍 Cause dell&apos;energia · Oggi</div>
+                  <div className="db-card-title">Cosa influenza di più l&apos;energia?</div>
+                  <div className="db-card-status">{statusText}</div>
+                  <div className="db-dist-list">
+                    {causeTop.map(([label, count]) => (
+                      <DistBar key={label} label={label} count={count} total={all.length} color="#FFB648" />
+                    ))}
+                  </div>
+                </div>
+              )
+            })()}
+
+            {(() => {
+              const recuperoPct = 100 - descrPositivoPct
+              const sev = recuperoPct >= 50 ? 'red' : recuperoPct >= 30 ? 'amber' : 'green'
+              const statusText = sev === 'red'
+                ? `${recuperoPct}% in recupero o assestamento`
+                : sev === 'amber'
+                ? `${recuperoPct}% ha vissuto un anno faticoso`
+                : `${descrPositivoPct}% descrive un anno positivo`
+              return (
+                <div className={`db-card alert-${sev}`}>
+                  <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
+                  <div className="db-card-title">Come è andata quest&apos;anno?</div>
+                  <div className="db-card-status">{statusText}</div>
+                  <div className="db-dist-list">
+                    {descOpts.map(o => {
+                      const n = descrCount[o.key] ?? 0
+                      const pct = all.length ? Math.round(n / all.length * 100) : 0
+                      return (
+                        <div key={o.label} className="db-dist-row">
+                          <span className="db-dist-label">{o.icon} {o.label}</span>
+                          <div className="db-dist-track">
+                            <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
+                          </div>
+                          <span className="db-dist-count">{n}</span>
+                          <span className="db-dist-pct">{pct}%</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })()}
 
             <div className="db-individual-box">
               <div className="db-individual-header">
