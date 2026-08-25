@@ -26,7 +26,7 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
           <rect x="17" y="7" width="5" height="21" rx="2" fill="#17B8A6"/>
           <rect x="24" y="14" width="5" height="14" rx="2" fill="#2E86DE"/>
         </svg>
-        <span className="intro-db-label">HR</span>
+        <span className="intro-db-label">Dashboard HR</span>
       </a>
     </div>
   )

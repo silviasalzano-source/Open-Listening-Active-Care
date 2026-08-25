@@ -58,9 +58,9 @@
 .intro p { color: var(--ink-dim); font-size: 15px; line-height: 1.55; max-width: 340px; }
 .intro p span { font-weight: 700; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .intro-logo { width: 150px; opacity: 0.9; margin-bottom: 6px; }
-.intro-db-btn { position: absolute; top: 0px; left: 0px; display: flex; flex-direction: column; align-items: center; gap: 3px; background: rgba(255,255,255,0.85); border: 1px solid rgba(42,35,56,0.10); border-radius: 14px; padding: 8px 10px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 14px rgba(42,35,56,0.10); transition: box-shadow .15s ease, transform .15s ease; }
-.intro-db-btn:hover { box-shadow: 0 8px 22px rgba(42,35,56,0.16); transform: translateY(-2px); }
-.intro-db-label { font-family: var(--font-fredoka), sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink-dim); text-transform: uppercase; }
+.intro-db-btn { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: row; align-items: center; gap: 8px; background: rgba(23,184,166,0.10); border: 1.5px solid rgba(23,184,166,0.30); border-radius: 100px; padding: 9px 18px; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background .18s ease, box-shadow .18s ease, transform .15s ease; }
+.intro-db-btn:hover { background: rgba(23,184,166,0.18); box-shadow: 0 6px 18px rgba(23,184,166,0.22); transform: translateX(-50%) translateY(-2px); }
+.intro-db-label { font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: #17B8A6; }
 .battery-hero { width: 108px; height: 180px; border: 5px solid rgba(42, 35, 56, 0.5); border-radius: 22px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 7px; background: rgba(42, 35, 56, 0.03); }
 .battery-hero::after { content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 40px; height: 12px; background: rgba(42, 35, 56, 0.5); border-radius: 6px 6px 0 0; }
 .battery-hero-fill { width: 100%; height: 14%; border-radius: 12px; background: linear-gradient(180deg, var(--coral), var(--amber)); animation: pulseFill 2.4s ease-in-out infinite alternate; }
