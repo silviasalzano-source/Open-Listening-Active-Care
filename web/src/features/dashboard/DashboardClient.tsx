@@ -405,7 +405,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               </div>
 
               <div className="db-card">
-                <div className="db-card-eyebrow">TERMOMETRO ENERGETICO · OGGI</div>
+                <div className="db-clima-badge">⚡ Termometro energetico · Oggi</div>
                 <div className="db-card-title">Il livello di energia attuale</div>
                 <div className="db-gauge-row">
                   <div className="db-gauge">
@@ -429,7 +429,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             </div>
 
             <div className="db-card">
-              <div className="db-card-eyebrow">CAUSE DELL'ENERGIA · OGGI</div>
+              <div className="db-clima-badge">🔍 Cause dell'energia · Oggi</div>
               <div className="db-card-title">Cosa influenza di più l'energia?</div>
               <div className="db-dist-list">
                 {causeTop.map(([label, count]) => (
