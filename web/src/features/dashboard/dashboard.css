@@ -268,11 +268,89 @@
   transition: background .15s, transform .12s;
 }
 .db-individual-dl:hover { background: #17B8A6; transform: translateY(-1px); }
-.db-individual-empty {
+.db-individual-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 20px;
   text-align: center;
   color: #9A93A8;
   font-size: 14px;
-  padding: 24px 0;
+  line-height: 1.6;
+}
+.db-individual-placeholder span { font-size: 12px; color: #C4BDD0; }
+.db-individual-results-count {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: rgba(42,35,56,.35);
+  margin-bottom: 10px;
+}
+
+/* ---- Quick view cards ---- */
+.db-quickview-list { display: flex; flex-direction: column; gap: 12px; }
+.db-quickview-card {
+  border: 1px solid #EDE8F5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow .15s;
+}
+.db-quickview-card:hover { box-shadow: 0 4px 18px rgba(42,35,56,.09); }
+.db-qv-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 12px;
+}
+.db-qv-identity { flex: 1; min-width: 0; }
+.db-qv-body { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 10px; }
+.db-qv-energy {
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.db-qv-score {
+  font-family: var(--font-fredoka, sans-serif);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.db-qv-score-unit { font-size: 14px; font-weight: 400; opacity: .6; }
+.db-qv-energy-right { flex: 1; }
+.db-qv-energy-label { font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+.db-qv-bar-wrap {
+  height: 6px;
+  background: rgba(42,35,56,.10);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.db-qv-bar-fill { height: 100%; border-radius: 100px; transition: width .4s ease; }
+.db-qv-clima { font-size: 24px; flex-shrink: 0; }
+.db-qv-data-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.db-qv-data-item { flex: 1; min-width: 120px; }
+.db-qv-data-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(42,35,56,.4);
+  margin-bottom: 4px;
+}
+.db-qv-data-val { font-size: 13px; font-weight: 600; color: #2A2338; }
+.db-qv-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.db-qv-tag {
+  background: #F4F1FA;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6B5F7A;
 }
 .db-individual-count {
   font-size: 12px;

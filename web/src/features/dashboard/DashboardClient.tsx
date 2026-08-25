@@ -635,45 +635,83 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 <span className="db-sort-note">↑ ordinate per energia</span>
               </div>
 
-              {q1Individuals.length === 0 ? (
-                <div className="db-individual-empty">Nessun rispondente trovato per questa ricerca.</div>
+              {q1Search.trim().length === 0 ? (
+                <div className="db-individual-placeholder">
+                  <svg viewBox="0 0 48 48" fill="none" width="40" height="40">
+                    <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5"/>
+                    <path d="M30 30l10 10" stroke="#CCC8D8" strokeWidth="2.5" strokeLinecap="round"/>
+                  </svg>
+                  <div>Cerca un dipendente per nome o cognome<br/><span>Usa i filtri sopra per restringere l'area o il livello di energia</span></div>
+                </div>
+              ) : q1Individuals.length === 0 ? (
+                <div className="db-individual-placeholder">
+                  <div>Nessun rispondente corrisponde alla ricerca.</div>
+                </div>
               ) : (
-                <div className="db-individual-list">
-                  {q1Individuals.map((r, i) => {
-                    const t = r.termometro ?? 0
-                    const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#FFB648' : '#FF6E86'
-                    const avatarBg = t >= 8 ? 'rgba(23,184,166,.15)' : t >= 5 ? 'rgba(255,182,72,.18)' : 'rgba(255,110,134,.15)'
-                    const avatarColor = t >= 8 ? '#0A7A6B' : t >= 5 ? '#9B5E00' : '#B8003A'
-                    const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
-                    return (
-                      <div key={i} className="db-individual-row">
-                        <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor }}>
-                          {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
-                        </div>
-                        <div className="db-individual-info">
-                          <div className="db-individual-name">{r.nome} {r.cognome}</div>
-                          <div className="db-individual-meta">
-                            {r.bu && <span>{r.bu}</span>}
-                            {r.ruolo && <span>· {r.ruolo}</span>}
+                <>
+                  <div className="db-individual-results-count">{q1Individuals.length} {q1Individuals.length === 1 ? 'risultato' : 'risultati'}</div>
+                  <div className="db-quickview-list">
+                    {q1Individuals.map((r, i) => {
+                      const t = r.termometro ?? 0
+                      const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
+                      const termBg = t >= 8 ? 'rgba(23,184,166,.10)' : t >= 5 ? 'rgba(75,107,204,.10)' : 'rgba(255,110,134,.10)'
+                      const termLabel = t >= 8 ? 'Alta' : t >= 5 ? 'Media' : 'Bassa'
+                      const avatarBg = t >= 8 ? 'rgba(23,184,166,.15)' : t >= 5 ? 'rgba(75,107,204,.15)' : 'rgba(255,110,134,.15)'
+                      const avatarColor = t >= 8 ? '#0A7A6B' : t >= 5 ? '#2A4A99' : '#B8003A'
+                      const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
+                      const descrShort: Record<string, string> = { 'Crescita': '⚡ Crescita', 'Stabile': '🔋 Stabile', 'Ricarica': '🔌 Ricarica', 'Assestamento': '🌱 Assestamento' }
+                      return (
+                        <div key={i} className="db-quickview-card">
+                          <div className="db-qv-header">
+                            <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor, width: 40, height: 40, fontSize: 14 }}>
+                              {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
+                            </div>
+                            <div className="db-qv-identity">
+                              <div className="db-individual-name">{r.nome} {r.cognome}</div>
+                              <div className="db-individual-meta">
+                                {r.bu && <span>{r.bu}</span>}
+                                {r.ruolo && <span>· {r.ruolo}</span>}
+                                {r.anzianita && <span>· {r.anzianita}</span>}
+                              </div>
+                            </div>
+                            <button className="db-individual-dl" onClick={() => downloadReport(r)}>
+                              <svg viewBox="0 0 20 20" fill="none" width="14" height="14">
+                                <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                              </svg>
+                              Report
+                            </button>
+                          </div>
+                          <div className="db-qv-body">
+                            <div className="db-qv-energy" style={{ background: termBg }}>
+                              <span className="db-qv-score" style={{ color: termColor }}>{t}<span className="db-qv-score-unit">/10</span></span>
+                              <div className="db-qv-energy-right">
+                                <div className="db-qv-energy-label" style={{ color: termColor }}>Energia {termLabel}</div>
+                                <div className="db-qv-bar-wrap">
+                                  <div className="db-qv-bar-fill" style={{ width: `${t * 10}%`, background: termColor }} />
+                                </div>
+                              </div>
+                              <span className="db-qv-clima">{climaEmoji[r.clima ?? ''] ?? '—'}</span>
+                            </div>
+                            <div className="db-qv-data-row">
+                              <div className="db-qv-data-item">
+                                <div className="db-qv-data-label">Anno</div>
+                                <div className="db-qv-data-val">{r.descrizione ? descrShort[r.descrizione] ?? r.descrizione : '—'}</div>
+                              </div>
+                              <div className="db-qv-data-item">
+                                <div className="db-qv-data-label">Cause</div>
+                                <div className="db-qv-tags">
+                                  {(r.causa ?? []).map(c => <span key={c} className="db-qv-tag">{c}</span>)}
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className="db-individual-energy">
-                          <span className="db-individual-clima">{climaEmoji[r.clima ?? ''] ?? '—'}</span>
-                          <span className="db-individual-term" style={{ color: termColor }}>{r.termometro ?? '—'}<span className="db-individual-term-unit">/10</span></span>
-                        </div>
-                        <button className="db-individual-dl" onClick={() => downloadReport(r)}>
-                          <svg viewBox="0 0 20 20" fill="none" width="15" height="15">
-                            <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-                          </svg>
-                          Report
-                        </button>
-                      </div>
-                    )
-                  })}
-                </div>
+                      )
+                    })}
+                  </div>
+                </>
               )}
-              <div className="db-individual-count">{q1Individuals.length} di {all.length} rispondenti</div>
             </div>
           </div>
         )}
