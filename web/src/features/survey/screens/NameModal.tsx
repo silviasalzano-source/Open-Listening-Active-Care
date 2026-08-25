@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
+import { createPortal } from 'react-dom'
 
-export function NameModal({ onConfirm }: { onConfirm: (nome: string, cognome: string) => void }) {
+function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: string) => void }) {
   const [nome, setNome] = useState('')
   const [cognome, setCognome] = useState('')
 
@@ -26,14 +27,14 @@ export function NameModal({ onConfirm }: { onConfirm: (nome: string, cognome: st
             <span className="name-modal-phase-icon">🔓</span>
             <div>
               <strong>Prima parte — nominativa</strong>
-              <p>Le risposte di "My Energy Battery" sono associate al tuo nome, per permetterci di preparare il tuo momento di ascolto personalizzato.</p>
+              <p>Le risposte di &quot;My Energy Battery&quot; sono associate al tuo nome, per permetterci di preparare il tuo momento di ascolto personalizzato.</p>
             </div>
           </div>
           <div className="name-modal-phase">
             <span className="name-modal-phase-icon">🔒</span>
             <div>
               <strong>Seconda parte — anonima</strong>
-              <p>I "Fattori Energy Battery" sono completamente anonimi: nessuno saprà mai chi ha risposto cosa.</p>
+              <p>I &quot;Fattori Energy Battery&quot; sono completamente anonimi: nessuno saprà mai chi ha risposto cosa.</p>
             </div>
           </div>
         </div>
@@ -69,4 +70,15 @@ export function NameModal({ onConfirm }: { onConfirm: (nome: string, cognome: st
       </div>
     </div>
   )
+}
+
+export function NameModal({ onConfirm }: { onConfirm: (nome: string, cognome: string) => void }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+  return createPortal(<NameModalContent onConfirm={onConfirm} />, document.body)
 }
