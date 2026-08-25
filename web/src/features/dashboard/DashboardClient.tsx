@@ -171,8 +171,9 @@ function DistBar({ label, count, total, color }: { label: string; count: number;
 }
 
 /* ---- Main component ---- */
-export function DashboardClient({ userEmail }: { userEmail: string }) {
-  const [tab, setTab] = useState<'q1' | 'q2'>('q1')
+export function DashboardClient({ userEmail, userRole }: { userEmail: string; userRole: 'hr_admin' | 'bu_manager' }) {
+  const isHR = userRole === 'hr_admin'
+  const [tab, setTab] = useState<'q1' | 'q2'>(isHR ? 'q1' : 'q2')
   const [buF, setBuF] = useState('')
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
@@ -251,7 +252,9 @@ export function DashboardClient({ userEmail }: { userEmail: string }) {
 
       <div className="db-content">
         <div className="db-tabs">
-          <button className={`db-tab warm${tab === 'q1' ? ' active' : ''}`} onClick={() => setTab('q1')}>🔋 My Energy Battery</button>
+          {isHR && (
+            <button className={`db-tab warm${tab === 'q1' ? ' active' : ''}`} onClick={() => setTab('q1')}>🔋 My Energy Battery</button>
+          )}
           <button className={`db-tab${tab === 'q2' ? ' active' : ''}`} onClick={() => setTab('q2')}>⚡ Fattori Energy Battery</button>
         </div>
 
