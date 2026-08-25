@@ -38,6 +38,7 @@ interface SurveyResponse {
 const LS_KEY = 'ol_responses'
 const LS_SEED_KEY = 'ol_seeded'
 const PRIVACY_MIN = 5
+const TOTAL_INVITED = 80
 
 /* ---- Deterministic mock data (LCG) ---- */
 function mkRng(seed: number) {
@@ -379,25 +380,29 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           <button className={`db-tab${tab === 'q2' ? ' active' : ''}`} onClick={() => setTab('q2')}>⚡ Fattori Energy Battery</button>
         </div>
 
+        <div className="db-survey-strip">
+          <div className="db-survey-stat">
+            <span className="db-survey-stat-num">{all.length}</span>
+            <span className="db-survey-stat-label">survey completate</span>
+          </div>
+          <div className="db-survey-divider" />
+          <div className="db-survey-stat pending">
+            <span className="db-survey-stat-num">{Math.max(0, TOTAL_INVITED - all.length)}</span>
+            <span className="db-survey-stat-label">da completare</span>
+          </div>
+          <div className="db-survey-divider" />
+          <div className="db-survey-stat">
+            <span className="db-survey-stat-num">{TOTAL_INVITED}</span>
+            <span className="db-survey-stat-label">inviti inviati</span>
+          </div>
+          <div className="db-survey-progress-wrap">
+            <div className="db-survey-progress-bar" style={{ width: `${Math.round(all.length / TOTAL_INVITED * 100)}%` }} />
+            <span className="db-survey-progress-pct">{Math.round(all.length / TOTAL_INVITED * 100)}% completamento</span>
+          </div>
+        </div>
+
         {tab === 'q1' && (
           <div className="db-tab-body">
-            <div className="db-overview-row">
-              <div className="db-ov-card">
-                <div className="db-ov-card-text">
-                  <div className="db-ov-label">RISPONDENTI TOTALI</div>
-                  <div className="db-ov-num">{all.length}</div>
-                  <div className="db-ov-sub">survey completate</div>
-                </div>
-              </div>
-              <div className="db-ov-card">
-                <div className="db-ov-card-text">
-                  <div className="db-ov-label">ENERGIA MEDIA</div>
-                  <div className="db-ov-num amber">{termAvg.toFixed(1)}<span className="db-ov-unit">/10</span></div>
-                  <div className="db-ov-sub">termometro oggi</div>
-                </div>
-              </div>
-            </div>
-
             <div className="db-section-hdr">
               <span className="db-section-title">Energia oggi e nell'anno</span>
             </div>
@@ -628,24 +633,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               </div>
             ) : (
               <>
-                <div className="db-overview-row">
-                  <div className="db-ov-card">
-                    <div className="db-ov-label">RISPONDENTI</div>
-                    <div className="db-ov-num">{N}</div>
-                    <div className="db-ov-sub">filtro attivo</div>
-                  </div>
-                  <div className="db-ov-card">
-                    <div className="db-ov-label">NPS SCORE</div>
-                    <div className={`db-ov-num ${npsColorClass}`}>{npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}</div>
-                    <div className="db-ov-sub">promotori – detrattori</div>
-                  </div>
-                  <div className="db-ov-card">
-                    <div className="db-ov-label">PASSIONE PER IL LAVORO</div>
-                    <div className="db-ov-num green">{soddAvg.toFixed(1)}<span className="db-ov-unit">/5</span></div>
-                    <div className="db-ov-sub">media soddisfazione</div>
-                  </div>
-                </div>
-
                 <div className="db-section-hdr">
                   <span className="db-section-pill cool">🤝 Relazioni</span>
                   <span className="db-section-title">Le tue relazioni sul lavoro</span>
