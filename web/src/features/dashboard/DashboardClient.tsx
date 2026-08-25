@@ -315,7 +315,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     if ((r.causa ?? []).includes('Carico di lavoro')) spunti.push('Ha citato il carico di lavoro come fattore: chiedi se ci sono priorità da rivedere insieme o attività da redistribuire.')
     if ((r.causa ?? []).includes('Rapporto con il/la responsabile')) spunti.push('Ha citato il rapporto con il/la responsabile: ascolta senza difendersi, fai domande aperte e prenditi del tempo per capire la prospettiva.')
     if ((r.causa ?? []).includes('Mancanza di crescita professionale') || (r.causa ?? []).includes('Crescita e sviluppo professionale')) spunti.push('La crescita professionale è un tema presente: chiedi dove si vede tra 1-2 anni e cosa potrebbe aiutarla/lo ad arrivarci.')
-    if (r.descrizione === 'Ricarica' || r.descrizione === 'Assestamento') spunti.push('L'ultimo anno è stato faticoso: chiedi cosa l\'ha sostenuta/o nei momenti difficili e cosa si aspetta dal prossimo periodo.')
+    if (r.descrizione === 'Ricarica' || r.descrizione === 'Assestamento') spunti.push("L'ultimo anno è stato faticoso: chiedi cosa l'ha sostenuta/o nei momenti difficili e cosa si aspetta dal prossimo periodo.")
     if (r.clima === 'Temporalesco' || r.clima === 'Piovoso') spunti.push('Il clima del team è percepito come difficile: esplora se ci sono dinamiche relazionali o organizzative da affrontare.')
     if (r.descrizione === 'Crescita') spunti.push('Descrive un anno di crescita: valorizzalo, chiedi cosa ha reso possibile questo risultato e come mantenerlo.')
     if (spunti.length === 0) spunti.push('Inizia con una domanda aperta: "Come stai vivendo questo periodo al lavoro?" — lascia che sia lei/lui a scegliere il punto di partenza.')
