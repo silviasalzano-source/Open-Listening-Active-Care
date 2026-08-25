@@ -27,14 +27,14 @@ function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: st
             <span className="name-modal-phase-icon">🔓</span>
             <div>
               <strong>Prima parte — nominativa</strong>
-              <p>Le risposte di &quot;My Energy Battery&quot; sono associate al tuo nome, per permetterci di preparare il tuo momento di ascolto personalizzato.</p>
+              <p>Le risposte di &quot;My Energy Battery&quot; sono <strong>associate al tuo nome</strong>, per permetterci di preparare il tuo <strong>momento di ascolto personalizzato</strong>.</p>
             </div>
           </div>
           <div className="name-modal-phase">
             <span className="name-modal-phase-icon">🔒</span>
             <div>
               <strong>Seconda parte — anonima</strong>
-              <p>I &quot;Fattori Energy Battery&quot; sono completamente anonimi: nessuno saprà mai chi ha risposto cosa.</p>
+              <p>I &quot;Fattori Energy Battery&quot; sono <strong>completamente anonimi</strong>: <strong>nessuno saprà mai</strong> chi ha risposto cosa.</p>
             </div>
           </div>
         </div>

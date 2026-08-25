@@ -285,6 +285,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .name-modal-phase:first-child strong { display: block; font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 3px; }
 .name-modal-phase:last-child strong { display: block; font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 3px; }
 .name-modal-phase p { font-size: 13px; color: var(--ink-dim); line-height: 1.5; margin: 0; }
+.name-modal-phase:first-child p strong { color: var(--amber); font-weight: 700; }
+.name-modal-phase:last-child p strong { color: var(--teal); font-weight: 700; }
 .name-modal-form { display: flex; flex-direction: column; gap: 12px; border-top: 1.5px solid rgba(42,35,56,0.07); padding-top: 14px; }
 .name-modal-field { display: flex; flex-direction: column; gap: 5px; }
 .name-modal-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(42,35,56,0.45); }
