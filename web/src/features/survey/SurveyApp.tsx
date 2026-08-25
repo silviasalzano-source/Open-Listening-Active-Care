@@ -5,6 +5,7 @@ import { step1 } from './data'
 import { buildFullFlow } from './flow'
 import { Hud } from './screens/Hud'
 import { IntroScreen } from './screens/IntroScreen'
+import { NameModal } from './screens/NameModal'
 import { Q1IntroScreen } from './screens/Q1IntroScreen'
 import { QuestionScreen } from './screens/QuestionScreen'
 import { ResultScreen } from './screens/ResultScreen'
@@ -21,6 +22,7 @@ const totalPhase1Questions = step1.length
 
 export function SurveyApp() {
   const [idx, setIdx] = useState(0)
+  const [showNameModal, setShowNameModal] = useState(false)
   const [phase1Answers, setPhase1Answers] = useState<Phase1Answers>({})
   const [phase2Answers, setPhase2Answers] = useState<SurveyAnswers>({})
 
@@ -45,6 +47,15 @@ export function SurveyApp() {
   const progress = Math.round((idx / (flow.length - 1)) * 100)
 
   return (
+    <>
+    {showNameModal && (
+      <NameModal onConfirm={(nome, cognome) => {
+        setPhase1Answer('nome', nome)
+        setPhase1Answer('cognome', cognome)
+        setShowNameModal(false)
+        goNext()
+      }} />
+    )}
     <div className={`survey-page${isCoolPhase ? ' phase-cool' : ''}`}>
       <div className="survey-container">
         {step.kind !== 'intro' && step.kind !== 'end' && (
@@ -52,11 +63,7 @@ export function SurveyApp() {
         )}
 
         {step.kind === 'intro' && (
-          <IntroScreen onStart={(nome, cognome) => {
-            setPhase1Answer('nome', nome)
-            setPhase1Answer('cognome', cognome)
-            goNext()
-          }} />
+          <IntroScreen onStart={() => setShowNameModal(true)} />
         )}
 
         {step.kind === 'focus' && <FocusScreen onContinue={goNext} onBack={goBack} />}
@@ -107,5 +114,6 @@ export function SurveyApp() {
         {step.kind === 'end' && <EndScreen />}
       </div>
     </div>
+    </>
   )
 }

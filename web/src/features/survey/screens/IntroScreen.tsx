@@ -2,11 +2,9 @@
 
 import { useState } from 'react'
 import { DashboardLoginModal } from './DashboardLoginModal'
-import { NameModal } from './NameModal'
 
-export function IntroScreen({ onStart }: { onStart: (nome: string, cognome: string) => void }) {
+export function IntroScreen({ onStart }: { onStart: () => void }) {
   const [showLogin, setShowLogin] = useState(false)
-  const [showNameModal, setShowNameModal] = useState(false)
 
   return (
     <div className="survey-screen intro">
@@ -25,12 +23,9 @@ export function IntroScreen({ onStart }: { onStart: (nome: string, cognome: stri
         Prima di organizzare il nostro momento di ascolto, desideriamo conoscere la tua{' '}
         <span>energia professionale</span> per affrontare al meglio quest&apos;anno!
       </p>
-      <button className="btn" onClick={() => setShowNameModal(true)}>
+      <button className="btn" onClick={onStart}>
         Iniziamo
       </button>
-      {showNameModal && (
-        <NameModal onConfirm={(nome, cognome) => { setShowNameModal(false); onStart(nome, cognome) }} />
-      )}
       <button className="intro-db-btn" onClick={() => setShowLogin(true)} title="Accesso Dashboard HR">
         <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="3" y="18" width="5" height="10" rx="2" fill="#FFB648"/>
