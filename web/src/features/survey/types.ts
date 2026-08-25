@@ -103,6 +103,8 @@ export type FlowStep =
   | { kind: 'end' }
 
 export type Phase1Answers = {
+  nome?: string
+  cognome?: string
   clima?: string
   termometro?: number
   causa?: string[]

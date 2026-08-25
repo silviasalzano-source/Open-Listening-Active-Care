@@ -272,6 +272,24 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .progress-track { height: 5px; border-radius: 6px; background: rgba(42, 35, 56, 0.08); overflow: hidden; }
 .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--amber), var(--magenta)); transition: width .5s ease; }
 
+/* ── Name modal (Prima di iniziare) ─────────────────────────────────── */
+.name-modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(42,35,56,0.45); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeUp .25s ease; }
+.name-modal-card { background: var(--surface); border-radius: 28px; padding: 28px 24px 24px; width: 100%; max-width: 380px; box-shadow: 0 24px 64px rgba(42,35,56,0.22); display: flex; flex-direction: column; gap: 14px; max-height: 90svh; overflow-y: auto; }
+.name-modal-badge { align-self: center; display: inline-block; font-family: var(--font-fredoka), sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); background: rgba(255,182,72,0.12); border: 1px solid rgba(255,182,72,0.35); border-radius: 100px; padding: 3px 14px; }
+.name-modal-title { font-family: var(--font-fredoka), sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); margin: 0; text-align: center; }
+.name-modal-phases { display: flex; flex-direction: column; gap: 10px; }
+.name-modal-phase { display: flex; align-items: flex-start; gap: 12px; background: rgba(42,35,56,0.04); border-radius: 14px; padding: 12px 14px; }
+.name-modal-phase-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+.name-modal-phase strong { display: block; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.name-modal-phase p { font-size: 13px; color: var(--ink-dim); line-height: 1.5; margin: 0; }
+.name-modal-form { display: flex; flex-direction: column; gap: 12px; border-top: 1.5px solid rgba(42,35,56,0.07); padding-top: 14px; }
+.name-modal-field { display: flex; flex-direction: column; gap: 5px; }
+.name-modal-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(42,35,56,0.45); }
+.name-modal-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-inter), sans-serif; font-size: 15px; background: rgba(42,35,56,0.03); color: var(--ink); outline: none; transition: border-color .15s ease; }
+.name-modal-input:focus { border-color: var(--amber); background: #fff; }
+.name-modal-submit { margin-top: 4px; }
+.name-modal-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
 /* ── Dashboard login modal ───────────────────────────────────────────── */
 .db-login-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(42,35,56,0.45); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeUp .25s ease; }
 .db-login-card { background: #fff; border-radius: 28px; padding: 32px 28px 24px; width: 100%; max-width: 400px; box-shadow: 0 24px 64px rgba(42,35,56,0.22); display: flex; flex-direction: column; gap: 6px; }

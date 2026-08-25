@@ -51,7 +51,13 @@ export function SurveyApp() {
           <Hud answered={progress} total={100} />
         )}
 
-        {step.kind === 'intro' && <IntroScreen onStart={goNext} />}
+        {step.kind === 'intro' && (
+          <IntroScreen onStart={(nome, cognome) => {
+            setPhase1Answer('nome', nome)
+            setPhase1Answer('cognome', cognome)
+            goNext()
+          }} />
+        )}
 
         {step.kind === 'focus' && <FocusScreen onContinue={goNext} onBack={goBack} />}
 
