@@ -402,20 +402,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               <div className="db-card">
                 <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
                 <div className="db-card-title">Che tempo fa nel tuo team?</div>
-                <div className="db-card-summary-row">
-                  <div className="db-summary-stat">
-                    <span className="db-summary-num" style={{ color: climaPositivoPct >= 60 ? '#17B8A6' : climaPositivoPct >= 40 ? '#FFB648' : '#FF6E86' }}>{climaPositivoPct}%</span>
-                    <span className="db-summary-label">clima positivo</span>
-                  </div>
-                  <div className="db-summary-stat">
-                    <span className="db-summary-num">{climaTop.icon}</span>
-                    <span className="db-summary-label">clima prevalente</span>
-                  </div>
-                  <div className="db-summary-stat">
-                    <span className="db-summary-num">{all.length}</span>
-                    <span className="db-summary-label">rispondenti</span>
-                  </div>
-                </div>
+
                 <div className="db-dist-list">
                   {climaOpts.map(o => {
                     const n = climaCount[o.label] ?? 0
@@ -480,20 +467,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             <div className="db-card">
               <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
               <div className="db-card-title">Come è andata quest'anno?</div>
-              <div className="db-card-summary-row">
-                <div className="db-summary-stat">
-                  <span className="db-summary-num" style={{ color: descrPositivoPct >= 60 ? '#17B8A6' : descrPositivoPct >= 40 ? '#FFB648' : '#FF6E86' }}>{descrPositivoPct}%</span>
-                  <span className="db-summary-label">energia positiva</span>
-                </div>
-                <div className="db-summary-stat">
-                  <span className="db-summary-num">{descrTop.icon}</span>
-                  <span className="db-summary-label">stato prevalente</span>
-                </div>
-                <div className="db-summary-stat">
-                  <span className="db-summary-num">{all.length}</span>
-                  <span className="db-summary-label">rispondenti</span>
-                </div>
-              </div>
+
               <div className="db-dist-list">
                 {descOpts.map(o => {
                   const n = descrCount[o.key] ?? 0
