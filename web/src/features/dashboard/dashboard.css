@@ -486,3 +486,98 @@
   color: #5B4A8A;
   line-height: 1.55;
 }
+
+/* ---- AI Floating Action Button ---- */
+.db-ai-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 50;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7C5CBF, #17B8A6);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(124,92,191,.35);
+  transition: transform .2s ease, box-shadow .2s ease;
+  animation: fab-pulse 3s ease-in-out infinite;
+}
+.db-ai-fab:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(124,92,191,.45); }
+.db-ai-fab.open { animation: none; transform: rotate(45deg) scale(1.05); }
+@keyframes fab-pulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(124,92,191,.35); }
+  50% { box-shadow: 0 8px 32px rgba(124,92,191,.55), 0 0 0 8px rgba(124,92,191,.08); }
+}
+
+/* ---- AI Floating Panel ---- */
+.db-ai-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 32px;
+  z-index: 51;
+  width: 360px;
+  max-height: 520px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 24px 64px rgba(42,35,56,.18);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  animation: panel-in .22s ease;
+  overflow-y: auto;
+}
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(16px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.db-ai-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.db-ai-panel-icon {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #7C5CBF, #17B8A6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.db-ai-panel-title {
+  font-family: var(--font-fredoka, sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: #2A2338;
+  flex: 1;
+}
+.db-ai-panel-close {
+  background: none;
+  border: none;
+  color: #9A93A8;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px 4px;
+  line-height: 1;
+  transition: color .15s;
+}
+.db-ai-panel-close:hover { color: #2A2338; }
+.db-ai-welcome {
+  font-size: 14px;
+  color: #5B4A8A;
+  font-weight: 500;
+  padding: 2px 0;
+}
+@media (max-width: 480px) {
+  .db-ai-panel { right: 12px; left: 12px; width: auto; bottom: 88px; }
+  .db-ai-fab { bottom: 20px; right: 20px; }
+}

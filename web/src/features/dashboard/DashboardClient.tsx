@@ -180,6 +180,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
+  const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
@@ -519,51 +520,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               </div>
             </div>
 
-            <div className="db-bottom-row">
-            <div className="db-ai-box">
-              <div className="db-ai-header">
-                <span className="db-ai-icon">✦</span>
-                <div>
-                  <div className="db-ai-title">Analisi AI</div>
-                  <div className="db-ai-sub">Fai una domanda sui dati della survey</div>
-                </div>
-              </div>
-
-              <div className="db-ai-suggestions">
-                {[
-                  'Quali sono i principali segnali di rischio per il benessere del team?',
-                  'Qual è l\'andamento generale dell\'energia in OT?',
-                  'Quale causa di bassa energia emerge più spesso?',
-                  'Come posso prepararmi per i colloqui one-to-one?',
-                ].map(s => (
-                  <button key={s} className="db-ai-chip" onClick={() => { setAiQuestion(s); askAI(s) }}>{s}</button>
-                ))}
-              </div>
-
-              <div className="db-ai-input-row">
-                <input
-                  className="db-ai-input"
-                  type="text"
-                  placeholder="Scrivi la tua domanda…"
-                  value={aiQuestion}
-                  onChange={e => setAiQuestion(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') askAI(aiQuestion) }}
-                />
-                <button className="db-ai-send" onClick={() => askAI(aiQuestion)} disabled={aiLoading || !aiQuestion.trim()}>
-                  {aiLoading ? '…' : '→'}
-                </button>
-              </div>
-
-              {aiLoading && (
-                <div className="db-ai-loading">
-                  <span className="db-ai-dot" /><span className="db-ai-dot" /><span className="db-ai-dot" />
-                </div>
-              )}
-              {aiAnswer && !aiLoading && (
-                <div className="db-ai-answer">{aiAnswer}</div>
-              )}
-            </div>
-
             <div className="db-individual-box">
               <div className="db-individual-header">
                 <div>
@@ -629,7 +585,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </div>
               )}
               <div className="db-individual-count">{q1Individuals.length} di {all.length} rispondenti</div>
-            </div>
             </div>
           </div>
         )}
@@ -790,6 +745,57 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           </div>
         )}
       </div>
+
+      {/* ---- AI Floating Button + Panel ---- */}
+      <button className={`db-ai-fab${aiOpen ? ' open' : ''}`} onClick={() => { setAiOpen(o => !o); setAiAnswer(null); setAiQuestion('') }} aria-label="Analisi AI">
+        <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+          <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" fill="currentColor"/>
+          <path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z" fill="currentColor" opacity=".6"/>
+        </svg>
+      </button>
+
+      {aiOpen && (
+        <div className="db-ai-panel">
+          <div className="db-ai-panel-header">
+            <span className="db-ai-panel-icon">✦</span>
+            <span className="db-ai-panel-title">Analisi AI</span>
+            <button className="db-ai-panel-close" onClick={() => setAiOpen(false)}>✕</button>
+          </div>
+          <div className="db-ai-welcome">Come posso aiutarti nell&apos;analisi?</div>
+          <div className="db-ai-suggestions">
+            {[
+              'Quali sono i principali segnali di rischio?',
+              'Com\'è l\'andamento generale dell\'energia?',
+              'Quale causa di bassa energia emerge più spesso?',
+              'Come preparo i colloqui one-to-one?',
+            ].map(s => (
+              <button key={s} className="db-ai-chip" onClick={() => { setAiQuestion(s); askAI(s) }}>{s}</button>
+            ))}
+          </div>
+          <div className="db-ai-input-row">
+            <input
+              className="db-ai-input"
+              type="text"
+              placeholder="Scrivi la tua domanda…"
+              value={aiQuestion}
+              onChange={e => setAiQuestion(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') askAI(aiQuestion) }}
+              autoFocus
+            />
+            <button className="db-ai-send" onClick={() => askAI(aiQuestion)} disabled={aiLoading || !aiQuestion.trim()}>
+              {aiLoading ? '…' : '→'}
+            </button>
+          </div>
+          {aiLoading && (
+            <div className="db-ai-loading">
+              <span className="db-ai-dot" /><span className="db-ai-dot" /><span className="db-ai-dot" />
+            </div>
+          )}
+          {aiAnswer && !aiLoading && (
+            <div className="db-ai-answer">{aiAnswer}</div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
