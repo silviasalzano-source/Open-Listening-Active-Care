@@ -36,6 +36,7 @@ export type SingleQuestion = {
   title: string
   sub?: string
   options: string[]
+  group?: string
 }
 
 export type Likert5Question = {
@@ -46,6 +47,7 @@ export type Likert5Question = {
   optional?: boolean
   alert?: string
   scaleLabels?: [string, string]
+  group?: string
 }
 
 export type MultiQuestion = {
@@ -56,6 +58,7 @@ export type MultiQuestion = {
   sub?: string
   options: string[]
   hasInputOn?: string
+  group?: string
 }
 
 export type NpsQuestion = {
@@ -63,6 +66,7 @@ export type NpsQuestion = {
   type: 'nps'
   title: string
   sub?: string
+  group?: string
 }
 
 export type Phase2Question = SingleQuestion | Likert5Question | MultiQuestion | NpsQuestion

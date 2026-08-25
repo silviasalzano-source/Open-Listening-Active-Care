@@ -198,9 +198,17 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
   return (
     <div className="survey-screen chapterset">
       <div className="q-eyebrow">{def.title}</div>
-      {questions.map((q) => (
-        <QuestionBlock key={q.id} q={q} answers={answers} onAnswer={onAnswer} />
-      ))}
+      {questions.map((q, i) => {
+        const showGroup = q.group && q.group !== questions[i - 1]?.group
+        return (
+          <div key={q.id}>
+            {showGroup && (
+              <div className="cs-group-label">{q.group}</div>
+            )}
+            <QuestionBlock q={q} answers={answers} onAnswer={onAnswer} />
+          </div>
+        )
+      })}
       <div className="footer-nav">
         <button className="btn ghost" onClick={onBack}>Indietro</button>
         <button className="btn cool" onClick={onNext} disabled={!allAnswered}>Continua</button>
