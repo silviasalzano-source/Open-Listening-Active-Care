@@ -178,6 +178,8 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
   const [all, setAll] = useState<SurveyResponse[]>([])
+  const [q1Search, setQ1Search] = useState('')
+  const [q1BuFilter, setQ1BuFilter] = useState('')
 
   useEffect(() => {
     if (!localStorage.getItem(LS_SEED_KEY)) {
@@ -239,6 +241,76 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const BUS = ['Tutte le aree', 'Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Amministrazione', 'Servizi Generali']
   const ANZS = ['Tutte le anzianità', '< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const RUOLI = ['Tutti i ruoli', 'Manager', 'Worker']
+
+  const q1Individuals = all.filter(r => {
+    const fullName = `${r.nome ?? ''} ${r.cognome ?? ''}`.toLowerCase()
+    const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
+    const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
+    return searchMatch && buMatch
+  })
+
+  function downloadReport(r: SurveyResponse) {
+    const termColor = (r.termometro ?? 0) >= 8 ? '#17B8A6' : (r.termometro ?? 0) >= 5 ? '#FFB648' : '#FF6E86'
+    const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
+    const descrLabel: Record<string, string> = { 'Crescita': '⚡ Energia in Crescita', 'Stabile': '🔋 Energia Stabile', 'Ricarica': '🔌 Energia in Ricarica', 'Assestamento': '🌱 Energia in Assestamento' }
+    const html = `<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Report ${r.nome} ${r.cognome}</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 24px; color: #2A2338; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; }
+  .sub { color: #6B5F7A; font-size: 14px; margin: 0 0 32px; }
+  .badge { display: inline-block; background: #FFF3DC; color: #C47800; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600; letter-spacing: .05em; margin-bottom: 8px; }
+  .section { border: 1px solid #EDE8F5; border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #9A93A8; margin: 0 0 6px; }
+  .section-q { font-size: 14px; color: #6B5F7A; margin: 0 0 10px; }
+  .answer { font-size: 18px; font-weight: 700; color: #2A2338; margin: 0; }
+  .answer-big { font-size: 32px; font-weight: 800; color: ${termColor}; margin: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { background: #F4F1FA; border-radius: 20px; padding: 4px 14px; font-size: 14px; font-weight: 500; }
+  .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .meta-chip { background: #F4F1FA; border-radius: 8px; padding: 4px 12px; font-size: 12px; }
+  footer { margin-top: 40px; font-size: 12px; color: #9A93A8; border-top: 1px solid #EDE8F5; padding-top: 16px; }
+  @media print { body { margin: 20px; } }
+</style></head><body>
+<div class="badge">OPEN LISTENING · ACTIVE CARE — Report individuale</div>
+<h1>${r.nome ?? ''} ${r.cognome ?? ''}</h1>
+<p class="sub">Generato il ${new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+<div class="meta">
+  ${r.bu ? `<span class="meta-chip">📍 ${r.bu}</span>` : ''}
+  ${r.ruolo ? `<span class="meta-chip">👤 ${r.ruolo}</span>` : ''}
+  ${r.anzianita ? `<span class="meta-chip">📅 ${r.anzianita}</span>` : ''}
+</div>
+<div class="section">
+  <div class="section-label">CLIMA DEL TEAM · OGGI</div>
+  <div class="section-q">Che tempo fa nel tuo team?</div>
+  <p class="answer">${climaEmoji[r.clima ?? ''] ?? ''} ${r.clima ?? '—'}</p>
+</div>
+<div class="section">
+  <div class="section-label">TERMOMETRO ENERGETICO · OGGI</div>
+  <div class="section-q">Il livello di energia attuale (1–10)</div>
+  <p class="answer-big">${r.termometro ?? '—'}<span style="font-size:16px;color:#6B5F7A;font-weight:400">/10</span></p>
+</div>
+<div class="section">
+  <div class="section-label">CAUSE DELL'ENERGIA · OGGI</div>
+  <div class="section-q">Cosa influenza di più la tua energia ora?</div>
+  <div class="tags">${(r.causa ?? []).map(c => `<span class="tag">${c}</span>`).join('') || '<span style="color:#9A93A8">—</span>'}</div>
+</div>
+<div class="section">
+  <div class="section-label">DESCRIZIONE ENERGIA · ULTIMO ANNO</div>
+  <div class="section-q">Come descriveresti la tua energia quest'anno?</div>
+  <p class="answer">${r.descrizione ? descrLabel[r.descrizione] ?? r.descrizione : '—'}</p>
+</div>
+<footer>OT Consulting — Open Listening · Active Care &nbsp;·&nbsp; Documento riservato per uso interno HR</footer>
+</body></html>`
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `report_${r.nome ?? ''}_${r.cognome ?? ''}.html`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className="db-page">
@@ -336,6 +408,73 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   <DistBar key={o.label} label={o.label} count={descrCount[o.label] ?? 0} total={all.length} color={o.col} />
                 ))}
               </div>
+            </div>
+
+            <div className="db-individual-box">
+              <div className="db-individual-header">
+                <div>
+                  <div className="db-individual-title">Report individuale · one-to-one</div>
+                  <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
+                </div>
+              </div>
+              <div className="db-individual-filters">
+                <div className="db-individual-search-wrap">
+                  <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="16" height="16">
+                    <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6"/>
+                    <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round"/>
+                  </svg>
+                  <input
+                    className="db-individual-search"
+                    type="text"
+                    placeholder="Cerca per nome o cognome…"
+                    value={q1Search}
+                    onChange={e => setQ1Search(e.target.value)}
+                  />
+                  {q1Search && (
+                    <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>
+                  )}
+                </div>
+                <select className="db-filter-select" value={q1BuFilter || 'Tutte le aree'} onChange={e => setQ1BuFilter(e.target.value)}>
+                  {BUS.map(o => <option key={o}>{o}</option>)}
+                </select>
+              </div>
+
+              {q1Individuals.length === 0 ? (
+                <div className="db-individual-empty">Nessun rispondente trovato per questa ricerca.</div>
+              ) : (
+                <div className="db-individual-list">
+                  {q1Individuals.map((r, i) => {
+                    const termColor = (r.termometro ?? 0) >= 8 ? '#17B8A6' : (r.termometro ?? 0) >= 5 ? '#FFB648' : '#FF6E86'
+                    const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
+                    return (
+                      <div key={i} className="db-individual-row">
+                        <div className="db-individual-avatar">
+                          {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
+                        </div>
+                        <div className="db-individual-info">
+                          <div className="db-individual-name">{r.nome} {r.cognome}</div>
+                          <div className="db-individual-meta">
+                            {r.bu && <span>{r.bu}</span>}
+                            {r.ruolo && <span>· {r.ruolo}</span>}
+                          </div>
+                        </div>
+                        <div className="db-individual-energy">
+                          <span className="db-individual-clima">{climaEmoji[r.clima ?? ''] ?? '—'}</span>
+                          <span className="db-individual-term" style={{ color: termColor }}>{r.termometro ?? '—'}<span className="db-individual-term-unit">/10</span></span>
+                        </div>
+                        <button className="db-individual-dl" onClick={() => downloadReport(r)}>
+                          <svg viewBox="0 0 20 20" fill="none" width="15" height="15">
+                            <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                          </svg>
+                          Report
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+              <div className="db-individual-count">{q1Individuals.length} di {all.length} rispondenti</div>
             </div>
           </div>
         )}
