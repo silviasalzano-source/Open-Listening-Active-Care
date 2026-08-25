@@ -219,10 +219,10 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const causeTop = Object.entries(causeCount).sort((a, b) => b[1] - a[1])
 
   const descOpts = [
-    { label: 'Energia in Crescita', icon: '⚡', col: '#17B8A6' },
-    { label: 'Energia Stabile', icon: '🔋', col: '#2E86DE' },
-    { label: 'Energia in Ricarica', icon: '🔌', col: '#FFB648' },
-    { label: 'Energia in Assestamento', icon: '🌱', col: '#9A93A8' },
+    { label: 'Energia in Crescita', key: 'Crescita', icon: '⚡', col: '#17B8A6' },
+    { label: 'Energia Stabile', key: 'Stabile', icon: '🔋', col: '#2E86DE' },
+    { label: 'Energia in Ricarica', key: 'Ricarica', icon: '🔌', col: '#FFB648' },
+    { label: 'Energia in Assestamento', key: 'Assestamento', icon: '🌱', col: '#9A93A8' },
   ]
   const descrCount: Record<string, number> = {}
   all.forEach(r => { if (r.descrizione) descrCount[r.descrizione] = (descrCount[r.descrizione] ?? 0) + 1 })
@@ -267,7 +267,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
         percentuale: `${all.length ? Math.round(count / all.length * 100) : 0}%`
       })),
       descrizioneEnergia: Object.fromEntries(
-        descOpts.map(o => [o.label, `${all.length ? Math.round((descrCount[o.label] ?? 0) / all.length * 100) : 0}%`])
+        descOpts.map(o => [o.label, `${all.length ? Math.round((descrCount[o.key] ?? 0) / all.length * 100) : 0}%`])
       ),
     }
     try {
@@ -351,7 +351,11 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   return (
     <div className="db-page">
       <header className="db-header">
-        <span className="db-brand">OPEN LISTENING · ACTIVE CARE</span>
+        <div className="db-brand-row">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/ot-logo-full.svg" alt="OT Consulting" className="db-header-logo" />
+          <span className="db-brand">OPEN LISTENING · ACTIVE CARE</span>
+        </div>
         <div className="db-user-row">
           <span className="db-user-chip">👤 {userEmail}</span>
           <a href="/survey" className="db-logout">Esci →</a>
@@ -443,7 +447,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               <div className="db-card-title">Come è andata quest'anno?</div>
               <div className="db-dist-list">
                 {descOpts.map(o => (
-                  <DistBar key={o.label} label={o.label} count={descrCount[o.label] ?? 0} total={all.length} color={o.col} />
+                  <DistBar key={o.label} label={o.label} count={descrCount[o.key] ?? 0} total={all.length} color={o.col} />
                 ))}
               </div>
             </div>

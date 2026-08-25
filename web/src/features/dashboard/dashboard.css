@@ -393,3 +393,14 @@
   color: #2A2338;
   white-space: pre-wrap;
 }
+
+/* ---- Header logo ---- */
+.db-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.db-header-logo {
+  height: 28px;
+  width: auto;
+}
