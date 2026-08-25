@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { ChapterMascot } from '../mascots'
 import type { ChapterDef } from '../types'
