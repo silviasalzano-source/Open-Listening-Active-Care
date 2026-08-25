@@ -420,3 +420,14 @@
   letter-spacing: .07em;
   margin-bottom: 10px;
 }
+
+/* ---- Bottom row: AI + Report affiancati ---- */
+.db-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 800px) {
+  .db-bottom-row { grid-template-columns: 1fr; }
+}

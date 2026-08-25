@@ -448,6 +448,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               </div>
             </div>
 
+            <div className="db-bottom-row">
             <div className="db-ai-box">
               <div className="db-ai-header">
                 <span className="db-ai-icon">✦</span>
@@ -557,6 +558,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </div>
               )}
               <div className="db-individual-count">{q1Individuals.length} di {all.length} rispondenti</div>
+            </div>
             </div>
           </div>
         )}
