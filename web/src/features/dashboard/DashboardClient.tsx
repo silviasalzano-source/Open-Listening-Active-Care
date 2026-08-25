@@ -383,14 +383,18 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           <div className="db-tab-body">
             <div className="db-overview-row">
               <div className="db-ov-card">
-                <div className="db-ov-label">RISPONDENTI TOTALI</div>
-                <div className="db-ov-num">{all.length}</div>
-                <div className="db-ov-sub">survey completate</div>
+                <div className="db-ov-card-text">
+                  <div className="db-ov-label">RISPONDENTI TOTALI</div>
+                  <div className="db-ov-num">{all.length}</div>
+                  <div className="db-ov-sub">survey completate</div>
+                </div>
               </div>
               <div className="db-ov-card">
-                <div className="db-ov-label">ENERGIA MEDIA</div>
-                <div className="db-ov-num amber">{termAvg.toFixed(1)}<span className="db-ov-unit">/10</span></div>
-                <div className="db-ov-sub">termometro oggi</div>
+                <div className="db-ov-card-text">
+                  <div className="db-ov-label">ENERGIA MEDIA</div>
+                  <div className="db-ov-num amber">{termAvg.toFixed(1)}<span className="db-ov-unit">/10</span></div>
+                  <div className="db-ov-sub">termometro oggi</div>
+                </div>
               </div>
             </div>
 
