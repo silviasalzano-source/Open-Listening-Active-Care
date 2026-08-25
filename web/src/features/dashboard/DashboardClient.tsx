@@ -353,7 +353,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       <header className="db-header">
         <div className="db-brand-row">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/ot-logo.png" alt="OT Consulting" className="db-header-logo" />
+          <img src="/ot-logo-icon.svg" alt="OT Consulting" className="db-header-logo" />
           <span className="db-brand">Dashboard Open Listening · <strong>ACTIVE CARE</strong></span>
         </div>
         <div className="db-user-row">
