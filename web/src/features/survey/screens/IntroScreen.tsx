@@ -2,7 +2,6 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
   return (
     <div className="survey-screen intro">
       {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
       <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" />
       <div className="intro-badge">Open Listening · Active Care</div>
       <div className="battery-hero">
@@ -20,6 +19,15 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
       <button className="btn" onClick={onStart}>
         Iniziamo
       </button>
+      <a href="/admin" className="intro-db-btn" title="Accesso Dashboard HR">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="18" width="5" height="10" rx="2" fill="#FFB648"/>
+          <rect x="10" y="12" width="5" height="16" rx="2" fill="#FF6E86"/>
+          <rect x="17" y="7" width="5" height="21" rx="2" fill="#17B8A6"/>
+          <rect x="24" y="14" width="5" height="14" rx="2" fill="#2E86DE"/>
+        </svg>
+        <span className="intro-db-label">HR</span>
+      </a>
     </div>
   )
 }
