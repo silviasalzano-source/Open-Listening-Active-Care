@@ -419,7 +419,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   : `${100 - negPct}% vive un clima positivo`
                 return (
                   <div className={`db-card alert-${sev}`}>
-                    <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
+                    <div className={`db-card-badge sev-${sev}`}>☀️ Clima del team · Oggi</div>
                     <div className="db-card-title">Che tempo fa nel tuo team?</div>
                     <div className="db-card-status">{statusText}</div>
                     <div className="db-dist-list">
@@ -452,7 +452,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   : `${termVals.filter(v => v >= 8).length} persone ad alta energia (8–10)`
                 return (
                   <div className={`db-card alert-${sev}`}>
-                    <div className="db-clima-badge">⚡ Termometro energetico · Oggi</div>
+                    <div className={`db-card-badge sev-${sev}`}>⚡ Termometro energetico · Oggi</div>
                     <div className="db-card-title">Il livello di energia attuale</div>
                     <div className="db-card-status">{statusText}</div>
                     <div className="db-gauge-row">
@@ -488,7 +488,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 : `Causa prevalente: "${topCausa}" (${topPct}%)`
               return (
                 <div className={`db-card alert-${sev}`}>
-                  <div className="db-clima-badge">🔍 Cause dell&apos;energia · Oggi</div>
+                  <div className={`db-card-badge sev-${sev}`}>🔍 Cause dell&apos;energia · Oggi</div>
                   <div className="db-card-title">Cosa influenza di più l&apos;energia?</div>
                   <div className="db-card-status">{statusText}</div>
                   <div className="db-dist-list">
@@ -510,7 +510,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 : `${descrPositivoPct}% descrive un anno positivo`
               return (
                 <div className={`db-card alert-${sev}`}>
-                  <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
+                  <div className={`db-card-badge sev-${sev}`}>🌱 Descrizione energia · Ultimo anno</div>
                   <div className="db-card-title">Come è andata quest&apos;anno?</div>
                   <div className="db-card-status">{statusText}</div>
                   <div className="db-dist-list">

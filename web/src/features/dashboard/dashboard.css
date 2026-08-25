@@ -264,13 +264,11 @@
 }
 
 /* ---- Clima colored badge ---- */
-.db-clima-badge {
+.db-clima-badge,
+.db-card-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(90deg, #FFF3DC, #FFECD0);
-  color: #B86A00;
-  border: 1px solid #FFD98A;
   border-radius: 20px;
   padding: 4px 14px;
   font-size: 11px;
@@ -278,6 +276,10 @@
   letter-spacing: .07em;
   margin-bottom: 10px;
 }
+.db-clima-badge { background: linear-gradient(90deg, #FFF3DC, #FFECD0); color: #B86A00; border: 1px solid #FFD98A; }
+.db-card-badge.sev-green { background: rgba(23,184,166,.12); color: #0A7A6B; border: 1px solid rgba(23,184,166,.30); }
+.db-card-badge.sev-amber { background: rgba(255,182,72,.15); color: #9B5E00; border: 1px solid rgba(255,182,72,.40); }
+.db-card-badge.sev-red   { background: rgba(255,110,134,.12); color: #B8003A; border: 1px solid rgba(255,110,134,.30); }
 
 /* ---- AI box ---- */
 .db-ai-box {
