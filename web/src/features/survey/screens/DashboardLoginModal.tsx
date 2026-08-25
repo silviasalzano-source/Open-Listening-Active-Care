@@ -60,7 +60,6 @@ export function DashboardLoginModal({ onClose }: Props) {
         </div>
 
         <h2 className="db-login-title">Dashboard HR</h2>
-        <p className="db-login-desc">Inserisci le credenziali per accedere ai risultati della survey.</p>
 
         <form onSubmit={handleSubmit} className="db-login-form">
           <div className="db-login-field">
