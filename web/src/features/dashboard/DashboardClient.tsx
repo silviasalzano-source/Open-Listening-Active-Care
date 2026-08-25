@@ -227,6 +227,14 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const descrCount: Record<string, number> = {}
   all.forEach(r => { if (r.descrizione) descrCount[r.descrizione] = (descrCount[r.descrizione] ?? 0) + 1 })
 
+  const climaPositivoN = (climaCount['Soleggiato'] ?? 0) + (climaCount['Parzialmente nuvoloso'] ?? 0)
+  const climaPositivoPct = all.length ? Math.round(climaPositivoN / all.length * 100) : 0
+  const climaTop = climaOpts.reduce((a, b) => (climaCount[a.label] ?? 0) >= (climaCount[b.label] ?? 0) ? a : b)
+
+  const descrPositivoN = (descrCount['Crescita'] ?? 0) + (descrCount['Stabile'] ?? 0)
+  const descrPositivoPct = all.length ? Math.round(descrPositivoN / all.length * 100) : 0
+  const descrTop = descOpts.reduce((a, b) => (descrCount[a.key] ?? 0) >= (descrCount[b.key] ?? 0) ? a : b)
+
   /* NPS */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
   const det = npsVals.filter(v => v <= 6).length
@@ -393,17 +401,44 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               <div className="db-card">
                 <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
                 <div className="db-card-title">Che tempo fa nel tuo team?</div>
+                <div className="db-card-summary-row">
+                  <div className="db-summary-stat">
+                    <span className="db-summary-num" style={{ color: climaPositivoPct >= 60 ? '#17B8A6' : climaPositivoPct >= 40 ? '#FFB648' : '#FF6E86' }}>{climaPositivoPct}%</span>
+                    <span className="db-summary-label">clima positivo</span>
+                  </div>
+                  <div className="db-summary-stat">
+                    <span className="db-summary-num">{climaTop.icon}</span>
+                    <span className="db-summary-label">clima prevalente</span>
+                  </div>
+                  <div className="db-summary-stat">
+                    <span className="db-summary-num">{all.length}</span>
+                    <span className="db-summary-label">rispondenti</span>
+                  </div>
+                </div>
                 <div className="db-dist-list">
-                  {climaOpts.map(o => (
-                    <div key={o.label} className="db-dist-row icon">
-                      <span className="db-dist-icon">{o.icon}</span>
-                      <span className="db-dist-label">{o.label}</span>
-                      <div className="db-dist-track">
-                        <div className="db-dist-fill" style={{ width: `${all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%`, background: o.col }} />
+                  {climaOpts.map(o => {
+                    const n = climaCount[o.label] ?? 0
+                    const pct = all.length ? Math.round(n / all.length * 100) : 0
+                    return (
+                      <div key={o.label} className="db-dist-row icon">
+                        <span className="db-dist-icon">{o.icon}</span>
+                        <span className="db-dist-label">{o.label}</span>
+                        <div className="db-dist-track">
+                          <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
+                        </div>
+                        <span className="db-dist-count">{n}</span>
+                        <span className="db-dist-pct">{pct}%</span>
                       </div>
-                      <span className="db-dist-pct">{all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%</span>
-                    </div>
-                  ))}
+                    )
+                  })}
+                </div>
+                <div className="db-card-insight">
+                  {climaPositivoPct >= 60
+                    ? `✅ La maggioranza del team (${climaPositivoPct}%) vive un clima sereno. Il clima prevalente è "${climaTop.label}".`
+                    : climaPositivoPct >= 40
+                    ? `⚠️ Il clima è misto: ${climaPositivoPct}% positivo, ${100 - climaPositivoPct}% sotto pressione. Vale la pena approfondire.`
+                    : `🔴 Solo il ${climaPositivoPct}% del team vive un clima positivo. Situazione da monitorare con priorità.`
+                  }
                 </div>
               </div>
 
@@ -444,10 +479,43 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             <div className="db-card">
               <div className="db-green-badge">🌱 Descrizione energia · Ultimo anno</div>
               <div className="db-card-title">Come è andata quest'anno?</div>
+              <div className="db-card-summary-row">
+                <div className="db-summary-stat">
+                  <span className="db-summary-num" style={{ color: descrPositivoPct >= 60 ? '#17B8A6' : descrPositivoPct >= 40 ? '#FFB648' : '#FF6E86' }}>{descrPositivoPct}%</span>
+                  <span className="db-summary-label">energia positiva</span>
+                </div>
+                <div className="db-summary-stat">
+                  <span className="db-summary-num">{descrTop.icon}</span>
+                  <span className="db-summary-label">stato prevalente</span>
+                </div>
+                <div className="db-summary-stat">
+                  <span className="db-summary-num">{all.length}</span>
+                  <span className="db-summary-label">rispondenti</span>
+                </div>
+              </div>
               <div className="db-dist-list">
-                {descOpts.map(o => (
-                  <DistBar key={o.label} label={o.label} count={descrCount[o.key] ?? 0} total={all.length} color={o.col} />
-                ))}
+                {descOpts.map(o => {
+                  const n = descrCount[o.key] ?? 0
+                  const pct = all.length ? Math.round(n / all.length * 100) : 0
+                  return (
+                    <div key={o.label} className="db-dist-row">
+                      <span className="db-dist-label">{o.icon} {o.label}</span>
+                      <div className="db-dist-track">
+                        <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
+                      </div>
+                      <span className="db-dist-count">{n}</span>
+                      <span className="db-dist-pct">{pct}%</span>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="db-card-insight">
+                {descrPositivoPct >= 60
+                  ? `✅ Il ${descrPositivoPct}% del team descrive il proprio anno con energia positiva (Crescita o Stabile). Lo stato prevalente è "${descrTop.label}".`
+                  : descrPositivoPct >= 40
+                  ? `⚠️ Il team è diviso: ${descrPositivoPct}% in energia positiva, ${100 - descrPositivoPct}% in una fase di recupero o assestamento.`
+                  : `🔴 La maggioranza (${100 - descrPositivoPct}%) ha vissuto un anno in Ricarica o Assestamento. Potrebbe indicare un periodo di stress prolungato.`
+                }
               </div>
             </div>
 

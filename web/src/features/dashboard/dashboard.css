@@ -431,3 +431,58 @@
 @media (max-width: 800px) {
   .db-bottom-row { grid-template-columns: 1fr; }
 }
+
+/* ---- Card summary row (3 stat pillars) ---- */
+.db-card-summary-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid #EDE8F5;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.db-summary-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  gap: 3px;
+  border-right: 1px solid #EDE8F5;
+}
+.db-summary-stat:last-child { border-right: none; }
+.db-summary-num {
+  font-family: var(--font-fredoka, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #2A2338;
+  line-height: 1;
+}
+.db-summary-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: #9A93A8;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ---- Count badge in dist rows ---- */
+.db-dist-count {
+  font-size: 12px;
+  color: #9A93A8;
+  min-width: 24px;
+  text-align: right;
+}
+
+/* ---- Card insight note ---- */
+.db-card-insight {
+  margin-top: 14px;
+  background: #F8F6FF;
+  border-left: 3px solid #C4BDD0;
+  border-radius: 0 10px 10px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #5B4A8A;
+  line-height: 1.55;
+}
