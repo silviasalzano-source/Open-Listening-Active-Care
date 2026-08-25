@@ -180,6 +180,9 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
+  const [aiQuestion, setAiQuestion] = useState('')
+  const [aiAnswer, setAiAnswer] = useState<string | null>(null)
+  const [aiLoading, setAiLoading] = useState(false)
 
   useEffect(() => {
     if (!localStorage.getItem(LS_SEED_KEY)) {
@@ -248,6 +251,39 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
     return searchMatch && buMatch
   })
+
+  async function askAI(q: string) {
+    if (!q.trim()) return
+    setAiLoading(true)
+    setAiAnswer(null)
+    const context = {
+      totaleRispondenti: all.length,
+      energiaMediaOggi: termAvg.toFixed(1),
+      distribuzioneClima: Object.fromEntries(
+        climaOpts.map(o => [o.label, `${all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%`])
+      ),
+      causePrincipali: causeTop.slice(0, 4).map(([label, count]) => ({
+        causa: label,
+        percentuale: `${all.length ? Math.round(count / all.length * 100) : 0}%`
+      })),
+      descrizioneEnergia: Object.fromEntries(
+        descOpts.map(o => [o.label, `${all.length ? Math.round((descrCount[o.label] ?? 0) / all.length * 100) : 0}%`])
+      ),
+    }
+    try {
+      const res = await fetch('/api/dashboard-ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: q, context }),
+      })
+      const data = await res.json()
+      setAiAnswer(data.answer ?? data.error ?? 'Errore imprevisto.')
+    } catch {
+      setAiAnswer('Errore di rete. Riprova più tardi.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   function downloadReport(r: SurveyResponse) {
     const termColor = (r.termometro ?? 0) >= 8 ? '#17B8A6' : (r.termometro ?? 0) >= 5 ? '#FFB648' : '#FF6E86'
@@ -350,42 +386,44 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               <span className="db-section-title">Energia oggi e nell'anno</span>
             </div>
 
-            <div className="db-card">
-              <div className="db-card-eyebrow">CLIMA DEL TEAM · OGGI</div>
-              <div className="db-card-title">Che tempo fa nel tuo team?</div>
-              <div className="db-dist-list">
-                {climaOpts.map(o => (
-                  <div key={o.label} className="db-dist-row icon">
-                    <span className="db-dist-icon">{o.icon}</span>
-                    <span className="db-dist-label">{o.label}</span>
-                    <div className="db-dist-track">
-                      <div className="db-dist-fill" style={{ width: `${all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%`, background: o.col }} />
+            <div className="db-row-2col">
+              <div className="db-card">
+                <div className="db-clima-badge">☀️ Clima del team · Oggi</div>
+                <div className="db-card-title">Che tempo fa nel tuo team?</div>
+                <div className="db-dist-list">
+                  {climaOpts.map(o => (
+                    <div key={o.label} className="db-dist-row icon">
+                      <span className="db-dist-icon">{o.icon}</span>
+                      <span className="db-dist-label">{o.label}</span>
+                      <div className="db-dist-track">
+                        <div className="db-dist-fill" style={{ width: `${all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%`, background: o.col }} />
+                      </div>
+                      <span className="db-dist-pct">{all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%</span>
                     </div>
-                    <span className="db-dist-pct">{all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="db-card">
-              <div className="db-card-eyebrow">TERMOMETRO ENERGETICO · OGGI</div>
-              <div className="db-card-title">Il livello di energia attuale</div>
-              <div className="db-gauge-row">
-                <div className="db-gauge">
-                  <svg viewBox="0 0 100 100" width="90" height="90">
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="10" />
-                    <circle cx="50" cy="50" r="42" fill="none"
-                      stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
-                      strokeWidth="10" strokeDasharray={`${(termAvg / 10) * 264} 264`}
-                      strokeLinecap="round" transform="rotate(-90 50 50)" />
-                    <text x="50" y="55" textAnchor="middle" fontSize="20" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
-                  </svg>
+                  ))}
                 </div>
-                <div className="db-gauge-legend">
-                  <span className="db-gauge-sub">{termVals.length} risposte</span>
-                  <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa (1–4)</span>
-                  <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media (5–7)</span>
-                  <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta (8–10)</span>
+              </div>
+
+              <div className="db-card">
+                <div className="db-card-eyebrow">TERMOMETRO ENERGETICO · OGGI</div>
+                <div className="db-card-title">Il livello di energia attuale</div>
+                <div className="db-gauge-row">
+                  <div className="db-gauge">
+                    <svg viewBox="0 0 100 100" width="90" height="90">
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="10" />
+                      <circle cx="50" cy="50" r="42" fill="none"
+                        stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
+                        strokeWidth="10" strokeDasharray={`${(termAvg / 10) * 264} 264`}
+                        strokeLinecap="round" transform="rotate(-90 50 50)" />
+                      <text x="50" y="55" textAnchor="middle" fontSize="20" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
+                    </svg>
+                  </div>
+                  <div className="db-gauge-legend">
+                    <span className="db-gauge-sub">{termVals.length} risposte</span>
+                    <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa (1–4)</span>
+                    <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media (5–7)</span>
+                    <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta (8–10)</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -408,6 +446,50 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   <DistBar key={o.label} label={o.label} count={descrCount[o.label] ?? 0} total={all.length} color={o.col} />
                 ))}
               </div>
+            </div>
+
+            <div className="db-ai-box">
+              <div className="db-ai-header">
+                <span className="db-ai-icon">✦</span>
+                <div>
+                  <div className="db-ai-title">Analisi AI</div>
+                  <div className="db-ai-sub">Fai una domanda sui dati della survey</div>
+                </div>
+              </div>
+
+              <div className="db-ai-suggestions">
+                {[
+                  'Quali sono i principali segnali di rischio per il benessere del team?',
+                  'Qual è l\'andamento generale dell\'energia in OT?',
+                  'Quale causa di bassa energia emerge più spesso?',
+                  'Come posso prepararmi per i colloqui one-to-one?',
+                ].map(s => (
+                  <button key={s} className="db-ai-chip" onClick={() => { setAiQuestion(s); askAI(s) }}>{s}</button>
+                ))}
+              </div>
+
+              <div className="db-ai-input-row">
+                <input
+                  className="db-ai-input"
+                  type="text"
+                  placeholder="Scrivi la tua domanda…"
+                  value={aiQuestion}
+                  onChange={e => setAiQuestion(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') askAI(aiQuestion) }}
+                />
+                <button className="db-ai-send" onClick={() => askAI(aiQuestion)} disabled={aiLoading || !aiQuestion.trim()}>
+                  {aiLoading ? '…' : '→'}
+                </button>
+              </div>
+
+              {aiLoading && (
+                <div className="db-ai-loading">
+                  <span className="db-ai-dot" /><span className="db-ai-dot" /><span className="db-ai-dot" />
+                </div>
+              )}
+              {aiAnswer && !aiLoading && (
+                <div className="db-ai-answer">{aiAnswer}</div>
+              )}
             </div>
 
             <div className="db-individual-box">
