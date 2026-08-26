@@ -114,7 +114,16 @@
   letter-spacing: -.01em;
 }
 .db-area-sub { font-size: 13px; color: #9A93A8; margin-top: 2px; }
-.db-area-list { display: flex; flex-direction: column; gap: 6px; }
+.db-area-list { display: flex; flex-direction: column; gap: 12px; }
+.db-area-group { display: flex; flex-direction: column; gap: 6px; }
+.db-area-company-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(42,35,56,.40);
+  padding: 0 2px;
+}
 .db-area-bu { border-radius: 12px; overflow: hidden; background: #FFF8E7; border: 1px solid #FFE0A3; }
 .db-area-bu-row {
   width: 100%; display: flex; align-items: center; gap: 10px;

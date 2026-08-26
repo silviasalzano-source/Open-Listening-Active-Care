@@ -69,10 +69,15 @@ const TEAMS_BY_BU: Record<string, string[]> = {
   'Operation & Delivery':          ['SYS Banking', 'SYS CROSS', 'SYS Fashion', 'APA'],
   'Sales & Marketing':             [],
   'IT (interno, helpdesk)':        [],
+  'Consulente esterno presso (One sys e Venio-AI)': [],
   'HR':                            ['HR Payroll', 'Recruiting & Development', 'Language Specialist'],
   'Servizi Generali':              ['Amministrazione', 'Office Coordinator'],
-  'Consulente esterno presso (One sys e Venio-AI)': [],
 }
+
+const COMPANY_GROUPS: { label: string; bus: string[] }[] = [
+  { label: 'OT Consulting', bus: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'Consulente esterno presso (One sys e Venio-AI)'] },
+  { label: 'Open Source',   bus: ['HR', 'Servizi Generali'] },
+]
 
 function generateMockData(): SurveyResponse[] {
   const rng = mkRng(0xdeadbeef)
@@ -635,40 +640,49 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 <div className="db-area-sub">Media termometro per BU e team · dal più critico al meno urgente</div>
               </div>
               <div className="db-area-list">
-                {buStats.map(bu => {
-                  const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
-                  const expanded = !!expandedBu[bu.name]
+                {COMPANY_GROUPS.map(group => {
+                  const groupStats = buStats.filter(b => group.bus.includes(b.name))
+                  if (groupStats.length === 0) return null
                   return (
-                    <div key={bu.name} className="db-area-bu">
-                      <button
-                        className="db-area-bu-row"
-                        onClick={() => setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] }))}
-                      >
-                        <span className="db-area-chevron" style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
-                        <span className="db-area-bu-name">{bu.name}</span>
-                        <span className="db-area-count">{bu.n} pers.</span>
-                        <span className="db-area-score" style={{ color: tc }}>{bu.avg.toFixed(1)}</span>
-                        <div className="db-area-bar-wrap">
-                          <div className="db-area-bar-fill" style={{ width: `${bu.avg * 10}%`, background: tc }} />
-                        </div>
-                      </button>
-                      {expanded && (
-                        <div className="db-area-teams">
-                          {bu.teams.map(t => {
-                            const ttc = t.avg >= 8 ? '#17B8A6' : t.avg >= 5 ? '#4B6BCC' : '#FF6E86'
-                            return (
-                              <div key={t.name} className="db-area-team-row">
-                                <span className="db-area-team-name">{t.name}</span>
-                                <span className="db-area-count">{t.n} pers.</span>
-                                <span className="db-area-score" style={{ color: ttc }}>{t.avg.toFixed(1)}</span>
-                                <div className="db-area-bar-wrap">
-                                  <div className="db-area-bar-fill" style={{ width: `${t.avg * 10}%`, background: ttc }} />
-                                </div>
+                    <div key={group.label} className="db-area-group">
+                      <div className="db-area-company-label">{group.label}</div>
+                      {groupStats.map(bu => {
+                        const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
+                        const expanded = !!expandedBu[bu.name]
+                        return (
+                          <div key={bu.name} className="db-area-bu">
+                            <button
+                              className="db-area-bu-row"
+                              onClick={() => setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] }))}
+                            >
+                              <span className="db-area-chevron" style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
+                              <span className="db-area-bu-name">{bu.name}</span>
+                              <span className="db-area-count">{bu.n} pers.</span>
+                              <span className="db-area-score" style={{ color: tc }}>{bu.avg.toFixed(1)}</span>
+                              <div className="db-area-bar-wrap">
+                                <div className="db-area-bar-fill" style={{ width: `${bu.avg * 10}%`, background: tc }} />
                               </div>
-                            )
-                          })}
-                        </div>
-                      )}
+                            </button>
+                            {expanded && (
+                              <div className="db-area-teams">
+                                {bu.teams.map(t => {
+                                  const ttc = t.avg >= 8 ? '#17B8A6' : t.avg >= 5 ? '#4B6BCC' : '#FF6E86'
+                                  return (
+                                    <div key={t.name} className="db-area-team-row">
+                                      <span className="db-area-team-name">{t.name}</span>
+                                      <span className="db-area-count">{t.n} pers.</span>
+                                      <span className="db-area-score" style={{ color: ttc }}>{t.avg > 0 ? t.avg.toFixed(1) : '—'}</span>
+                                      <div className="db-area-bar-wrap">
+                                        <div className="db-area-bar-fill" style={{ width: `${t.avg * 10}%`, background: ttc }} />
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   )
                 })}
