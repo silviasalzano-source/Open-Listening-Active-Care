@@ -78,6 +78,7 @@ export function SurveyApp({
   }
 
   async function handleNameConfirm(nome: string, cognome: string) {
+    if (saving) return
     setPhase1Answer('nome', nome)
     setPhase1Answer('cognome', cognome)
     setSaving(true)
@@ -102,6 +103,7 @@ export function SurveyApp({
   }
 
   async function handleQ1Next(question: Phase1Question) {
+    if (saving) return
     const value = phase1Answers[question.id as keyof Phase1Answers]
     setSaving(true)
     setSaveError(null)
@@ -169,6 +171,7 @@ export function SurveyApp({
                 onNext={() => {
                   void handleQ1Next(step.question)
                 }}
+                saving={saving}
               />
               {saving && <div className="save-status">Salvataggio in corso…</div>}
               {saveError && (
@@ -176,6 +179,7 @@ export function SurveyApp({
                   <span>{saveError}</span>
                   <button
                     className="btn ghost"
+                    disabled={saving}
                     onClick={() => {
                       void handleQ1Next(step.question)
                     }}
