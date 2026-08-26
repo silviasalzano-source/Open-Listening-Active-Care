@@ -473,7 +473,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
         {tab === 'q1' && (
           <div className="db-tab-body">
             <div className="db-section-hdr">
-              <span className="db-section-title">Energia oggi e nell'anno</span>
+              <span className="db-section-title">Energia oggi e nell&apos;anno</span>
             </div>
 
             <div className="db-row-2col">
@@ -645,7 +645,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                     <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5"/>
                     <path d="M30 30l10 10" stroke="#CCC8D8" strokeWidth="2.5" strokeLinecap="round"/>
                   </svg>
-                  <div>Cerca un dipendente per nome o cognome<br/><span>Usa i filtri sopra per restringere l'area o il livello di energia</span></div>
+                  <div>Cerca un dipendente per nome o cognome<br/><span>Usa i filtri sopra per restringere l&apos;area o il livello di energia</span></div>
                 </div>
               ) : q1Individuals.length === 0 ? (
                 <div className="db-individual-placeholder">
