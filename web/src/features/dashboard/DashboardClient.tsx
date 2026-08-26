@@ -548,6 +548,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
               })()}
             </div>
 
+            <div className="db-two-col">
             {(() => {
               const [topCausa, topN] = causeTop[0] ?? ['—', 0]
               const topPct = all.length ? Math.round(topN / all.length * 100) : 0
@@ -602,6 +603,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </div>
               )
             })()}
+            </div>
 
             <div className="db-individual-box">
               <div className="db-individual-header">
