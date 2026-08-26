@@ -124,7 +124,7 @@
 .db-area-bu-row:hover { background: rgba(255,182,72,.10); }
 .db-area-chevron { font-size: 9px; color: #9A93A8; transition: transform .2s; flex-shrink: 0; }
 .db-area-bu-name { font-size: 14px; font-weight: 600; color: #2A2338; flex: 1; text-align: left; }
-.db-area-team-name { font-size: 13px; font-weight: 500; color: #5A5370; flex: 1; }
+.db-area-team-name { font-size: 13px; font-weight: 700; color: #2A2338; flex: 1; }
 .db-area-count { font-size: 12px; color: #9A93A8; flex-shrink: 0; min-width: 52px; text-align: right; }
 .db-area-score { font-family: var(--font-fredoka, sans-serif); font-size: 17px; font-weight: 700; flex-shrink: 0; min-width: 36px; text-align: right; }
 .db-area-bar-wrap { width: 90px; height: 6px; border-radius: 100px; background: #EDE8F5; flex-shrink: 0; overflow: hidden; }
