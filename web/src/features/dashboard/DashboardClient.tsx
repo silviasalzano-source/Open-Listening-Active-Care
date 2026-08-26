@@ -12,6 +12,7 @@ interface SurveyResponse {
   causa?: string[]
   descrizione?: string
   bu?: string
+  team?: string
   anzianita?: string
   ruolo?: string
   relazioni_q?: number
@@ -64,9 +65,18 @@ function mkRng(seed: number) {
   }
 }
 
+const TEAMS_BY_BU: Record<string, string[]> = {
+  'Operation & Delivery':     ['Team Progetti A', 'Team Progetti B', 'Team Operations'],
+  'Sales & Marketing':        ['Sales', 'Marketing & Comunicazione'],
+  'IT (interno, helpdesk)':   ['Helpdesk', 'IT Infrastructure'],
+  'HR':                       ['HR Business Partner', 'Talent & Learning'],
+  'Amministrazione':          ['Contabilità', 'Finance & Controlling'],
+  'Servizi Generali':         ['Facility & Acquisti'],
+}
+
 function generateMockData(): SurveyResponse[] {
   const rng = mkRng(0xdeadbeef)
-  const bus = ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Amministrazione', 'Servizi Generali']
+  const bus = Object.keys(TEAMS_BY_BU)
   const anzs = ['< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const ruoli = ['Manager', 'Worker']
   const climas = ['Soleggiato', 'Parzialmente nuvoloso', 'Piovoso', 'Temporalesco']
@@ -81,11 +91,13 @@ function generateMockData(): SurveyResponse[] {
     const seed2 = i * 137 + 42
     const r2 = mkRng(seed2)
     const termo = rng.next(1, 10)
+    const bu = rng.pick(bus)
+    const team = rng.pick(TEAMS_BY_BU[bu] ?? ['—'])
     res.push({
       nome: r2.pick(nomi), cognome: r2.pick(cognomi),
       clima: rng.pick(climas), termometro: termo,
       causa: rng.pickN(causeOpts, rng.next(1, 2)), descrizione: rng.pick(descrs),
-      bu: rng.pick(bus), anzianita: rng.pick(anzs), ruolo: rng.pick(ruoli),
+      bu, team, anzianita: rng.pick(anzs), ruolo: rng.pick(ruoli),
       relazioni_q: rng.next(1, 5), referente_crescita: rng.next(1, 5),
       referente_obiettivi: rng.next(1, 5), hr_access: rng.next(1, 5),
       hr_valore: rng.next(1, 5), mgmt_trasp: rng.next(1, 5),
@@ -182,6 +194,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
   const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'mid' | 'high'>('all')
+  const [expandedBu, setExpandedBu] = useState<Record<string, boolean>>({})
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -230,6 +243,17 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   ]
   const descrCount: Record<string, number> = {}
   all.forEach(r => { if (r.descrizione) descrCount[r.descrizione] = (descrCount[r.descrizione] ?? 0) + 1 })
+
+  // Energia per BU → team
+  const buStats = Object.keys(TEAMS_BY_BU).map(buName => {
+    const buRows = all.filter(r => r.bu === buName)
+    const buAvg = avg(buRows.map(r => r.termometro))
+    const teams = TEAMS_BY_BU[buName].map(teamName => {
+      const teamRows = buRows.filter(r => r.team === teamName)
+      return { name: teamName, n: teamRows.length, avg: avg(teamRows.map(r => r.termometro)) }
+    }).filter(t => t.n > 0).sort((a, b) => a.avg - b.avg)
+    return { name: buName, n: buRows.length, avg: buAvg, teams }
+  }).filter(b => b.n > 0).sort((a, b) => a.avg - b.avg)
 
   const climaPositivoN = (climaCount['Soleggiato'] ?? 0) + (climaCount['Parzialmente nuvoloso'] ?? 0)
   const climaPositivoPct = all.length ? Math.round(climaPositivoN / all.length * 100) : 0
@@ -603,6 +627,52 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </div>
               )
             })()}
+            </div>
+
+            <div className="db-area-box">
+              <div className="db-area-header">
+                <div className="db-area-title">🗺️ Energia per area</div>
+                <div className="db-area-sub">Media termometro per BU e team · dal più critico al più alto</div>
+              </div>
+              <div className="db-area-list">
+                {buStats.map(bu => {
+                  const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
+                  const expanded = !!expandedBu[bu.name]
+                  return (
+                    <div key={bu.name} className="db-area-bu">
+                      <button
+                        className="db-area-bu-row"
+                        onClick={() => setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] }))}
+                      >
+                        <span className="db-area-chevron" style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
+                        <span className="db-area-bu-name">{bu.name}</span>
+                        <span className="db-area-count">{bu.n} pers.</span>
+                        <span className="db-area-score" style={{ color: tc }}>{bu.avg.toFixed(1)}</span>
+                        <div className="db-area-bar-wrap">
+                          <div className="db-area-bar-fill" style={{ width: `${bu.avg * 10}%`, background: tc }} />
+                        </div>
+                      </button>
+                      {expanded && (
+                        <div className="db-area-teams">
+                          {bu.teams.map(t => {
+                            const ttc = t.avg >= 8 ? '#17B8A6' : t.avg >= 5 ? '#4B6BCC' : '#FF6E86'
+                            return (
+                              <div key={t.name} className="db-area-team-row">
+                                <span className="db-area-team-name">{t.name}</span>
+                                <span className="db-area-count">{t.n} pers.</span>
+                                <span className="db-area-score" style={{ color: ttc }}>{t.avg.toFixed(1)}</span>
+                                <div className="db-area-bar-wrap">
+                                  <div className="db-area-bar-fill" style={{ width: `${t.avg * 10}%`, background: ttc }} />
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
 
             <div className="db-individual-box">
