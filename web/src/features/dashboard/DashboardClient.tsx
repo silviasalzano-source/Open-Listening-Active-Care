@@ -639,9 +639,9 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 <div className="db-area-title">🔋 Energia per BU & Team</div>
                 <div className="db-area-sub">Media termometro per BU e team</div>
                 <div className="db-area-legend">
-                  <span className="db-area-legend-pill" style={{ color: '#B8003A', background: 'rgba(255,110,134,.14)', border: '1px solid rgba(255,110,134,.35)' }}>● Bassa · 1–4</span>
-                  <span className="db-area-legend-pill" style={{ color: '#2A4A99', background: 'rgba(75,107,204,.12)', border: '1px solid rgba(75,107,204,.30)' }}>● Media · 5–7</span>
-                  <span className="db-area-legend-pill" style={{ color: '#0A7A6B', background: 'rgba(23,184,166,.12)', border: '1px solid rgba(23,184,166,.30)' }}>● Alta · 8–10</span>
+                  <span className="db-area-legend-pill" style={{ color: '#FF6E86', background: 'rgba(255,110,134,.14)', border: '1px solid rgba(255,110,134,.35)' }}>● Bassa · 1–4</span>
+                  <span className="db-area-legend-pill" style={{ color: '#4B6BCC', background: 'rgba(75,107,204,.12)', border: '1px solid rgba(75,107,204,.30)' }}>● Media · 5–7</span>
+                  <span className="db-area-legend-pill" style={{ color: '#17B8A6', background: 'rgba(23,184,166,.12)', border: '1px solid rgba(23,184,166,.30)' }}>● Alta · 8–10</span>
                 </div>
               </div>
               <div className="db-area-list">
@@ -700,7 +700,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   <div className="db-individual-title">👤 Report my energy</div>
                   <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
                   <div className="db-area-legend" style={{ marginTop: 8 }}>
-                    <span className="db-area-legend-pill" style={{ color: '#B8003A', background: 'rgba(255,110,134,.14)', border: '1px solid rgba(255,110,134,.35)' }}>● Bassa · 1–4</span>
+                    <span className="db-area-legend-pill" style={{ color: '#FF6E86', background: 'rgba(255,110,134,.14)', border: '1px solid rgba(255,110,134,.35)' }}>● Bassa · 1–4</span>
                     <span className="db-area-legend-pill" style={{ color: '#2A4A99', background: 'rgba(75,107,204,.12)', border: '1px solid rgba(75,107,204,.30)' }}>● Media · 5–7</span>
                     <span className="db-area-legend-pill" style={{ color: '#0A7A6B', background: 'rgba(23,184,166,.12)', border: '1px solid rgba(23,184,166,.30)' }}>● Alta · 8–10</span>
                   </div>
