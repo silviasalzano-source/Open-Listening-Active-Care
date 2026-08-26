@@ -198,6 +198,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
+  const [q1TeamFilter, setQ1TeamFilter] = useState('')
   const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'mid' | 'high'>('all')
   const [expandedBu, setExpandedBu] = useState<Record<string, boolean>>({})
   const [aiOpen, setAiOpen] = useState(false)
@@ -295,9 +296,10 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       const fullName = `${r.nome ?? ''} ${r.cognome ?? ''}`.toLowerCase()
       const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
       const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
+      const teamMatch = !q1TeamFilter || q1TeamFilter === 'Tutti i team' || r.team === q1TeamFilter
       const t = r.termometro ?? 0
       const energyMatch = q1EnergyFilter === 'all' || (q1EnergyFilter === 'low' && t <= 4) || (q1EnergyFilter === 'mid' && t >= 5 && t <= 7) || (q1EnergyFilter === 'high' && t >= 8)
-      return searchMatch && buMatch && energyMatch
+      return searchMatch && buMatch && teamMatch && energyMatch
     })
     .sort((a, b) => (a.termometro ?? 0) - (b.termometro ?? 0))
 
@@ -700,6 +702,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   <div className="db-individual-title">👤 Report my energy</div>
                   <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
                   <div className="db-area-legend" style={{ marginTop: 8 }}>
+                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter('all')} style={{ color: q1EnergyFilter === 'all' ? '#2A2338' : '#9A93A8', background: q1EnergyFilter === 'all' ? 'rgba(42,35,56,.10)' : 'rgba(42,35,56,.05)', border: `1.5px solid ${q1EnergyFilter === 'all' ? '#2A2338' : 'rgba(42,35,56,.15)'}`, fontWeight: q1EnergyFilter === 'all' ? 900 : 700 }}>Tutti</button>
                     <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'low' ? 'all' : 'low')} style={{ color: '#FF6E86', background: q1EnergyFilter === 'low' ? 'rgba(255,110,134,.28)' : 'rgba(255,110,134,.14)', border: `1.5px solid ${q1EnergyFilter === 'low' ? '#FF6E86' : 'rgba(255,110,134,.35)'}`, fontWeight: q1EnergyFilter === 'low' ? 900 : 700 }}>● Bassa · 1–4</button>
                     <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'mid' ? 'all' : 'mid')} style={{ color: '#4B6BCC', background: q1EnergyFilter === 'mid' ? 'rgba(75,107,204,.25)' : 'rgba(75,107,204,.12)', border: `1.5px solid ${q1EnergyFilter === 'mid' ? '#4B6BCC' : 'rgba(75,107,204,.30)'}`, fontWeight: q1EnergyFilter === 'mid' ? 900 : 700 }}>● Media · 5–7</button>
                     <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'high' ? 'all' : 'high')} style={{ color: '#17B8A6', background: q1EnergyFilter === 'high' ? 'rgba(23,184,166,.25)' : 'rgba(23,184,166,.12)', border: `1.5px solid ${q1EnergyFilter === 'high' ? '#17B8A6' : 'rgba(23,184,166,.30)'}`, fontWeight: q1EnergyFilter === 'high' ? 900 : 700 }}>● Alta · 8–10</button>
@@ -723,16 +726,23 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                     <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>
                   )}
                 </div>
-                <select className="db-filter-select" value={q1BuFilter || 'Tutte le aree'} onChange={e => setQ1BuFilter(e.target.value)}>
+                <select className="db-filter-select" value={q1BuFilter || 'Tutte le aree'} onChange={e => { setQ1BuFilter(e.target.value); setQ1TeamFilter('') }}>
                   {BUS.map(o => <option key={o}>{o}</option>)}
                 </select>
+                {(() => {
+                  const teams = (q1BuFilter && q1BuFilter !== 'Tutte le aree') ? (TEAMS_BY_BU[q1BuFilter] ?? []) : []
+                  if (teams.length === 0) return null
+                  return (
+                    <select className="db-filter-select" value={q1TeamFilter || 'Tutti i team'} onChange={e => setQ1TeamFilter(e.target.value)}>
+                      <option>Tutti i team</option>
+                      {teams.map(t => <option key={t}>{t}</option>)}
+                    </select>
+                  )
+                })()}
               </div>
-              <div className="db-energy-pills">
-                <button className={`db-energy-pill${q1EnergyFilter === 'all' ? ' active' : ''}`} onClick={() => setQ1EnergyFilter('all')}>Tutti</button>
-                <span className="db-sort-note">↑ ordinate per energia</span>
-              </div>
+              <div className="db-sort-note" style={{ marginTop: 6 }}>↑ ordinate per energia</div>
 
-              {q1Search.trim().length === 0 && q1EnergyFilter === 'all' ? (
+              {q1Search.trim().length === 0 && q1EnergyFilter === 'all' && (!q1TeamFilter || q1TeamFilter === 'Tutti i team') && (!q1BuFilter || q1BuFilter === 'Tutte le aree') ? (
                 <div className="db-individual-placeholder">
                   <svg viewBox="0 0 48 48" fill="none" width="40" height="40">
                     <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5"/>
