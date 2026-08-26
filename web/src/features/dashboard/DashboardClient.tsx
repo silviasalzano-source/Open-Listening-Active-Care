@@ -637,7 +637,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             <div className="db-area-box">
               <div className="db-area-header">
                 <div className="db-area-title">🔋 Energia per BU & Team</div>
-                <div className="db-area-sub">Media termometro per BU e team · dal più critico al meno urgente</div>
+                <div className="db-area-sub">Media termometro per BU e team</div>
                 <div className="db-area-legend">
                   <span className="db-area-legend-item" style={{ color: '#FF6E86' }}><span className="db-area-legend-dot" style={{ background: '#FF6E86' }} />Bassa (1–4)</span>
                   <span className="db-area-legend-item" style={{ color: '#4B6BCC' }}><span className="db-area-legend-dot" style={{ background: '#4B6BCC' }} />Media (5–7)</span>
