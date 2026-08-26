@@ -13,6 +13,7 @@ export function FocusScreen({
   const [revealed, setRevealed] = useState({ mascot: false, header: false, desc: false, nav: false })
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRevealed({ mascot: false, header: false, desc: false, nav: false })
     const timers = [
       setTimeout(() => setRevealed(r => ({ ...r, mascot: true })), 60),

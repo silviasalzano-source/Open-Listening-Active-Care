@@ -193,6 +193,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       localStorage.setItem(LS_SEED_KEY, '1')
     }
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAll(JSON.parse(localStorage.getItem(LS_KEY) ?? '[]'))
     } catch { setAll([]) }
   }, [])
@@ -746,7 +747,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
             {privacyBlock ? (
               <div className="db-privacy-warn">
-                ⚠️ Meno di {PRIVACY_MIN} rispondenti per questa selezione di filtri — i dati aggregati non vengono mostrati per garantire l'anonimato.
+                ⚠️ Meno di {PRIVACY_MIN} rispondenti per questa selezione di filtri — i dati aggregati non vengono mostrati per garantire l&apos;anonimato.
               </div>
             ) : (
               <>
