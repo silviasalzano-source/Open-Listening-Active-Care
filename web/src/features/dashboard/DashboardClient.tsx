@@ -36,7 +36,7 @@ interface SurveyResponse {
 }
 
 const LS_KEY = 'ol_responses'
-const LS_SEED_KEY = 'ol_seeded_v3'
+const LS_SEED_KEY = 'ol_seeded_v4'
 const PRIVACY_MIN = 5
 const TOTAL_INVITED = 80
 
@@ -71,7 +71,7 @@ const TEAMS_BY_BU: Record<string, string[]> = {
   'IT (interno, helpdesk)':        [],
   'HR':                            ['HR Payroll', 'Recruiting & Development', 'Language Specialist'],
   'Servizi Generali':              ['Amministrazione', 'Office Coordinator'],
-  'Consulenti esterni su One sys': [],
+  'Consulente esterno presso (One sys e Venio-AI)': [],
 }
 
 function generateMockData(): SurveyResponse[] {
