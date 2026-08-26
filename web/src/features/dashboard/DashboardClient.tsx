@@ -678,7 +678,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             <div className="db-individual-box">
               <div className="db-individual-header">
                 <div>
-                  <div className="db-individual-title">🔋 Report my energy</div>
+                  <div className="db-individual-title">👤 Report my energy</div>
                   <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
                 </div>
               </div>
