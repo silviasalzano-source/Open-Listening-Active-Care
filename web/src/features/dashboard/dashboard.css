@@ -112,9 +112,10 @@
 }
 .db-individual-title {
   font-family: var(--font-fredoka, sans-serif);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 600;
-  color: #2A2338;
+  color: #FF6E86;
+  letter-spacing: -.01em;
 }
 .db-individual-sub {
   font-size: 13px;
@@ -256,7 +257,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #2A2338;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -265,9 +265,9 @@
   font-weight: 600;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background .15s, transform .12s;
+  transition: filter .15s, transform .12s;
 }
-.db-individual-dl:hover { background: #17B8A6; transform: translateY(-1px); }
+.db-individual-dl:hover { filter: brightness(.85); transform: translateY(-1px); }
 .db-individual-placeholder {
   display: flex;
   flex-direction: column;
@@ -293,6 +293,7 @@
 .db-quickview-list { display: flex; flex-direction: column; gap: 12px; }
 .db-quickview-card {
   border: 1px solid #EDE8F5;
+  border-left: 4px solid transparent;
   border-radius: 16px;
   overflow: hidden;
   background: #fff;

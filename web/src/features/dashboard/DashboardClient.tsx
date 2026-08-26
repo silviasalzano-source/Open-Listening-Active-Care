@@ -606,7 +606,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
             <div className="db-individual-box">
               <div className="db-individual-header">
                 <div>
-                  <div className="db-individual-title">Report individuale · one-to-one</div>
+                  <div className="db-individual-title">🔋 Report my energy</div>
                   <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
                 </div>
               </div>
@@ -666,9 +666,9 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                       const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
                       const descrShort: Record<string, string> = { 'Crescita': '⚡ Crescita', 'Stabile': '🔋 Stabile', 'Ricarica': '🔌 Ricarica', 'Assestamento': '🌱 Assestamento' }
                       return (
-                        <div key={i} className="db-quickview-card">
+                        <div key={i} className="db-quickview-card" style={{ borderLeft: `4px solid ${termColor}` }}>
                           <div className="db-qv-header">
-                            <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor, width: 40, height: 40, fontSize: 14 }}>
+                            <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor, width: 44, height: 44, fontSize: 15 }}>
                               {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
                             </div>
                             <div className="db-qv-identity">
@@ -679,7 +679,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                                 {r.anzianita && <span>· {r.anzianita}</span>}
                               </div>
                             </div>
-                            <button className="db-individual-dl" onClick={() => downloadReport(r)}>
+                            <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
                               <svg viewBox="0 0 20 20" fill="none" width="14" height="14">
                                 <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
                                 <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
