@@ -3,10 +3,10 @@ import type { FlowStep } from '../../../src/features/survey/types'
 import { buildPhase1Flow, mascotBucket } from '../../../src/features/survey/flow'
 
 describe('buildPhase1Flow', () => {
-  it('produces the exact 9-step sequence for phase 1', () => {
+  it('produces the exact 10-step sequence for phase 1', () => {
     const flow = buildPhase1Flow()
     expect(flow.map((s) => s.kind)).toEqual([
-      'intro', 'q1intro', 'q1', 'q1', 'q1', 'q1intro', 'q1', 'result', 'transition',
+      'intro', 'q1intro', 'q1', 'focus', 'q1', 'q1', 'q1intro', 'q1', 'result', 'transition',
     ])
   })
 
@@ -14,8 +14,8 @@ describe('buildPhase1Flow', () => {
     const flow = buildPhase1Flow()
     const teamIntro = flow[1]
     const clima = flow[2]
-    const causa = flow[4]
-    const annoIntro = flow[5]
+    const causa = flow[5]
+    const annoIntro = flow[6]
     if (teamIntro.kind !== 'q1intro' || clima.kind !== 'q1') throw new Error('unexpected shape')
     expect(teamIntro.key).toBe('team')
     expect(clima.question.id).toBe('clima')

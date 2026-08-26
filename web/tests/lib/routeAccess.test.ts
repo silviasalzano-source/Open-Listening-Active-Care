@@ -14,9 +14,9 @@ describe('getRequiredRoles', () => {
     expect(getRequiredRoles('/survey/step-1')).toEqual(['employee', 'hr_admin'])
   })
 
-  it('returns only hr_admin for /admin routes', () => {
-    expect(getRequiredRoles('/admin')).toEqual(['hr_admin'])
-    expect(getRequiredRoles('/admin/reports')).toEqual(['hr_admin'])
+  it('returns hr_admin and bu_manager for /admin routes', () => {
+    expect(getRequiredRoles('/admin')).toEqual(['hr_admin', 'bu_manager'])
+    expect(getRequiredRoles('/admin/reports')).toEqual(['hr_admin', 'bu_manager'])
   })
 
   it('returns null for unprotected routes', () => {
