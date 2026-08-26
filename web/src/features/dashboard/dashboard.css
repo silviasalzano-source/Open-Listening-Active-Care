@@ -98,8 +98,8 @@
 
 /* ---- Individual report box ---- */
 .db-individual-box {
-  background: linear-gradient(135deg, #fffbf0 0%, #fff8fc 100%);
-  border: 1.5px solid #FFE0A3;
+  background: #fff;
+  border: 1.5px solid #FF6E86;
   border-radius: 20px;
   padding: 24px;
   margin-top: 8px;
