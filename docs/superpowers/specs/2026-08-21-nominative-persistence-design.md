@@ -152,7 +152,37 @@ web/src/features/survey/screens/NoActiveCampaignScreen.tsx  — nuovo screen
   verificare il messaggio quando non c'è campagna attiva; verificare che un
   salvataggio fallito blocchi realmente l'avanzamento.
 
-## 9. Fuori scope (rimandato)
+## 9. Addendum — Nome/Cognome (`NameModal`)
+
+*(Aggiunto dopo l'approvazione iniziale, durante la scrittura del piano di
+implementazione: il codice su `main` è nel frattempo cambiato — è stato
+reintrodotto il `NameModal` del prototipo originale, che il piano precedente
+[2026-08-20-survey-nominative-phase-design.md](2026-08-20-survey-nominative-phase-design.md)
+aveva rimosso. Decisione dell'utente: persistere anche questi campi.)*
+
+- `nome` e `cognome` (raccolti dal modal obbligatorio prima della prima
+  domanda) vengono salvati come due righe aggiuntive in
+  `nominative_responses` (`question_id = 'nome'` / `'cognome'`), con lo
+  stesso endpoint `POST /api/survey/nominative-answer` usato per le altre
+  domande.
+- **Rientrano tra le domande "obbligatorie"** che fanno scattare il
+  passaggo a `status = 'submitted'`: l'insieme diventa `nome`, `cognome`,
+  `clima`, `termometro`, `causa`, `descrizione` (6 in totale, non più 4).
+  Motivo: il gating del modal lato client impedisce già di procedere senza
+  compilarli, ma includerli anche nel controllo server-side mantiene la
+  stessa difesa in profondità già applicata alle altre domande (il client
+  non è l'unica barriera).
+- **Ripresa**: se `nome`/`cognome` sono già presenti tra le risposte
+  caricate, il modal non viene ri-mostrato al resume — il flow riprende
+  direttamente dalla prima domanda `q1` senza risposta (stessa regola della
+  sezione 4, dato che il modal non è uno step del `flow` ma uno stato
+  separato in `SurveyApp` mostrato solo cliccando "Iniziamo" sull'intro). Se
+  invece `nome`/`cognome` NON sono presenti, si riparte sempre dall'intro
+  (indice 0), indipendentemente da eventuali risposte `q1` già presenti
+  (stato che non dovrebbe verificarsi dato il gating del modal, ma è il
+  comportamento di default più sicuro).
+
+## 10. Fuori scope (rimandato)
 
 - Persistenza della fase anonima (7 capitoli) — piano separato.
 - Modifica di una compilazione già `submitted` (finestra `edit_window`) —
