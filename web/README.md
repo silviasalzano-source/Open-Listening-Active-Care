@@ -15,10 +15,28 @@ Scaffold Next.js (App Router, TypeScript) per il pilota. Vedi
 ## Test
 
 `npm run test` (Vitest) — copre la logica pura di controllo accessi
-(`src/lib/auth/routeAccess.ts`) e la validazione delle env Supabase
-(`src/lib/supabase/env.ts`). La sessione Supabase vera e propria (login,
-middleware, pagine server) va verificata manualmente con `npm run dev`,
+(`src/lib/auth/routeAccess.ts`), la validazione delle env Supabase
+(`src/lib/supabase/env.ts`) e la logica di apertura/chiusura delle finestre
+di campagna (`src/lib/campaigns/windows.ts`). La sessione Supabase vera e propria
+(login, middleware, pagine server) va verificata manualmente con `npm run dev`,
 perché dipende da un progetto Supabase reale.
+
+## Migrazioni database
+
+Le migrazioni SQL vivono in `web/supabase/migrations/`, con naming
+`<timestamp>_<nome>.sql` (convenzione compatibile con la Supabase CLI, non
+ancora installata in questo progetto). Per applicarle oggi:
+
+1. Apri il progetto Supabase → **SQL Editor**.
+2. Esegui i file in `web/supabase/migrations/` **in ordine di timestamp**
+   (crescente), uno alla volta.
+3. Ogni file di migrazione contiene, nel piano di implementazione che l'ha
+   generato (`docs/superpowers/plans/2026-08-21-database-schema-implementation.md`),
+   le query di verifica manuale corrispondenti — eseguile dopo ogni
+   migrazione per confermare che vincoli/trigger funzionino come previsto.
+
+Se in futuro si installa la Supabase CLI (`supabase link` + `supabase db
+push`), questa stessa cartella funziona senza modifiche.
 
 ## Collegare Vercel (azione manuale, non scriptabile da qui)
 
