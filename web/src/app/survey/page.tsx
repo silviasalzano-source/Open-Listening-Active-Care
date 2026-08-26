@@ -18,29 +18,38 @@ export default async function SurveyPage() {
     return <NoActiveCampaignScreen />
   }
 
-  const submission = await getOrCreateSubmission(supabase, user.id, campaign.id)
+  try {
+    const submission = await getOrCreateSubmission(supabase, user.id, campaign.id)
 
-  const { data: responses, error } = await supabase
-    .from('nominative_responses')
-    .select('question_id, answer')
-    .eq('submission_id', submission.id)
+    const { data: responses, error } = await supabase
+      .from('nominative_responses')
+      .select('question_id, answer')
+      .eq('submission_id', submission.id)
 
-  if (error) {
-    throw new Error(`Failed to fetch nominative responses: ${error.message}`)
+    if (error) {
+      throw new Error(`Failed to fetch nominative responses: ${error.message}`)
+    }
+
+    const initialPhase1Answers = (responses ?? []).reduce<Phase1Answers>((acc, row) => {
+      return { ...acc, [row.question_id]: row.answer }
+    }, {})
+
+    const flow = buildFullFlow()
+    const initialIdx = computeResumeIndex(flow, initialPhase1Answers, submission.status)
+
+    return (
+      <SurveyApp
+        submissionId={submission.id}
+        initialPhase1Answers={initialPhase1Answers}
+        initialIdx={initialIdx}
+      />
+    )
+  } catch {
+    // Qualsiasi errore a questo punto (inclusa la finestra di compilazione
+    // che si chiude tra il lookup della campagna e l'insert della submission,
+    // rigettato dalla RLS con 42501) rende il sondaggio non completabile per
+    // il dipendente: la cosa più onesta da mostrare è lo stesso messaggio di
+    // "nessun sondaggio attivo".
+    return <NoActiveCampaignScreen />
   }
-
-  const initialPhase1Answers = (responses ?? []).reduce<Phase1Answers>((acc, row) => {
-    return { ...acc, [row.question_id]: row.answer }
-  }, {})
-
-  const flow = buildFullFlow()
-  const initialIdx = computeResumeIndex(flow, initialPhase1Answers, submission.status)
-
-  return (
-    <SurveyApp
-      submissionId={submission.id}
-      initialPhase1Answers={initialPhase1Answers}
-      initialIdx={initialIdx}
-    />
-  )
 }

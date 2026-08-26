@@ -1,4 +1,5 @@
 import type { FlowStep, Phase1Answers } from '@/features/survey/types'
+import { IDENTITY_QUESTION_IDS } from './mandatory'
 
 export function computeResumeIndex(
   flow: FlowStep[],
@@ -10,7 +11,9 @@ export function computeResumeIndex(
     return resultIdx === -1 ? 0 : resultIdx
   }
 
-  const hasIdentity = answers.nome !== undefined && answers.cognome !== undefined
+  const hasIdentity = IDENTITY_QUESTION_IDS.every(
+    (id) => answers[id as keyof Phase1Answers] !== undefined
+  )
   if (!hasIdentity) {
     return 0
   }

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-
-const MANDATORY_QUESTION_IDS = ['nome', 'cognome', 'clima', 'termometro', 'causa', 'descrizione']
+import { ALLOWED_QUESTION_IDS, MANDATORY_QUESTION_IDS } from '@/lib/survey/mandatory'
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
@@ -28,6 +27,13 @@ export async function POST(request: NextRequest) {
   if (!submissionId || !questionId || answer === undefined) {
     return NextResponse.json(
       { error: 'invalid_request', message: 'Campi mancanti.' },
+      { status: 400 }
+    )
+  }
+
+  if (!ALLOWED_QUESTION_IDS.includes(questionId as (typeof ALLOWED_QUESTION_IDS)[number])) {
+    return NextResponse.json(
+      { error: 'invalid_request', message: 'Domanda non riconosciuta.' },
       { status: 400 }
     )
   }
