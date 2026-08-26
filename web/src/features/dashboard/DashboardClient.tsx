@@ -36,7 +36,7 @@ interface SurveyResponse {
 }
 
 const LS_KEY = 'ol_responses'
-const LS_SEED_KEY = 'ol_seeded_v4'
+const LS_SEED_KEY = 'ol_seeded_v5'
 const PRIVACY_MIN = 5
 const TOTAL_INVITED = 80
 
@@ -66,7 +66,7 @@ function mkRng(seed: number) {
 }
 
 const TEAMS_BY_BU: Record<string, string[]> = {
-  'Operation & Delivery':          ['SYS', 'APA'],
+  'Operation & Delivery':          ['SYS Banking', 'SYS CROSS', 'SYS Fashion', 'APA'],
   'Sales & Marketing':             [],
   'IT (interno, helpdesk)':        [],
   'HR':                            ['HR Payroll', 'Recruiting & Development', 'Language Specialist'],
@@ -251,7 +251,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     const teams = TEAMS_BY_BU[buName].map(teamName => {
       const teamRows = buRows.filter(r => r.team === teamName)
       return { name: teamName, n: teamRows.length, avg: avg(teamRows.map(r => r.termometro)) }
-    }).filter(t => t.n > 0).sort((a, b) => a.avg - b.avg)
+    }).sort((a, b) => a.avg - b.avg)
     return { name: buName, n: buRows.length, avg: buAvg, teams }
   }).filter(b => b.n > 0).sort((a, b) => a.avg - b.avg)
 
