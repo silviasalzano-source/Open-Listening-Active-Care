@@ -192,10 +192,10 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       localStorage.setItem(LS_KEY, JSON.stringify(generateMockData()))
       localStorage.setItem(LS_SEED_KEY, '1')
     }
-    try {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAll(JSON.parse(localStorage.getItem(LS_KEY) ?? '[]'))
-    } catch { setAll([]) }
+    let data: SurveyResponse[] = []
+    try { data = JSON.parse(localStorage.getItem(LS_KEY) ?? '[]') } catch { /* ignore */ }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setAll(data)
   }, [])
 
   const filtered = all.filter(r =>
