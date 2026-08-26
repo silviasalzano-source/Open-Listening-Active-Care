@@ -100,7 +100,8 @@
 /* ---- Energia per area box ---- */
 .db-area-box {
   background: #fff;
-  border: 2.5px solid #FFB648;
+  border: 1.5px solid #FFB648;
+  border-top: 4px solid #FFB648;
   border-radius: 20px;
   padding: 24px;
   margin-top: 8px;
@@ -173,7 +174,8 @@
 /* ---- Individual report box ---- */
 .db-individual-box {
   background: #fff;
-  border: 2.5px solid #17B8A6;
+  border: 1.5px solid #17B8A6;
+  border-top: 4px solid #17B8A6;
   border-radius: 20px;
   padding: 24px;
   margin-top: 8px;
