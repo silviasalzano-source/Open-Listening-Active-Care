@@ -36,7 +36,7 @@ interface SurveyResponse {
 }
 
 const LS_KEY = 'ol_responses'
-const LS_SEED_KEY = 'ol_seeded'
+const LS_SEED_KEY = 'ol_seeded_v2'
 const PRIVACY_MIN = 5
 const TOTAL_INVITED = 80
 
