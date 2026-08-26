@@ -728,11 +728,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 </select>
               </div>
               <div className="db-energy-pills">
-                {([['all', 'Tutti'], ['low', '🔴 Energia bassa'], ['mid', '🔵 Energia media'], ['high', '🟢 Energia alta']] as const).map(([val, label]) => (
-                  <button key={val} data-val={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
-                    {label}
-                  </button>
-                ))}
+                <button className={`db-energy-pill${q1EnergyFilter === 'all' ? ' active' : ''}`} onClick={() => setQ1EnergyFilter('all')}>Tutti</button>
                 <span className="db-sort-note">↑ ordinate per energia</span>
               </div>
 
