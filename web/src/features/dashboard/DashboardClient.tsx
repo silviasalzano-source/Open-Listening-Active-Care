@@ -76,7 +76,7 @@ const TEAMS_BY_BU: Record<string, string[]> = {
 
 const COMPANY_GROUPS: { label: string; bus: string[]; color: string; bg: string }[] = [
   { label: 'OT Consulting', bus: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'Consulente esterno presso (One sys e Venio-AI)'], color: '#B91C1C', bg: 'rgba(220,38,38,.10)' },
-  { label: 'Open Source',   bus: ['HR', 'Servizi Generali'], color: '#0A7A6B', bg: 'rgba(23,184,166,.12)' },
+  { label: 'Open Source',   bus: ['HR', 'Servizi Generali'], color: '#6D28D9', bg: 'rgba(109,40,217,.10)' },
 ]
 
 function generateMockData(): SurveyResponse[] {
