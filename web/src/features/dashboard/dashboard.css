@@ -115,13 +115,13 @@
 }
 .db-area-sub { font-size: 13px; color: #9A93A8; margin-top: 2px; }
 .db-area-list { display: flex; flex-direction: column; gap: 6px; }
-.db-area-bu { border-radius: 12px; overflow: hidden; background: #FAFAFA; border: 1px solid #EDE8F5; }
+.db-area-bu { border-radius: 12px; overflow: hidden; background: #FFF8E7; border: 1px solid #FFE0A3; }
 .db-area-bu-row {
   width: 100%; display: flex; align-items: center; gap: 10px;
   padding: 12px 14px; background: none; border: none; cursor: pointer;
   text-align: left;
 }
-.db-area-bu-row:hover { background: rgba(42,35,56,.03); }
+.db-area-bu-row:hover { background: rgba(255,182,72,.10); }
 .db-area-chevron { font-size: 9px; color: #9A93A8; transition: transform .2s; flex-shrink: 0; }
 .db-area-bu-name { font-size: 14px; font-weight: 600; color: #2A2338; flex: 1; text-align: left; }
 .db-area-team-name { font-size: 13px; font-weight: 500; color: #5A5370; flex: 1; }
