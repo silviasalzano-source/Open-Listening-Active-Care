@@ -114,6 +114,9 @@
   letter-spacing: -.01em;
 }
 .db-area-sub { font-size: 13px; color: #9A93A8; margin-top: 2px; }
+.db-area-legend { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.db-area-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; }
+.db-area-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .db-area-list { display: flex; flex-direction: column; gap: 16px; }
 .db-area-group { display: flex; flex-direction: column; gap: 8px; }
 .db-area-company-label {
