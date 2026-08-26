@@ -13,6 +13,7 @@ export function QuestionScreen({
   onAltroChange,
   onBack,
   onNext,
+  saving,
 }: {
   question: Phase1Question
   index: number
@@ -23,6 +24,7 @@ export function QuestionScreen({
   onAltroChange: (value: string) => void
   onBack: () => void
   onNext: () => void
+  saving: boolean
 }) {
   const isAnswered =
     value !== undefined && value !== null && !(Array.isArray(value) && value.length === 0)
@@ -73,7 +75,7 @@ export function QuestionScreen({
         <button className="btn ghost" onClick={onBack}>
           Indietro
         </button>
-        <button className="btn" disabled={!canContinue} onClick={onNext}>
+        <button className="btn" disabled={!canContinue || saving} onClick={onNext}>
           Continua
         </button>
       </div>

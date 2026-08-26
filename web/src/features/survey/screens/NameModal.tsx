@@ -1,9 +1,18 @@
+// web/src/features/survey/screens/NameModal.tsx
 'use client'
 
 import { useState, useEffect, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 
-function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: string) => void }) {
+function NameModalContent({
+  onConfirm,
+  saving,
+  error,
+}: {
+  onConfirm: (nome: string, cognome: string) => void
+  saving: boolean
+  error: string | null
+}) {
   const [nome, setNome] = useState('')
   const [cognome, setCognome] = useState('')
 
@@ -27,14 +36,21 @@ function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: st
             <span className="name-modal-phase-icon">🔓</span>
             <div>
               <strong>Prima parte — nominativa</strong>
-              <p>Le risposte di &quot;My Energy Battery&quot; sono <strong>associate al tuo nome</strong>, per permetterci di preparare il tuo <strong>momento di ascolto personalizzato</strong>.</p>
+              <p>
+                Le risposte di &quot;My Energy Battery&quot; sono{' '}
+                <strong>associate al tuo nome</strong>, per permetterci di preparare il tuo{' '}
+                <strong>momento di ascolto personalizzato</strong>.
+              </p>
             </div>
           </div>
           <div className="name-modal-phase">
             <span className="name-modal-phase-icon">🔒</span>
             <div>
               <strong>Seconda parte — anonima</strong>
-              <p>I &quot;Fattori Energy Battery&quot; sono <strong>completamente anonimi</strong>: <strong>nessuno saprà mai</strong> chi ha risposto cosa.</p>
+              <p>
+                I &quot;Fattori Energy Battery&quot; sono <strong>completamente anonimi</strong>:{' '}
+                <strong>nessuno saprà mai</strong> chi ha risposto cosa.
+              </p>
             </div>
           </div>
         </div>
@@ -47,7 +63,7 @@ function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: st
               type="text"
               placeholder="Il tuo nome"
               value={nome}
-              onChange={e => setNome(e.target.value)}
+              onChange={(e) => setNome(e.target.value)}
               required
               autoFocus
             />
@@ -59,12 +75,13 @@ function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: st
               type="text"
               placeholder="Il tuo cognome"
               value={cognome}
-              onChange={e => setCognome(e.target.value)}
+              onChange={(e) => setCognome(e.target.value)}
               required
             />
           </div>
-          <button className="btn name-modal-submit" type="submit" disabled={!valid}>
-            Ho capito, inizio →
+          {error && <div className="name-modal-error">{error}</div>}
+          <button className="btn name-modal-submit" type="submit" disabled={!valid || saving}>
+            {saving ? 'Salvataggio…' : 'Ho capito, inizio →'}
           </button>
         </form>
       </div>
@@ -72,7 +89,15 @@ function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: st
   )
 }
 
-export function NameModal({ onConfirm }: { onConfirm: (nome: string, cognome: string) => void }) {
+export function NameModal({
+  onConfirm,
+  saving,
+  error,
+}: {
+  onConfirm: (nome: string, cognome: string) => void
+  saving: boolean
+  error: string | null
+}) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -81,5 +106,8 @@ export function NameModal({ onConfirm }: { onConfirm: (nome: string, cognome: st
   }, [])
 
   if (!mounted) return null
-  return createPortal(<NameModalContent onConfirm={onConfirm} />, document.body)
+  return createPortal(
+    <NameModalContent onConfirm={onConfirm} saving={saving} error={error} />,
+    document.body
+  )
 }
