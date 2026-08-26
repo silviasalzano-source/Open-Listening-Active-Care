@@ -123,6 +123,12 @@
   padding: 4px 10px;
   letter-spacing: .01em;
 }
+.db-legend-filter {
+  cursor: pointer;
+  transition: box-shadow .15s, transform .12s;
+  font-family: inherit;
+}
+.db-legend-filter:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12); transform: translateY(-1px); }
 .db-area-list { display: flex; flex-direction: column; gap: 16px; }
 .db-area-group { display: flex; flex-direction: column; gap: 8px; }
 .db-area-company-label {

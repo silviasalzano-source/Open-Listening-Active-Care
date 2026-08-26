@@ -700,9 +700,9 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   <div className="db-individual-title">👤 Report my energy</div>
                   <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
                   <div className="db-area-legend" style={{ marginTop: 8 }}>
-                    <span className="db-area-legend-pill" style={{ color: '#FF6E86', background: 'rgba(255,110,134,.14)', border: '1px solid rgba(255,110,134,.35)' }}>● Bassa · 1–4</span>
-                    <span className="db-area-legend-pill" style={{ color: '#4B6BCC', background: 'rgba(75,107,204,.12)', border: '1px solid rgba(75,107,204,.30)' }}>● Media · 5–7</span>
-                    <span className="db-area-legend-pill" style={{ color: '#17B8A6', background: 'rgba(23,184,166,.12)', border: '1px solid rgba(23,184,166,.30)' }}>● Alta · 8–10</span>
+                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'low' ? 'all' : 'low')} style={{ color: '#FF6E86', background: q1EnergyFilter === 'low' ? 'rgba(255,110,134,.28)' : 'rgba(255,110,134,.14)', border: `1.5px solid ${q1EnergyFilter === 'low' ? '#FF6E86' : 'rgba(255,110,134,.35)'}`, fontWeight: q1EnergyFilter === 'low' ? 900 : 700 }}>● Bassa · 1–4</button>
+                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'mid' ? 'all' : 'mid')} style={{ color: '#4B6BCC', background: q1EnergyFilter === 'mid' ? 'rgba(75,107,204,.25)' : 'rgba(75,107,204,.12)', border: `1.5px solid ${q1EnergyFilter === 'mid' ? '#4B6BCC' : 'rgba(75,107,204,.30)'}`, fontWeight: q1EnergyFilter === 'mid' ? 900 : 700 }}>● Media · 5–7</button>
+                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'high' ? 'all' : 'high')} style={{ color: '#17B8A6', background: q1EnergyFilter === 'high' ? 'rgba(23,184,166,.25)' : 'rgba(23,184,166,.12)', border: `1.5px solid ${q1EnergyFilter === 'high' ? '#17B8A6' : 'rgba(23,184,166,.30)'}`, fontWeight: q1EnergyFilter === 'high' ? 900 : 700 }}>● Alta · 8–10</button>
                   </div>
                 </div>
               </div>
@@ -736,7 +736,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                 <span className="db-sort-note">↑ ordinate per energia</span>
               </div>
 
-              {q1Search.trim().length === 0 ? (
+              {q1Search.trim().length === 0 && q1EnergyFilter === 'all' ? (
                 <div className="db-individual-placeholder">
                   <svg viewBox="0 0 48 48" fill="none" width="40" height="40">
                     <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5"/>
