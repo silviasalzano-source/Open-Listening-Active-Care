@@ -64,7 +64,7 @@ function NameModalContent({ onConfirm }: { onConfirm: (nome: string, cognome: st
             />
           </div>
           <button className="btn name-modal-submit" type="submit" disabled={!valid}>
-            Ho capito, inizio →
+            Ho capito, inizio
           </button>
         </form>
       </div>
