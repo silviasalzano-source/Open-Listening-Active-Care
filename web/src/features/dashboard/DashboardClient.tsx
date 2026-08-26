@@ -74,9 +74,9 @@ const TEAMS_BY_BU: Record<string, string[]> = {
   'Servizi Generali':              ['Amministrazione', 'Office Coordinator'],
 }
 
-const COMPANY_GROUPS: { label: string; bus: string[] }[] = [
-  { label: 'OT Consulting', bus: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'Consulente esterno presso (One sys e Venio-AI)'] },
-  { label: 'Open Source',   bus: ['HR', 'Servizi Generali'] },
+const COMPANY_GROUPS: { label: string; bus: string[]; color: string; bg: string }[] = [
+  { label: 'OT Consulting', bus: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'Consulente esterno presso (One sys e Venio-AI)'], color: '#B91C1C', bg: 'rgba(220,38,38,.10)' },
+  { label: 'Open Source',   bus: ['HR', 'Servizi Generali'], color: '#C2500A', bg: 'rgba(234,88,12,.10)' },
 ]
 
 function generateMockData(): SurveyResponse[] {
@@ -645,7 +645,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                   if (groupStats.length === 0) return null
                   return (
                     <div key={group.label} className="db-area-group">
-                      <div className="db-area-company-label">{group.label}</div>
+                      <div className="db-area-company-label" style={{ color: group.color, background: group.bg }}>{group.label}</div>
                       {groupStats.map(bu => {
                         const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
                         const expanded = !!expandedBu[bu.name]

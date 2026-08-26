@@ -117,12 +117,14 @@
 .db-area-list { display: flex; flex-direction: column; gap: 12px; }
 .db-area-group { display: flex; flex-direction: column; gap: 6px; }
 .db-area-company-label {
+  display: inline-block;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: .09em;
   text-transform: uppercase;
-  color: rgba(42,35,56,.40);
-  padding: 0 2px;
+  border-radius: 100px;
+  padding: 3px 10px;
+  align-self: flex-start;
 }
 .db-area-bu { border-radius: 12px; overflow: hidden; background: #FFF8E7; border: 1px solid #FFE0A3; }
 .db-area-bu-row {
