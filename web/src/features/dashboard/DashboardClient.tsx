@@ -631,7 +631,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
             <div className="db-area-box">
               <div className="db-area-header">
-                <div className="db-area-title">🗺️ Energia per area</div>
+                <div className="db-area-title">🔋 Energia per area</div>
                 <div className="db-area-sub">Media termometro per BU e team · dal più critico al meno urgente</div>
               </div>
               <div className="db-area-list">
