@@ -655,7 +655,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                         const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
                         const expanded = !!expandedBu[bu.name]
                         return (
-                          <div key={bu.name} className="db-area-bu" style={{ borderColor: tc }}>
+                          <div key={bu.name} className="db-area-bu">
                             <button
                               className="db-area-bu-row"
                               onClick={() => setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] }))}
