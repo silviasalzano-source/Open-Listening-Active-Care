@@ -66,12 +66,11 @@ function mkRng(seed: number) {
 }
 
 const TEAMS_BY_BU: Record<string, string[]> = {
-  'Operation & Delivery':     ['Team Progetti A', 'Team Progetti B', 'Team Operations'],
-  'Sales & Marketing':        ['Sales', 'Marketing & Comunicazione'],
-  'IT (interno, helpdesk)':   ['Helpdesk', 'IT Infrastructure'],
-  'HR':                       ['HR Business Partner', 'Talent & Learning'],
-  'Amministrazione':          ['Contabilità', 'Finance & Controlling'],
-  'Servizi Generali':         ['Facility & Acquisti'],
+  'Operation & Delivery':   ['SYS', 'APA'],
+  'Sales & Marketing':      [],
+  'IT (interno, helpdesk)': [],
+  'HR':                     ['HR Payroll', 'Recruiting & Development', 'Language Specialist'],
+  'Servizi Generali':       ['Amministrazione', 'Office Coordinator'],
 }
 
 function generateMockData(): SurveyResponse[] {
@@ -281,7 +280,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
   const soddAvg = avg(filtered.map(r => r.soddisfazione))
 
-  const BUS = ['Tutte le aree', 'Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Amministrazione', 'Servizi Generali']
+  const BUS = ['Tutte le aree', ...Object.keys(TEAMS_BY_BU)]
   const ANZS = ['Tutte le anzianità', '< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const RUOLI = ['Tutti i ruoli', 'Manager', 'Worker']
 
@@ -631,7 +630,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
             <div className="db-area-box">
               <div className="db-area-header">
-                <div className="db-area-title">🔋 Energia per area</div>
+                <div className="db-area-title">🔋 Energia per BU & Team</div>
                 <div className="db-area-sub">Media termometro per BU e team · dal più critico al meno urgente</div>
               </div>
               <div className="db-area-list">
