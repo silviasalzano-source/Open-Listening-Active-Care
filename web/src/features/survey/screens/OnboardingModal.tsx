@@ -153,7 +153,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Survey nominativa</span></div>
             <p className="ob-section-body">Analizziamo il tuo <strong>livello di energia</strong> in OT e quello del tuo team. Le risposte saranno associate al tuo profilo per organizzare il tuo momento di ascolto personale con HR.</p>
-            <p className="ob-section-body ob-section-body-sub">Le tue risposte ci aiuteranno a organizzare il tuo <strong>momento di ascolto one to one</strong> con HR. Ci permetteranno anche di capire il <strong>livello di energia</strong> nelle varie BU e team, e cosa può spronare la tua carica.</p>
+            <p className="ob-section-body ob-section-body-sub">Le risposte vengono <strong>associate al tuo nome e cognome</strong> e utilizzate per il tuo <strong>momento di ascolto one to one</strong> con HR. Ci permettono anche di fare un'analisi accurata del <strong>livello di energia</strong> nei team specifici e nelle BU.</p>
           </div>
         </div>
 
