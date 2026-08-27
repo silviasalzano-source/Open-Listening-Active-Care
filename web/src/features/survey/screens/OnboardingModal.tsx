@@ -136,10 +136,10 @@ function Step1({ onNext }: { onNext: () => void }) {
         <div className="ob-figs-duo">
           <div className="ob-fig-pair">
             <FigBlonde className="ob-fig-svg" />
-            <div className="ob-bubble ob-bubble-r">Siamo qui<br />per ascoltarti!</div>
+            <div className="ob-bubble">Andrai a compilare<br />2 survey</div>
           </div>
           <div className="ob-fig-pair ob-fig-pair-rev">
-            <div className="ob-bubble ob-bubble-l">Ci vuole solo<br />qualche minuto</div>
+            <div className="ob-bubble">Timing di compilazione<br />10 minuti</div>
             <FigBrunette className="ob-fig-svg" />
           </div>
         </div>
@@ -152,7 +152,7 @@ function Step1({ onNext }: { onNext: () => void }) {
           <div className="ob-dot ob-dot-amber" />
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">~ 5 min · Nominativa</span></div>
-            <p className="ob-section-body">Come stai oggi e nell'ultimo anno. Le risposte sono associate al tuo nome per organizzare il tuo <strong>momento di ascolto personale</strong> con HR.</p>
+            <p className="ob-section-body">Analizziamo il tuo livello di energia in OT e quello del tuo team. Le risposte saranno associate al tuo profilo per organizzare il tuo <strong>momento di ascolto personale</strong> con HR.</p>
           </div>
         </div>
 
@@ -160,23 +160,15 @@ function Step1({ onNext }: { onNext: () => void }) {
           <div className="ob-dot ob-dot-teal" />
           <div>
             <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">~ 10 min · Anonima</span></div>
-            <p className="ob-section-body">22 domande su 7 aree del lavoro. <strong>Completamente anonima</strong>: nessuno saprà mai chi ha risposto cosa.</p>
-          </div>
-        </div>
-
-        <div className="ob-section">
-          <div className="ob-dot ob-dot-coral" />
-          <div>
-            <div className="ob-section-title">Privacy</div>
-            <p className="ob-section-body">I dati vengono analizzati solo in forma aggregata. I manager non hanno accesso alle risposte individuali.</p>
+            <p className="ob-section-body">22 domande. Survey completamente anonima.</p>
           </div>
         </div>
 
         <div className="ob-section ob-section-last">
-          <div className="ob-dot ob-dot-magenta" />
+          <div className="ob-dot ob-dot-coral" />
           <div>
-            <div className="ob-section-title">Durata totale</div>
-            <p className="ob-section-body">Circa <strong>15 minuti</strong>. Compilala in un momento di pausa, senza fretta.</p>
+            <div className="ob-section-title">Privacy</div>
+            <p className="ob-section-body">I dati verranno analizzati solo in forma aggregata. I manager non avranno accesso alle risposte individuali.</p>
           </div>
         </div>
       </div>
