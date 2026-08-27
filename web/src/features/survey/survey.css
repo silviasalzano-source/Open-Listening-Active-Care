@@ -70,7 +70,7 @@
 @keyframes pulseFill { from { height: 10%; } to { height: 22%; } }
 
 .q-eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; color: #C9862B; font-weight: 600; margin-bottom: 8px; }
-.cs-chapter-eyebrow { display: inline-block; padding: 5px 14px; border-radius: 8px; margin-bottom: 16px; font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.cs-chapter-eyebrow { display: inline-block; padding: 5px 14px; border-radius: 100px; margin-bottom: 16px; font-family: var(--font-fredoka), sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--teal) !important; color: #fff !important; }
 .q-eyebrow-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 8px; }
 .q-eyebrow-row .q-eyebrow { margin-bottom: 0; }
 .q-eyebrow-badge { font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; color: #fff; background: linear-gradient(90deg, var(--amber), var(--coral)); padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
@@ -338,8 +338,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* ── Chapter set screen ─────────────────────────────────────────────────── */
 .chapterset { display: flex; flex-direction: column; }
-.cs-group-label { display: inline-flex; align-items: center; gap: 6px; margin: 20px 0 4px; font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; padding: 4px 12px; border-radius: 20px; max-width: 210px; overflow: hidden; white-space: nowrap; }
-.cs-group-label-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.cs-group-label { display: inline-flex; align-items: center; gap: 6px; margin: 20px 0 4px; font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; padding: 4px 12px; border-radius: 100px; background: rgba(23,184,166,0.12); color: #0A7A6E; border: 1px solid rgba(23,184,166,0.28); }
+.cs-group-label-text { }
 .cs-group-label:first-child { margin-top: 4px; }
 .cs-block { padding: 16px 0; border-bottom: 1px solid var(--card-border); }
 .cs-block:last-of-type { border-bottom: none; }

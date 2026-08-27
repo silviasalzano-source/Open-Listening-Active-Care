@@ -2,7 +2,6 @@
 
 import type { Phase2Question, ChapterDef, SurveyAnswers } from '../types'
 
-const LABEL_GRADIENT = 'linear-gradient(135deg, #17B8A6, #2E86DE)'
 
 function stripEmoji(s: string): string {
   return s.replace(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}️⃣]+\s*/gu, '').trim()
@@ -227,17 +226,13 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
     <div className="survey-screen chapterset">
       <div
         className="q-eyebrow cs-chapter-eyebrow"
-        style={{ background: LABEL_GRADIENT, color: '#fff' }}
       >{def.title}</div>
       {questions.map((q, i) => {
         const showGroup = q.group && q.group !== questions[i - 1]?.group
         return (
           <div key={q.id}>
             {showGroup && (
-              <div
-                className="cs-group-label"
-                style={{ background: LABEL_GRADIENT, color: '#fff' }}
-              >
+              <div className="cs-group-label">
                 {groupIcon(q.group ?? '') && (
                   <span dangerouslySetInnerHTML={{ __html: groupIcon(q.group ?? '') ?? '' }} style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} />
                 )}
