@@ -160,7 +160,7 @@ function Step1({ onNext }: { onNext: () => void }) {
           <div className="ob-dot ob-dot-teal" />
           <div>
             <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Anonima</span></div>
-            <p className="ob-section-body">22 domande. Survey completamente anonima.</p>
+            <p className="ob-section-body">Desideriamo sapere quali sono le variabili che influenzano la tua carica di energia.</p>
           </div>
         </div>
 
