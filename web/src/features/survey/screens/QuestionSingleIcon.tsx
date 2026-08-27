@@ -1,4 +1,7 @@
 import type { SingleIconQuestion } from '../types'
+import { WeatherSvg } from './WeatherIcons'
+
+const WEATHER_LABELS = new Set(['Soleggiato', 'Parzialmente nuvoloso', 'Piovoso', 'Temporalesco'])
 
 export function QuestionSingleIcon({
   question,
@@ -9,6 +12,7 @@ export function QuestionSingleIcon({
   value?: string
   onAnswer: (label: string) => void
 }) {
+  const isClima = question.id === 'clima'
   return (
     <div className="options">
       {question.options.map((opt) => (
@@ -18,7 +22,13 @@ export function QuestionSingleIcon({
           className={`opt-card${value === opt.label ? ' selected' : ''}`}
           onClick={() => onAnswer(opt.label)}
         >
-          <div className="opt-icon">{opt.icon}</div>
+          {isClima && WEATHER_LABELS.has(opt.label) ? (
+            <div className="opt-icon opt-icon-weather">
+              <WeatherSvg label={opt.label} />
+            </div>
+          ) : (
+            <div className="opt-icon">{opt.icon}</div>
+          )}
           <div className="opt-text">
             <b>{opt.label}</b>
             {opt.desc ? <span>{opt.desc}</span> : null}
