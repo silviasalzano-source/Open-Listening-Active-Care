@@ -136,10 +136,10 @@ function Step1({ onNext }: { onNext: () => void }) {
         <div className="ob-figs-duo">
           <div className="ob-fig-pair">
             <FigBlonde className="ob-fig-svg" />
-            <div className="ob-bubble">Andrai a compilare<br />2 survey</div>
+            <div className="ob-bubble">Compilerai <strong>due survey!</strong></div>
           </div>
           <div className="ob-fig-pair ob-fig-pair-rev">
-            <div className="ob-bubble">Timing di compilazione<br />10 minuti</div>
+            <div className="ob-bubble">Timing di compilazione circa <strong>10 minuti!</strong></div>
             <FigBrunette className="ob-fig-svg" />
           </div>
         </div>
@@ -151,7 +151,7 @@ function Step1({ onNext }: { onNext: () => void }) {
         <div className="ob-section">
           <div className="ob-dot ob-dot-amber" />
           <div>
-            <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">~ 5 min · Nominativa</span></div>
+            <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Nominativa</span></div>
             <p className="ob-section-body">Analizziamo il tuo livello di energia in OT e quello del tuo team. Le risposte saranno associate al tuo profilo per organizzare il tuo <strong>momento di ascolto personale</strong> con HR.</p>
           </div>
         </div>
@@ -159,7 +159,7 @@ function Step1({ onNext }: { onNext: () => void }) {
         <div className="ob-section">
           <div className="ob-dot ob-dot-teal" />
           <div>
-            <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">~ 10 min · Anonima</span></div>
+            <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Anonima</span></div>
             <p className="ob-section-body">22 domande. Survey completamente anonima.</p>
           </div>
         </div>
