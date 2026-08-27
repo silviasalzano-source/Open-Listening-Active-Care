@@ -11,7 +11,7 @@ export function CausaSvg({ label }: { label: string }) {
 }
 
 /* ── 1. Carico di lavoro — stack di fogli, quello in cima si alza ── */
-function WorkloadSvg() {
+export function WorkloadSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       <rect x="6" y="28" width="32" height="12" rx="3" fill="#F0DFC0" stroke="#C9862B" strokeWidth="1.5"/>
@@ -27,7 +27,7 @@ function WorkloadSvg() {
 }
 
 /* ── 2. Relazioni con colleghi — due teste che si avvicinano ── */
-function RelationsSvg() {
+export function RelationsSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       {/* Persona sinistra */}
@@ -60,7 +60,7 @@ function RelationsSvg() {
 }
 
 /* ── 3. Rapporto con responsabile — target con onde che si espandono ── */
-function LeaderSvg() {
+export function LeaderSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       {/* Onde espansione */}
@@ -83,7 +83,7 @@ function LeaderSvg() {
 }
 
 /* ── 4. Crescita e sviluppo — barre che crescono ── */
-function GrowthSvg() {
+export function GrowthSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       {/* Base line */}
@@ -114,7 +114,7 @@ function GrowthSvg() {
 }
 
 /* ── 5. Motivi personali — casetta con cuore pulsante ── */
-function PersonalSvg() {
+export function PersonalSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       {/* Tetto */}
@@ -141,7 +141,7 @@ function PersonalSvg() {
 }
 
 /* ── 6. Strumenti e organizzazione — ingranaggio che gira ── */
-function ToolsSvg() {
+export function ToolsSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       <g>
@@ -167,7 +167,7 @@ function ToolsSvg() {
 }
 
 /* ── 7. Altro — matita che scrive ── */
-function AltroSvg() {
+export function AltroSvg() {
   return (
     <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
       {/* Matita */}

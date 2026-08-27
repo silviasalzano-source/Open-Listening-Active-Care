@@ -340,6 +340,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .chapterset { display: flex; flex-direction: column; }
 .cs-group-label { display: inline-flex; align-items: center; gap: 6px; margin: 20px 0 4px; font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; padding: 4px 12px; border-radius: 100px; background: rgba(23,184,166,0.12); color: #0A7A6E; border: 1px solid rgba(23,184,166,0.28); }
 .cs-group-label-text { }
+.cs-group-icon { width: 28px; height: 28px; display: inline-flex; flex-shrink: 0; overflow: hidden; }
+.cs-group-icon svg { width: 28px !important; height: 28px !important; }
 .cs-group-label:first-child { margin-top: 4px; }
 .cs-block { padding: 16px 0; border-bottom: 1px solid var(--card-border); }
 .cs-block:last-of-type { border-bottom: none; }
