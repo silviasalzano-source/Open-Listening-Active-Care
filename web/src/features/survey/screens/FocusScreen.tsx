@@ -29,12 +29,10 @@ export function FocusScreen({
       <div className={`chapter-reveal${revealed.mascot ? ' show' : ''}`}>
         <FocusMascot />
       </div>
-      <div className={`chapter-reveal q1intro-header${revealed.header ? ' show' : ''}`}>
+      <div className={`chapter-reveal q1intro-card${revealed.header ? ' show' : ''}`}>
         <span className="q1intro-badge">My Energy Battery</span>
         <h2 className="q1intro-title-gradient">Ora ti chiediamo di rispondere tenendo il focus su di te.</h2>
-      </div>
-      <div className={`chapter-reveal q1intro-desc-card${revealed.desc ? ' show' : ''}`}>
-        <p>Non pensare al team o ai colleghi — solo a come ti senti tu, in prima persona.</p>
+        <p className={`q1intro-desc${revealed.desc ? ' q1intro-desc-in' : ''}`}>Non pensare al team o ai colleghi — solo a come ti senti tu, in prima persona.</p>
       </div>
       <div className={`chapter-reveal footer-nav${revealed.nav ? ' show' : ''}`}>
         <button className="btn ghost" onClick={onBack}>Indietro</button>
