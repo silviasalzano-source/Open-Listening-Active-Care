@@ -36,7 +36,7 @@ export function QuestionScreen({
     <div className="survey-screen">
       <div className="q-eyebrow-row">
         <div className="q-eyebrow">
-          My Energy Battery · {index + 1}/{total}
+          {index + 1}/{total}
         </div>
         <div className="q-eyebrow-badge">
           {question.id === 'descrizione' ? 'ULTIMO ANNO' : 'OGGI'}
