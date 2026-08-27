@@ -318,15 +318,14 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* Step 2 */
 .ob-step2 { display: flex; flex-direction: column; overflow-y: auto; max-height: 94svh; }
-.ob-step2-fig-row { display: flex; align-items: flex-end; gap: 14px; padding: 22px 22px 0; }
-.ob-fig-man { width: 80px; flex-shrink: 0; }
-.ob-speech-bubble { background: rgba(149,117,205,0.1); border: 1.5px solid rgba(149,117,205,0.3); border-radius: 16px 16px 16px 4px; padding: 12px 14px; font-size: 14px; line-height: 1.5; color: var(--ink); flex: 1; }
-.ob-speech-bubble span { display: block; font-size: 12.5px; color: var(--ink-dim); margin-top: 3px; }
-.ob-name-form { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px 28px; }
-.ob-name-title { font-family: var(--font-fredoka), sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); margin: 0; }
-.ob-name-sub { font-size: 13px; color: var(--ink-dim); line-height: 1.5; margin: 0; }
-.ob-field { display: flex; flex-direction: column; gap: 5px; }
-.ob-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(42,35,56,0.45); }
+.ob-step2-top { padding: 20px 22px 16px; border-bottom: 1px solid rgba(42,35,56,0.07); }
+.ob-name-title { font-family: var(--font-fredoka), sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); margin: 0; }
+.ob-step2-fig-area { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: rgba(149,117,205,0.05); border-bottom: 1px solid rgba(42,35,56,0.06); }
+.ob-fig-man { width: 88px; flex-shrink: 0; }
+.ob-speech-bubble { background: #fff; border: 1.5px solid rgba(149,117,205,0.35); border-radius: 14px 14px 14px 4px; padding: 12px 14px; font-size: 13.5px; line-height: 1.55; color: var(--ink); flex: 1; box-shadow: 0 2px 8px rgba(149,117,205,0.1); }
+.ob-name-form { display: flex; flex-direction: column; gap: 16px; padding: 20px 22px 28px; }
+.ob-field { display: flex; flex-direction: column; gap: 7px; }
+.ob-field-label { font-size: 17px; font-weight: 700; color: var(--ink); }
 .ob-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-nunito), sans-serif; font-size: 15px; background: rgba(42,35,56,0.03); color: var(--ink); outline: none; transition: border-color .15s ease; }
 .ob-input:focus { border-color: var(--amber); background: #fff; }
 .ob-btn-start { width: 100%; }

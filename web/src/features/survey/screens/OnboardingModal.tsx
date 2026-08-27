@@ -78,7 +78,7 @@ function FigBrunette({ className }: { className?: string }) {
 
 function FigMan({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 80 122" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg viewBox="0 0 96 122" xmlns="http://www.w3.org/2000/svg" className={className}>
       <ellipse cx="40" cy="119" rx="26" ry="4" fill="rgba(42,35,56,0.07)" />
       <rect x="26" y="88" width="8" height="28" rx="3" fill="#2A2338" />
       <rect x="42" y="88" width="8" height="28" rx="3" fill="#2A2338" />
@@ -97,16 +97,17 @@ function FigMan({ className }: { className?: string }) {
       <circle cx="32" cy="28" r="2.2" fill="#2A2338" />
       <circle cx="44" cy="28" r="2.2" fill="#2A2338" />
       <path d="M32,35 Q38,40 44,35" fill="none" stroke="#2A2338" strokeWidth="2" strokeLinecap="round" />
+      {/* Pointing arm — extends right toward fields */}
       <g>
-        <path d="M60,54 Q72,40 68,24" fill="none" stroke="#9575CD" strokeWidth="9" strokeLinecap="round" />
-        <circle cx="67" cy="20" r="6.5" fill="#FCD9A0" />
-        <rect x="63" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+        <path d="M62,64 Q80,60 84,68" fill="none" stroke="#9575CD" strokeWidth="9" strokeLinecap="round" />
+        <circle cx="86" cy="70" r="6" fill="#FCD9A0" />
+        <rect x="83" y="63" width="5" height="10" rx="2.5" fill="#FCD9A0" />
         <animateTransform
           attributeName="transform"
           type="rotate"
-          values="0 60 54; -20 60 54; 0 60 54; 12 60 54; 0 60 54"
-          keyTimes="0; 0.25; 0.5; 0.75; 1"
-          dur="1.6s"
+          values="0 62 64; -10 62 64; 0 62 64; 6 62 64; 0 62 64"
+          keyTimes="0; 0.3; 0.5; 0.75; 1"
+          dur="1.8s"
           repeatCount="indefinite"
         />
       </g>
@@ -218,27 +219,26 @@ function Step2({ onNext }: { onNext: (nome: string, cognome: string) => void }) 
 
   return (
     <div className="ob-step2">
-      <div className="ob-step2-fig-row">
+      <div className="ob-step2-top">
+        <h2 className="ob-name-title">Come ti chiami?</h2>
+      </div>
+
+      <div className="ob-step2-fig-area">
         <FigMan className="ob-fig-man" />
         <div className="ob-speech-bubble">
-          Raccontaci come stai!<br />
-          <span>Sarà utile per te e per tutta l&apos;azienda.</span>
+          Questa info è riservata solo a noi HR, ci aiuterà per il tuo momento di ascolto one to one.
         </div>
       </div>
 
       <form className="ob-name-form" onSubmit={handleSubmit}>
-        <h2 className="ob-name-title">Come ti chiami?</h2>
-        <p className="ob-name-sub">Riservato a HR — serve per il tuo momento di ascolto personalizzato.</p>
-
         <div className="ob-field">
-          <label className="ob-label">Nome</label>
+          <label className="ob-field-label">Nome</label>
           <input className="ob-input" type="text" placeholder="Il tuo nome" value={nome} onChange={e => setNome(e.target.value)} required autoFocus />
         </div>
         <div className="ob-field">
-          <label className="ob-label">Cognome</label>
+          <label className="ob-field-label">Cognome</label>
           <input className="ob-input" type="text" placeholder="Il tuo cognome" value={cognome} onChange={e => setCognome(e.target.value)} required />
         </div>
-
         <button className="btn ob-btn-start" type="submit" disabled={!valid}>
           Incominciamo!
         </button>
