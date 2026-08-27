@@ -70,7 +70,7 @@
 @keyframes pulseFill { from { height: 10%; } to { height: 22%; } }
 
 .q-eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; color: #C9862B; font-weight: 600; margin-bottom: 8px; }
-.cs-chapter-eyebrow { display: inline-block; padding: 5px 14px; border-radius: 100px; margin-bottom: 16px; font-family: var(--font-fredoka), sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--teal) !important; color: #fff !important; }
+.cs-chapter-eyebrow { align-self: flex-start; display: inline-block; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; font-family: var(--font-fredoka), sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--teal); color: #fff; }
 .q-eyebrow-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 8px; }
 .q-eyebrow-row .q-eyebrow { margin-bottom: 0; }
 .q-eyebrow-badge { font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; color: #fff; background: linear-gradient(90deg, var(--amber), var(--coral)); padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
