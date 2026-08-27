@@ -153,7 +153,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Survey nominativa</span></div>
             <p className="ob-section-body">Vogliamo conoscere il tuo <strong>livello di energia</strong> in OT e quello del tuo team.</p>
-            <p className="ob-section-body ob-section-body-sub">I dati, in questa sezione, sono <strong>associati al tuo nome e cognome</strong>, utili per il momento one to one con HR e per comprendere lo stato di energia attuale in OT. Solo HR avrà accesso a queste informazioni. I manager avranno solo una panoramica generale delle BU e team.</p>
+            <p className="ob-section-body ob-section-body-sub">I dati, in questa sezione, sono <strong>associati al tuo nome e cognome</strong>, utili per il momento one to one con HR e per comprendere lo stato di energia attuale in OT.</p>
           </div>
         </div>
 
@@ -162,7 +162,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           <div>
             <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Survey anonima</span></div>
             <p className="ob-section-body">Desideriamo sapere quali sono le <strong>variabili che influenzano la tua carica</strong> di energia.</p>
-            <p className="ob-section-body ob-section-body-sub">I dati vengono raccolti in modo <strong>completamente anonimo</strong> e analizzati solo in forma aggregata. I manager <strong>non</strong> avranno accesso alle risposte individuali.</p>
+            <p className="ob-section-body ob-section-body-sub">I dati vengono raccolti in modo <strong>completamente anonimo</strong> e analizzati solo in forma aggregata.</p>
           </div>
         </div>
       </div>
