@@ -23,9 +23,20 @@ function FigBlonde({ className }: { className?: string }) {
       <circle cx="32" cy="28" r="2.2" fill="#2A2338" />
       <circle cx="44" cy="28" r="2.2" fill="#2A2338" />
       <path d="M32,35 Q38,40 44,35" fill="none" stroke="#2A2338" strokeWidth="2" strokeLinecap="round" />
-      <path d="M60,54 Q72,40 68,24" fill="none" stroke="#FF6E86" strokeWidth="9" strokeLinecap="round" />
-      <circle cx="67" cy="20" r="6.5" fill="#FCD9A0" />
-      <rect x="63" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+      {/* Wave arm with animation */}
+      <g>
+        <path d="M60,54 Q72,40 68,24" fill="none" stroke="#FF6E86" strokeWidth="9" strokeLinecap="round" />
+        <circle cx="67" cy="20" r="6.5" fill="#FCD9A0" />
+        <rect x="63" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          values="0 60 54; -22 60 54; 0 60 54; 14 60 54; 0 60 54"
+          keyTimes="0; 0.25; 0.5; 0.75; 1"
+          dur="1.4s"
+          repeatCount="indefinite"
+        />
+      </g>
     </svg>
   )
 }
@@ -46,9 +57,21 @@ function FigBrunette({ className }: { className?: string }) {
       <circle cx="32" cy="28" r="2.2" fill="#2A2338" />
       <circle cx="44" cy="28" r="2.2" fill="#2A2338" />
       <path d="M32,35 Q38,40 44,35" fill="none" stroke="#2A2338" strokeWidth="2" strokeLinecap="round" />
-      <path d="M16,54 Q4,40 8,24" fill="none" stroke="#17B8A6" strokeWidth="9" strokeLinecap="round" />
-      <circle cx="9" cy="20" r="6.5" fill="#FCD9A0" />
-      <rect x="5" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+      {/* Wave arm left with animation — delayed */}
+      <g>
+        <path d="M16,54 Q4,40 8,24" fill="none" stroke="#17B8A6" strokeWidth="9" strokeLinecap="round" />
+        <circle cx="9" cy="20" r="6.5" fill="#FCD9A0" />
+        <rect x="5" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          values="0 20 54; 22 20 54; 0 20 54; -14 20 54; 0 20 54"
+          keyTimes="0; 0.25; 0.5; 0.75; 1"
+          dur="1.4s"
+          begin="0.2s"
+          repeatCount="indefinite"
+        />
+      </g>
     </svg>
   )
 }
@@ -74,9 +97,19 @@ function FigMan({ className }: { className?: string }) {
       <circle cx="32" cy="28" r="2.2" fill="#2A2338" />
       <circle cx="44" cy="28" r="2.2" fill="#2A2338" />
       <path d="M32,35 Q38,40 44,35" fill="none" stroke="#2A2338" strokeWidth="2" strokeLinecap="round" />
-      <path d="M60,54 Q72,40 68,24" fill="none" stroke="#9575CD" strokeWidth="9" strokeLinecap="round" />
-      <circle cx="67" cy="20" r="6.5" fill="#FCD9A0" />
-      <rect x="63" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+      <g>
+        <path d="M60,54 Q72,40 68,24" fill="none" stroke="#9575CD" strokeWidth="9" strokeLinecap="round" />
+        <circle cx="67" cy="20" r="6.5" fill="#FCD9A0" />
+        <rect x="63" y="9" width="6" height="13" rx="3" fill="#FCD9A0" />
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          values="0 60 54; -20 60 54; 0 60 54; 12 60 54; 0 60 54"
+          keyTimes="0; 0.25; 0.5; 0.75; 1"
+          dur="1.6s"
+          repeatCount="indefinite"
+        />
+      </g>
     </svg>
   )
 }
@@ -91,62 +124,58 @@ function Step1({ onNext }: { onNext: () => void }) {
   function handleScroll() {
     const el = scrollRef.current
     if (!el) return
-    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 24) setScrolled(true)
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 20) setScrolled(true)
   }
 
   return (
     <div className="ob-step1">
-      {/* Figures header */}
-      <div className="ob-duo-row">
-        <div className="ob-fig-col">
-          <div className="ob-bubble ob-bubble-r">Siamo qui<br />per ascoltarti! 🎧</div>
-          <FigBlonde className="ob-fig-svg" />
-        </div>
-        <div className="ob-duo-center">
-          <span className="ob-badge">Open Listening · Active Care</span>
-          <h2 className="ob-title">Benvenuto/a! 👋</h2>
-        </div>
-        <div className="ob-fig-col">
-          <div className="ob-bubble ob-bubble-l">Ci vuole solo<br />qualche minuto ⚡</div>
-          <FigBrunette className="ob-fig-svg" />
+      {/* Header */}
+      <div className="ob-step1-header">
+        <h2 className="ob-title">Benvenuto/a</h2>
+        <div className="ob-figs-duo">
+          <div className="ob-fig-pair">
+            <FigBlonde className="ob-fig-svg" />
+            <div className="ob-bubble ob-bubble-r">Siamo qui<br />per ascoltarti!</div>
+          </div>
+          <div className="ob-fig-pair ob-fig-pair-rev">
+            <div className="ob-bubble ob-bubble-l">Ci vuole solo<br />qualche minuto</div>
+            <FigBrunette className="ob-fig-svg" />
+          </div>
         </div>
       </div>
 
       {/* Scrollable content */}
       <div className="ob-scroll" ref={scrollRef} onScroll={handleScroll}>
-        <p className="ob-intro-text">
-          Prima di iniziare, ti spieghiamo brevemente <strong>cosa troverai</strong> e come vengono gestiti i tuoi dati.
-        </p>
 
         <div className="ob-section">
-          <div className="ob-section-icon">🔋</div>
+          <div className="ob-dot ob-dot-amber" />
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">~ 5 min · Nominativa</span></div>
-            <p className="ob-section-body">Ti chiediamo come stai oggi e come hai vissuto l'ultimo anno. Queste risposte sono associate al tuo nome per organizzare il tuo <strong>momento di ascolto personalizzato</strong> con HR.</p>
+            <p className="ob-section-body">Come stai oggi e nell'ultimo anno. Le risposte sono associate al tuo nome per organizzare il tuo <strong>momento di ascolto personale</strong> con HR.</p>
           </div>
         </div>
 
         <div className="ob-section">
-          <div className="ob-section-icon">📊</div>
+          <div className="ob-dot ob-dot-teal" />
           <div>
             <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">~ 10 min · Anonima</span></div>
-            <p className="ob-section-body">22 domande su 7 aree del tuo lavoro — relazioni, crescita, valori, carico ed energia. <strong>Completamente anonima</strong>: nessuno saprà mai chi ha risposto cosa.</p>
+            <p className="ob-section-body">22 domande su 7 aree del lavoro. <strong>Completamente anonima</strong>: nessuno saprà mai chi ha risposto cosa.</p>
           </div>
         </div>
 
         <div className="ob-section">
-          <div className="ob-section-icon">🔒</div>
+          <div className="ob-dot ob-dot-coral" />
           <div>
-            <div className="ob-section-title">La tua privacy</div>
-            <p className="ob-section-body">I dati vengono analizzati solo in forma aggregata. I manager non hanno accesso alle risposte individuali. Soglia minima di anonimato: 5 risposte per segmento.</p>
+            <div className="ob-section-title">Privacy</div>
+            <p className="ob-section-body">I dati vengono analizzati solo in forma aggregata. I manager non hanno accesso alle risposte individuali.</p>
           </div>
         </div>
 
         <div className="ob-section ob-section-last">
-          <div className="ob-section-icon">⏱️</div>
+          <div className="ob-dot ob-dot-magenta" />
           <div>
-            <div className="ob-section-title">Quanto ci vuole?</div>
-            <p className="ob-section-body">Circa <strong>15 minuti</strong> in totale. Puoi compilarla in un momento di pausa, tranquillo/a.</p>
+            <div className="ob-section-title">Durata totale</div>
+            <p className="ob-section-body">Circa <strong>15 minuti</strong>. Compilala in un momento di pausa, senza fretta.</p>
           </div>
         </div>
       </div>
@@ -166,11 +195,7 @@ function Step1({ onNext }: { onNext: () => void }) {
           />
           <span>Ho letto e capito come funziona questa survey</span>
         </label>
-        <button
-          className="btn ob-btn-next"
-          onClick={onNext}
-          disabled={!agreed}
-        >
+        <button className="btn ob-btn-next" onClick={onNext} disabled={!agreed}>
           Avanti
         </button>
       </div>
@@ -196,37 +221,22 @@ function Step2({ onNext }: { onNext: (nome: string, cognome: string) => void }) 
       <div className="ob-step2-fig-row">
         <FigMan className="ob-fig-man" />
         <div className="ob-speech-bubble">
-          Raccontaci come stai! 😊<br />
-          <span>Sarà utile per te e per tutta l'azienda.</span>
+          Raccontaci come stai!<br />
+          <span>Sarà utile per te e per tutta l&apos;azienda.</span>
         </div>
       </div>
 
       <form className="ob-name-form" onSubmit={handleSubmit}>
         <h2 className="ob-name-title">Come ti chiami?</h2>
-        <p className="ob-name-sub">Questa info è riservata solo a HR — serve per il tuo momento di ascolto personalizzato.</p>
+        <p className="ob-name-sub">Riservato a HR — serve per il tuo momento di ascolto personalizzato.</p>
 
         <div className="ob-field">
           <label className="ob-label">Nome</label>
-          <input
-            className="ob-input"
-            type="text"
-            placeholder="Il tuo nome"
-            value={nome}
-            onChange={e => setNome(e.target.value)}
-            required
-            autoFocus
-          />
+          <input className="ob-input" type="text" placeholder="Il tuo nome" value={nome} onChange={e => setNome(e.target.value)} required autoFocus />
         </div>
         <div className="ob-field">
           <label className="ob-label">Cognome</label>
-          <input
-            className="ob-input"
-            type="text"
-            placeholder="Il tuo cognome"
-            value={cognome}
-            onChange={e => setCognome(e.target.value)}
-            required
-          />
+          <input className="ob-input" type="text" placeholder="Il tuo cognome" value={cognome} onChange={e => setCognome(e.target.value)} required />
         </div>
 
         <button className="btn ob-btn-start" type="submit" disabled={!valid}>
@@ -239,7 +249,7 @@ function Step2({ onNext }: { onNext: (nome: string, cognome: string) => void }) 
 
 // ─── Step 3: Countdown ────────────────────────────────────────────────────────
 
-const COUNT_STEPS = ['3', '2', '1', 'Viaaaaa! 🚀']
+const COUNT_STEPS = ['3', '2', '1', 'Viaaaaa!']
 
 function Step3({ onDone }: { onDone: () => void }) {
   const [idx, setIdx] = useState(0)
@@ -264,10 +274,7 @@ function Step3({ onDone }: { onDone: () => void }) {
       <div className="ob-battery-anim">
         <div className="ob-battery-fill" style={{ width: `${((idx + 1) / COUNT_STEPS.length) * 100}%` }} />
       </div>
-      <div
-        key={animKey}
-        className={`ob-count-num${isFinal ? ' ob-count-final' : ''}`}
-      >
+      <div key={animKey} className={`ob-count-num${isFinal ? ' ob-count-final' : ''}`}>
         {COUNT_STEPS[idx]}
       </div>
     </div>
@@ -292,16 +299,8 @@ function OnboardingContent({ onConfirm }: Props) {
   return (
     <div className="ob-overlay">
       <div className="ob-card">
-        {step === 1 && (
-          <Step1 onNext={() => setStep(2)} />
-        )}
-        {step === 2 && (
-          <Step2 onNext={(n, c) => {
-            setNome(n)
-            setCognome(c)
-            setStep(3)
-          }} />
-        )}
+        {step === 1 && <Step1 onNext={() => setStep(2)} />}
+        {step === 2 && <Step2 onNext={(n, c) => { setNome(n); setCognome(c); setStep(3) }} />}
       </div>
     </div>
   )
