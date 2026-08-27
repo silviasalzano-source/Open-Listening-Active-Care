@@ -22,7 +22,7 @@
   justify-content: center;
   background: var(--bg-warm);
   padding: 32px 16px;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-nunito), sans-serif;
   color: var(--ink);
 }
 @media (max-width: 480px) {
@@ -83,7 +83,7 @@
 .opt-check { margin-left: auto; width: 21px; height: 21px; border-radius: 50%; border: 2px solid rgba(42, 35, 56, 0.22); flex-shrink: 0; }
 .opt-card.selected .opt-check { background: var(--coral); border-color: var(--coral); }
 
-.altro-input { margin-top: 2px; margin-bottom: 14px; width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--card-border); background: #fff; color: var(--ink); font-family: var(--font-inter), sans-serif; font-size: 14px; }
+.altro-input { margin-top: 2px; margin-bottom: 14px; width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--card-border); background: #fff; color: var(--ink); font-family: var(--font-nunito), sans-serif; font-size: 14px; }
 .altro-input:focus { outline: none; border-color: var(--coral); }
 .altro-hint { font-size: 12px; color: var(--coral); margin: -10px 0 14px 4px; font-weight: 600; }
 
@@ -292,7 +292,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .name-modal-form { display: flex; flex-direction: column; gap: 12px; border-top: 1.5px solid rgba(42,35,56,0.07); padding-top: 14px; }
 .name-modal-field { display: flex; flex-direction: column; gap: 5px; }
 .name-modal-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(42,35,56,0.45); }
-.name-modal-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-inter), sans-serif; font-size: 15px; background: rgba(42,35,56,0.03); color: var(--ink); outline: none; transition: border-color .15s ease; }
+.name-modal-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-nunito), sans-serif; font-size: 15px; background: rgba(42,35,56,0.03); color: var(--ink); outline: none; transition: border-color .15s ease; }
 .name-modal-input:focus { border-color: var(--amber); background: #fff; }
 .name-modal-submit { margin-top: 4px; }
 .name-modal-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
@@ -308,7 +308,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .db-login-form { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
 .db-login-field { display: flex; flex-direction: column; gap: 5px; }
 .db-login-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(42,35,56,0.5); }
-.db-login-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-inter), sans-serif; font-size: 14px; background: #fafafa; color: #2A2338; outline: none; transition: border-color .15s ease; }
+.db-login-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-nunito), sans-serif; font-size: 14px; background: #fafafa; color: #2A2338; outline: none; transition: border-color .15s ease; }
 .db-login-input:focus { border-color: #17B8A6; background: #fff; }
 .db-login-error { font-size: 13px; color: #FF3D8A; background: rgba(255,61,138,0.08); border-radius: 10px; padding: 10px 14px; line-height: 1.45; }
 .db-login-submit { font-family: var(--font-fredoka), sans-serif; font-size: 15.5px; font-weight: 600; border: none; border-radius: 100px; padding: 14px; background: linear-gradient(90deg, #17B8A6, #2E86DE); color: #fff; cursor: pointer; transition: opacity .15s ease, transform .15s ease; margin-top: 4px; }
