@@ -11,7 +11,7 @@ const CONTENT = {
   },
   anno: {
     badge: '4ª domanda su 4',
-    title: 'Ora ti chiediamo di concentrarti sul tuo ultimo anno',
+    title: 'Infine, concentrati sul tuo ultimo anno.',
     desc: 'Guarda indietro agli ultimi 12 mesi — come è cambiata la tua energia nel tempo.',
   },
 }
