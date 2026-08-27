@@ -30,8 +30,8 @@ export function FocusScreen({
         <FocusMascot />
       </div>
       <div className={`chapter-reveal q1intro-card${revealed.header ? ' show' : ''}`}>
-        <span className="q1intro-badge">My Energy Battery</span>
-        <h2 className="q1intro-title-gradient">Ora ti chiediamo di rispondere tenendo il focus su di te.</h2>
+        <span className="q1intro-badge">2ª domanda su 4</span>
+        <h2 className="q1intro-title-gradient">Cerca di tenere il focus su di te.</h2>
         <p className={`q1intro-desc${revealed.desc ? ' q1intro-desc-in' : ''}`}>Non pensare al team o ai colleghi — solo a come ti senti tu, in prima persona.</p>
       </div>
       <div className={`chapter-reveal footer-nav${revealed.nav ? ' show' : ''}`}>
