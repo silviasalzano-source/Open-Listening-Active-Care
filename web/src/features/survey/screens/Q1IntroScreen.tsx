@@ -6,7 +6,7 @@ import { Q1IntroMascot } from '../mascots'
 const CONTENT = {
   team: {
     badge: '1ª domanda su 4',
-    title: 'Ora ti chiediamo di concentrarti sul clima attuale del tuo team',
+    title: 'Ora concentrati sul clima attuale del tuo team',
     desc: 'Pensa alle ultime settimane — le interazioni con i colleghi, l\'atmosfera, il ritmo di lavoro.',
   },
   anno: {
