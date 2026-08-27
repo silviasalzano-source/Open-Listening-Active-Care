@@ -5,12 +5,12 @@ import { Q1IntroMascot } from '../mascots'
 
 const CONTENT = {
   team: {
-    badge: 'Focus: team',
+    badge: '1 domanda su 4',
     title: 'Ora ti chiediamo di concentrarti sul clima attuale del tuo team',
     desc: 'Pensa alle ultime settimane — le interazioni con i colleghi, l\'atmosfera, il ritmo di lavoro.',
   },
   anno: {
-    badge: 'Focus: ultimo anno',
+    badge: '4 domanda su 4',
     title: 'Ora ti chiediamo di concentrarti sul tuo ultimo anno',
     desc: 'Guarda indietro agli ultimi 12 mesi — come è cambiata la tua energia nel tempo.',
   },
@@ -45,12 +45,10 @@ export function Q1IntroScreen({
       <div className={`chapter-reveal${revealed.mascot ? ' show' : ''}`}>
         <Q1IntroMascot variant={variant} />
       </div>
-      <div className={`chapter-reveal q1intro-header${revealed.header ? ' show' : ''}`}>
+      <div className={`chapter-reveal q1intro-card${revealed.header ? ' show' : ''}`}>
         <span className="q1intro-badge">{content.badge}</span>
         <h2 className="q1intro-title-gradient">{content.title}</h2>
-      </div>
-      <div className={`chapter-reveal q1intro-desc-card${revealed.desc ? ' show' : ''}`}>
-        <p>{content.desc}</p>
+        <p className={`q1intro-desc${revealed.desc ? ' q1intro-desc-in' : ''}`}>{content.desc}</p>
       </div>
       <div className={`chapter-reveal footer-nav${revealed.nav ? ' show' : ''}`}>
         <button className="btn ghost" onClick={onBack}>Indietro</button>
