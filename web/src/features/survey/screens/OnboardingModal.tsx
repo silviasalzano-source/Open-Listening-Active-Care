@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 
-type Props = { onConfirm: (nome: string, cognome: string) => void }
+type Props = { onConfirm: (nome: string, cognome: string) => void; onClose: () => void }
 
 // ─── SVG Figures ─────────────────────────────────────────────────────────────
 
@@ -117,7 +117,7 @@ function FigMan({ className }: { className?: string }) {
 
 // ─── Step 1: Info + consent ───────────────────────────────────────────────────
 
-function Step1({ onNext }: { onNext: () => void }) {
+function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   const [agreed, setAgreed] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -151,16 +151,16 @@ function Step1({ onNext }: { onNext: () => void }) {
         <div className="ob-section">
           <div className="ob-dot ob-dot-amber" />
           <div>
-            <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Nominativa</span></div>
-            <p className="ob-section-body">Analizziamo il tuo livello di energia in OT e quello del tuo team. Le risposte saranno associate al tuo profilo per organizzare il tuo <strong>momento di ascolto personale</strong> con HR.</p>
+            <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Survey nominativa</span></div>
+            <p className="ob-section-body">Analizziamo il tuo <strong>livello di energia</strong> in OT e quello del tuo team. Le risposte saranno associate al tuo profilo per organizzare il tuo momento di ascolto personale con HR.</p>
           </div>
         </div>
 
         <div className="ob-section">
           <div className="ob-dot ob-dot-teal" />
           <div>
-            <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Anonima</span></div>
-            <p className="ob-section-body">Desideriamo sapere quali sono le variabili che influenzano la tua carica di energia.</p>
+            <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Survey anonima</span></div>
+            <p className="ob-section-body">Desideriamo sapere quali sono le <strong>variabili che influenzano la tua carica</strong> di energia.</p>
           </div>
         </div>
 
@@ -168,7 +168,7 @@ function Step1({ onNext }: { onNext: () => void }) {
           <div className="ob-dot ob-dot-coral" />
           <div>
             <div className="ob-section-title">Privacy</div>
-            <p className="ob-section-body">I dati verranno analizzati solo in forma aggregata. I manager non avranno accesso alle risposte individuali.</p>
+            <p className="ob-section-body">I <strong>dati in forma aggregata</strong> verranno analizzati. I manager non avranno accesso alle risposte individuali.</p>
           </div>
         </div>
       </div>
@@ -190,6 +190,9 @@ function Step1({ onNext }: { onNext: () => void }) {
         </label>
         <button className="btn ob-btn-next" onClick={onNext} disabled={!agreed}>
           Avanti
+        </button>
+        <button className="btn ghost ob-btn-back" onClick={onBack}>
+          Indietro
         </button>
       </div>
     </div>
@@ -275,7 +278,7 @@ function Step3({ onDone }: { onDone: () => void }) {
 
 // ─── Modal shell ─────────────────────────────────────────────────────────────
 
-function OnboardingContent({ onConfirm }: Props) {
+function OnboardingContent({ onConfirm, onClose }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [nome, setNome] = useState('')
   const [cognome, setCognome] = useState('')
@@ -291,16 +294,16 @@ function OnboardingContent({ onConfirm }: Props) {
   return (
     <div className="ob-overlay">
       <div className="ob-card">
-        {step === 1 && <Step1 onNext={() => setStep(2)} />}
+        {step === 1 && <Step1 onNext={() => setStep(2)} onBack={onClose} />}
         {step === 2 && <Step2 onNext={(n, c) => { setNome(n); setCognome(c); setStep(3) }} />}
       </div>
     </div>
   )
 }
 
-export function OnboardingModal({ onConfirm }: Props) {
+export function OnboardingModal({ onConfirm, onClose }: Props) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
   if (!mounted) return null
-  return createPortal(<OnboardingContent onConfirm={onConfirm} />, document.body)
+  return createPortal(<OnboardingContent onConfirm={onConfirm} onClose={onClose} />, document.body)
 }

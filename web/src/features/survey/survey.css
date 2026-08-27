@@ -312,6 +312,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .ob-checkbox { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; accent-color: var(--amber); cursor: pointer; }
 .ob-btn-next { width: 100%; }
 .ob-btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.ob-btn-back { width: 100%; margin-top: 8px; }
 
 /* Step 2 */
 .ob-step2 { display: flex; flex-direction: column; overflow-y: auto; max-height: 94svh; }

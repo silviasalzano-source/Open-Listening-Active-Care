@@ -49,12 +49,15 @@ export function SurveyApp() {
   return (
     <>
     {showNameModal && (
-      <OnboardingModal onConfirm={(nome, cognome) => {
-        setPhase1Answer('nome', nome)
-        setPhase1Answer('cognome', cognome)
-        setShowNameModal(false)
-        goNext()
-      }} />
+      <OnboardingModal
+        onConfirm={(nome, cognome) => {
+          setPhase1Answer('nome', nome)
+          setPhase1Answer('cognome', cognome)
+          setShowNameModal(false)
+          goNext()
+        }}
+        onClose={() => setShowNameModal(false)}
+      />
     )}
     <div className={`survey-page${isCoolPhase ? ' phase-cool' : ''}`}>
       <div className="survey-container">
