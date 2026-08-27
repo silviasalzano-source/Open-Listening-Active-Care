@@ -5,7 +5,7 @@ import { step1 } from './data'
 import { buildFullFlow } from './flow'
 import { Hud } from './screens/Hud'
 import { IntroScreen } from './screens/IntroScreen'
-import { NameModal } from './screens/NameModal'
+import { OnboardingModal } from './screens/OnboardingModal'
 import { Q1IntroScreen } from './screens/Q1IntroScreen'
 import { QuestionScreen } from './screens/QuestionScreen'
 import { ResultScreen } from './screens/ResultScreen'
@@ -49,7 +49,7 @@ export function SurveyApp() {
   return (
     <>
     {showNameModal && (
-      <NameModal onConfirm={(nome, cognome) => {
+      <OnboardingModal onConfirm={(nome, cognome) => {
         setPhase1Answer('nome', nome)
         setPhase1Answer('cognome', cognome)
         setShowNameModal(false)
