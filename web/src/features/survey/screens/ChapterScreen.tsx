@@ -32,15 +32,13 @@ export function ChapterScreen({ def, chapterIndex, chapterTotal, onBack, onConti
       <div className={`chapter-reveal${revealed.mascot ? ' show' : ''}`}>
         <ChapterMascot type={def.mascot} />
       </div>
-      <div className={`chapter-reveal chapter-header${revealed.header ? ' show' : ''}`}>
+      <div className={`chapter-reveal chapter-card${revealed.header ? ' show' : ''}`}>
         <span className="chapter-badge">Sezione {chapterIndex} di {chapterTotal}</span>
         <h2 className="chapter-title-gradient">{def.title}</h2>
+        {def.desc && (
+          <p className={`chapter-desc${revealed.desc ? ' chapter-desc-in' : ''}`}>{def.desc}</p>
+        )}
       </div>
-      {def.desc && (
-        <div className={`chapter-reveal chapter-desc-card${revealed.desc ? ' show' : ''}`}>
-          <p>{def.desc}</p>
-        </div>
-      )}
       <div className={`chapter-reveal footer-nav${revealed.nav ? ' show' : ''}`}>
         <button className="btn ghost" onClick={onBack}>Indietro</button>
         <button className="btn cool" onClick={onContinue}>Continua</button>

@@ -197,11 +197,25 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .chapter-mascot-stage { width: 210px; height: 140px; margin-top: 8px; }
 .chapter-mascot-stage.large { width: 270px; height: 190px; }
 .chapter-mascot-stage svg { width: 100%; height: 100%; overflow: visible; }
-.chapter-header { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.chapter-card {
+  background: #fff;
+  border-radius: 18px;
+  border: 1.5px solid rgba(23,184,166,0.2);
+  border-top: 5px solid var(--teal);
+  padding: 20px 24px 24px;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(23,184,166,0.14), 0 2px 8px rgba(42,35,56,0.06);
+  text-align: center;
+}
 .chapter-badge { display: inline-block; font-family: var(--font-fredoka), sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); background: rgba(23,184,166,0.12); border: 1px solid rgba(23,184,166,0.3); border-radius: 100px; padding: 3px 12px; }
-.chapter-title-gradient { font-size: 24px; background: linear-gradient(90deg, var(--teal), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0; }
-.chapter-desc-card { background: rgba(23,184,166,0.07); border: 1.5px solid rgba(23,184,166,0.2); border-radius: 16px; padding: 14px 20px; max-width: 300px; }
-.chapter-desc-card p { color: var(--ink); font-size: 15px; line-height: 1.65; margin: 0; }
+.chapter-title-gradient { font-size: 22px; background: linear-gradient(90deg, var(--teal), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0; line-height: 1.35; }
+.chapter-desc { font-size: 14.5px; line-height: 1.65; color: var(--ink); font-weight: 500; margin: 4px 0 0; opacity: 0; transition: opacity .3s ease; }
+.chapter-desc-in { opacity: 1; }
 .chapter-reveal { opacity: 0; transform: translateY(10px); transition: opacity .4s ease, transform .4s ease; }
 .chapter-reveal.show { opacity: 1; transform: translateY(0); }
 

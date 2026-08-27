@@ -83,41 +83,154 @@ export function EnergyMascot({ level, idPrefix }: { level: number; idPrefix: str
 
 export function q1IntroMascotSvgMarkup(variant: 'team' | 'anno'): string {
   if (variant === 'team') {
-    return `<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    // Three HR figures in a warm group scene — left (coral), center bigger (teal), right (blue)
+    return `<svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shadow floor -->
+      <ellipse cx="120" cy="148" rx="88" ry="7" fill="rgba(42,35,56,0.07)"/>
+
+      <!-- Left figure (coral) -->
       <g class="chm-walk-a">
-        <rect x="18" y="60" width="42" height="54" rx="14" fill="hsl(28,80%,92%)" stroke="hsl(28,70%,55%)" stroke-width="4"/>
-        <rect x="32" y="48" width="14" height="14" rx="4" fill="hsl(28,70%,55%)"/>
-        <circle cx="30" cy="82" r="4" fill="#2A2338"/><circle cx="46" cy="82" r="4" fill="#2A2338"/>
-        <path d="M30,94 Q38,99 46,94" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="44" cy="146" rx="18" ry="4" fill="rgba(42,35,56,0.05)"/>
+        <rect x="36" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
+        <rect x="49" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
+        <rect x="24" y="68" width="44" height="46" rx="14" fill="#FF6E86"/>
+        <rect x="36" y="82" width="20" height="11" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <text x="46" y="91" font-size="6.5" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
+        <!-- Head -->
+        <circle cx="46" cy="52" r="18" fill="#FCD9A0"/>
+        <!-- Hair -->
+        <path d="M28,48 Q28,28 46,28 Q64,28 64,48 Q62,35 46,35 Q30,35 28,48Z" fill="#F4C542"/>
+        <path d="M27,44 Q24,56 30,64" fill="none" stroke="#F4C542" stroke-width="6" stroke-linecap="round"/>
+        <path d="M65,44 Q68,56 62,64" fill="none" stroke="#F4C542" stroke-width="6" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <circle cx="40" cy="54" r="3" fill="#2A2338"/>
+        <circle cx="52" cy="54" r="3" fill="#2A2338"/>
+        <circle cx="41" cy="53" r="1" fill="#fff"/>
+        <!-- Smile -->
+        <path d="M40,62 Q46,67 52,62" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+        <!-- Wave arm right -->
+        <g class="chm-wave-l">
+          <path d="M68,80 Q82,66 78,52" fill="none" stroke="#FF6E86" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="77" cy="48" r="6" fill="#FCD9A0"/>
+        </g>
       </g>
-      <g class="chm-walk-b" style="animation-delay:0.15s">
-        <rect x="88" y="40" width="46" height="60" rx="16" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
-        <rect x="104" y="26" width="16" height="16" rx="5" fill="var(--teal,#17B8A6)"/>
-        <circle cx="103" cy="66" r="5" fill="#2A2338"/><circle cx="119" cy="66" r="5" fill="#2A2338"/>
-        <path d="M103,80 Q111,86 119,80" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Center figure (teal, bigger) -->
+      <g class="chm-walk-b" style="animation-delay:0.1s">
+        <ellipse cx="120" cy="148" rx="22" ry="5" fill="rgba(42,35,56,0.06)"/>
+        <rect x="110" y="106" width="9" height="38" rx="3.5" fill="#2A2338"/>
+        <rect x="127" y="106" width="9" height="38" rx="3.5" fill="#2A2338"/>
+        <rect x="96" y="62" width="52" height="50" rx="16" fill="#17B8A6"/>
+        <rect x="110" y="78" width="24" height="13" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <text x="122" y="88" font-size="7.5" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
+        <!-- Head -->
+        <circle cx="122" cy="44" r="22" fill="#FCD9A0"/>
+        <!-- Hair dark -->
+        <path d="M100,40 Q100,16 122,16 Q144,16 144,40 Q142,24 122,24 Q102,24 100,40Z" fill="#5B3A29"/>
+        <path d="M99,36 Q95,52 102,64" fill="none" stroke="#5B3A29" stroke-width="7" stroke-linecap="round"/>
+        <path d="M145,36 Q149,52 142,64" fill="none" stroke="#5B3A29" stroke-width="7" stroke-linecap="round"/>
+        <!-- Eyes bigger -->
+        <circle cx="114" cy="46" r="5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="114" cy="47" r="2.5" fill="#2A2338"/>
+        <circle cx="130" cy="46" r="5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="130" cy="47" r="2.5" fill="#2A2338"/>
+        <circle cx="115" cy="45" r="1.2" fill="#fff"/>
+        <circle cx="131" cy="45" r="1.2" fill="#fff"/>
+        <!-- Big smile -->
+        <path d="M114,58 Q122,65 130,58" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
       </g>
-      <g class="chm-walk-a" style="animation-delay:0.3s">
-        <rect x="160" y="60" width="42" height="54" rx="14" fill="hsl(210,70%,92%)" stroke="hsl(210,60%,55%)" stroke-width="4"/>
-        <rect x="174" y="48" width="14" height="14" rx="4" fill="hsl(210,60%,55%)"/>
-        <circle cx="172" cy="82" r="4" fill="#2A2338"/><circle cx="188" cy="82" r="4" fill="#2A2338"/>
-        <path d="M172,94 Q180,99 188,94" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Right figure (blue) -->
+      <g class="chm-walk-a" style="animation-delay:0.25s">
+        <ellipse cx="196" cy="146" rx="18" ry="4" fill="rgba(42,35,56,0.05)"/>
+        <rect x="188" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
+        <rect x="201" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
+        <rect x="176" y="68" width="44" height="46" rx="14" fill="#2E86DE"/>
+        <rect x="188" y="82" width="20" height="11" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <text x="198" y="91" font-size="6.5" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
+        <!-- Head -->
+        <circle cx="198" cy="52" r="18" fill="#FCD9A0"/>
+        <!-- Hair short dark -->
+        <path d="M180,48 Q180,28 198,28 Q216,28 216,48 Q214,35 198,35 Q182,35 180,48Z" fill="#3D2B1F"/>
+        <path d="M179,44 Q176,56 182,64" fill="none" stroke="#3D2B1F" stroke-width="6" stroke-linecap="round"/>
+        <path d="M217,44 Q220,56 214,64" fill="none" stroke="#3D2B1F" stroke-width="6" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <circle cx="192" cy="54" r="3" fill="#2A2338"/>
+        <circle cx="204" cy="54" r="3" fill="#2A2338"/>
+        <circle cx="193" cy="53" r="1" fill="#fff"/>
+        <!-- Smile -->
+        <path d="M192,62 Q198,67 204,62" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+        <!-- Wave arm left -->
+        <g class="chm-wave-r">
+          <path d="M172,80 Q158,66 162,52" fill="none" stroke="#2E86DE" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="163" cy="48" r="6" fill="#FCD9A0"/>
+        </g>
       </g>
-      <g class="chm-bubble"><ellipse cx="34" cy="38" rx="14" ry="11" fill="#fff" stroke="#2A2338" stroke-width="2"/><text x="34" y="42" font-size="12" text-anchor="middle">···</text></g>
-      <g class="chm-bubble" style="animation-delay:0.35s"><ellipse cx="176" cy="38" rx="14" ry="11" fill="#fff" stroke="#2A2338" stroke-width="2"/><text x="176" y="42" font-size="12" text-anchor="middle">!</text></g>
+
+      <!-- Speech bubble center -->
+      <g class="chm-bubble">
+        <rect x="90" y="4" width="64" height="24" rx="10" fill="#fff" stroke="rgba(42,35,56,0.15)" stroke-width="1.5"/>
+        <polygon points="118,28 122,36 126,28" fill="#fff" stroke="rgba(42,35,56,0.1)" stroke-width="1"/>
+        <text x="122" y="20" font-size="11" text-anchor="middle" fill="#FF6E86" font-family="Fredoka, sans-serif" font-weight="700">Team! 🤝</text>
+      </g>
     </svg>`
   }
-  return `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="100" cy="80" r="55" fill="none" stroke="rgba(42,35,56,0.15)" stroke-width="3" stroke-dasharray="8 8" class="q1i-rotate"/>
-    <rect x="78" y="58" width="44" height="52" rx="14" fill="hsl(45,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="4"/>
-    <rect x="92" y="46" width="16" height="14" rx="4" fill="var(--amber,#FFB648)"/>
-    <circle cx="92" cy="80" r="5" fill="#2A2338"/><circle cx="108" cy="80" r="5" fill="#2A2338"/>
-    <path d="M92,92 Q100,97 108,92" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+
+  // Anno variant — figure with seasonal cycle around it
+  return `<svg viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg">
+    <!-- Orbit ring -->
+    <circle cx="110" cy="88" r="62" fill="none" stroke="rgba(255,182,72,0.2)" stroke-width="3" stroke-dasharray="6 6" class="q1i-rotate"/>
+
+    <!-- Season icons at compass points -->
     <g class="q1i-rotate">
-      <text x="100" y="22" font-size="22" text-anchor="middle">☀️</text>
-      <text x="176" y="86" font-size="22" text-anchor="middle">🍁</text>
-      <text x="100" y="148" font-size="22" text-anchor="middle">❄️</text>
-      <text x="24" y="86" font-size="22" text-anchor="middle">🌸</text>
+      <!-- Spring (top) -->
+      <circle cx="110" cy="22" r="10" fill="rgba(255,182,72,0.12)" stroke="rgba(255,182,72,0.3)" stroke-width="1.5"/>
+      <text x="110" y="27" font-size="13" text-anchor="middle">🌸</text>
+      <!-- Summer (right) -->
+      <circle cx="176" cy="88" r="10" fill="rgba(255,182,72,0.12)" stroke="rgba(255,182,72,0.3)" stroke-width="1.5"/>
+      <text x="176" y="93" font-size="13" text-anchor="middle">☀️</text>
+      <!-- Autumn (bottom) -->
+      <circle cx="110" cy="154" r="10" fill="rgba(255,182,72,0.12)" stroke="rgba(255,182,72,0.3)" stroke-width="1.5"/>
+      <text x="110" y="159" font-size="13" text-anchor="middle">🍂</text>
+      <!-- Winter (left) -->
+      <circle cx="44" cy="88" r="10" fill="rgba(255,182,72,0.12)" stroke="rgba(255,182,72,0.3)" stroke-width="1.5"/>
+      <text x="44" y="93" font-size="13" text-anchor="middle">❄️</text>
     </g>
+
+    <!-- Shadow -->
+    <ellipse cx="110" cy="148" rx="28" ry="5" fill="rgba(42,35,56,0.08)"/>
+
+    <!-- Legs -->
+    <rect x="100" y="120" width="9" height="26" rx="3.5" fill="#2A2338"/>
+    <rect x="113" y="120" width="9" height="26" rx="3.5" fill="#2A2338"/>
+
+    <!-- Body (amber maglia) -->
+    <rect x="86" y="76" width="48" height="50" rx="15" fill="var(--amber,#FFB648)"/>
+    <rect x="98" y="90" width="26" height="14" rx="3" fill="rgba(255,255,255,0.9)"/>
+    <text x="111" y="101" font-size="8" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
+
+    <!-- Head -->
+    <circle cx="110" cy="58" r="22" fill="#FCD9A0"/>
+
+    <!-- Hair -->
+    <path d="M88,52 Q88,30 110,30 Q132,30 132,52 Q130,38 110,38 Q90,38 88,52Z" fill="#E8954A"/>
+    <path d="M87,48 Q83,62 90,72" fill="none" stroke="#E8954A" stroke-width="7" stroke-linecap="round"/>
+    <path d="M133,48 Q137,62 130,72" fill="none" stroke="#E8954A" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Eyes — looking up/around (wonder) -->
+    <circle cx="102" cy="59" r="6" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+    <circle cx="102" cy="56" r="3" fill="#2A2338"/>
+    <circle cx="118" cy="59" r="6" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+    <circle cx="118" cy="56" r="3" fill="#2A2338"/>
+    <circle cx="103" cy="55" r="1.2" fill="#fff"/>
+    <circle cx="119" cy="55" r="1.2" fill="#fff"/>
+
+    <!-- Eyebrows raised (thoughtful) -->
+    <path d="M96,50 Q102,46 108,50" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+    <path d="M112,50 Q118,46 124,50" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Smile -->
+    <path d="M103,70 Q110,76 117,70" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
   </svg>`
 }
 
