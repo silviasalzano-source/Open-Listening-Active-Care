@@ -1,16 +1,8 @@
 'use client'
 
-import type { Phase2Question, ChapterDef, SurveyAnswers, MascotType } from '../types'
+import type { Phase2Question, ChapterDef, SurveyAnswers } from '../types'
 
-const CHAPTER_COLORS: Record<MascotType, { bg: string; text: string }> = {
-  commute:  { bg: '#17B8A6', text: '#fff' },
-  talk:     { bg: '#17B8A6', text: '#fff' },
-  growth:   { bg: '#17B8A6', text: '#fff' },
-  tech:     { bg: '#17B8A6', text: '#fff' },
-  flow:     { bg: '#17B8A6', text: '#fff' },
-  timeline: { bg: '#17B8A6', text: '#fff' },
-  finish:   { bg: '#17B8A6', text: '#fff' },
-}
+const LABEL_GRADIENT = 'linear-gradient(135deg, #17B8A6, #2E86DE)'
 
 function stripEmoji(s: string): string {
   return s.replace(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}️⃣]+\s*/gu, '').trim()
@@ -235,7 +227,7 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
     <div className="survey-screen chapterset">
       <div
         className="q-eyebrow cs-chapter-eyebrow"
-        style={{ background: 'linear-gradient(135deg, #17B8A6, #2E86DE)', color: '#fff' }}
+        style={{ background: LABEL_GRADIENT, color: '#fff' }}
       >{def.title}</div>
       {questions.map((q, i) => {
         const showGroup = q.group && q.group !== questions[i - 1]?.group
@@ -244,7 +236,7 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
             {showGroup && (
               <div
                 className="cs-group-label"
-                style={{ background: 'linear-gradient(135deg, #17B8A6, #2E86DE)', color: '#fff' }}
+                style={{ background: LABEL_GRADIENT, color: '#fff' }}
               >
                 {groupIcon(q.group ?? '') && (
                   <span dangerouslySetInnerHTML={{ __html: groupIcon(q.group ?? '') ?? '' }} style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} />
