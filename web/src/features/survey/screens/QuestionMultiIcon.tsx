@@ -1,4 +1,11 @@
 import type { MultiIconQuestion } from '../types'
+import { CausaSvg } from './CausaIcons'
+
+const CAUSA_LABELS = new Set([
+  'Carico di lavoro', 'Relazioni con colleghi', 'Rapporto con il/la responsabile',
+  'Crescita e sviluppo professionale', 'Motivi personali/extra-lavorativi',
+  'Strumenti e organizzazione', 'Altro',
+])
 
 export function QuestionMultiIcon({
   question,
@@ -16,6 +23,7 @@ export function QuestionMultiIcon({
   const altroLabel = question.options.find((o) => o.hasInput)?.label
   const altroActive = Boolean(altroLabel && value.includes(altroLabel))
   const altroFilled = altroValue.trim().length > 0
+  const isCausa = question.id === 'causa'
 
   function toggle(label: string) {
     const already = value.includes(label)
@@ -37,7 +45,13 @@ export function QuestionMultiIcon({
             className={`opt-card${value.includes(opt.label) ? ' selected' : ''}`}
             onClick={() => toggle(opt.label)}
           >
-            <div className="opt-icon">{opt.icon}</div>
+            {isCausa && CAUSA_LABELS.has(opt.label) ? (
+              <div className="opt-icon opt-icon-weather">
+                <CausaSvg label={opt.label} />
+              </div>
+            ) : (
+              <div className="opt-icon">{opt.icon}</div>
+            )}
             <div className="opt-text">
               <b>{opt.label}</b>
             </div>
