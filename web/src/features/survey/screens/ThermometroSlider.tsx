@@ -84,8 +84,6 @@ function twoFiguresSvg(level: number): string {
       <rect x="38" y="160" width="10" height="26" rx="4" fill="#2A2338"/>
       <rect x="54" y="160" width="10" height="26" rx="4" fill="#2A2338"/>
       <rect x="28" y="102" width="48" height="62" rx="14" fill="#FF6E86"/>
-      <rect x="40" y="116" width="28" height="12" rx="3" fill="rgba(255,255,255,0.88)"/>
-      <text x="54" y="125" font-size="6" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka,sans-serif">HR</text>
       <path d="${girlArmL}" fill="none" stroke="#FF6E86" stroke-width="9" stroke-linecap="round"/>
       <path d="${girlArmR}" fill="none" stroke="#FF6E86" stroke-width="9" stroke-linecap="round"/>
       <circle cx="52" cy="64" r="28" fill="#FCD9A0"/>
@@ -101,8 +99,6 @@ function twoFiguresSvg(level: number): string {
       <rect x="134" y="160" width="10" height="26" rx="4" fill="#2A2338"/>
       <rect x="150" y="160" width="10" height="26" rx="4" fill="#2A2338"/>
       <rect x="124" y="102" width="48" height="62" rx="14" fill="#17B8A6"/>
-      <rect x="136" y="116" width="28" height="12" rx="3" fill="rgba(255,255,255,0.88)"/>
-      <text x="150" y="125" font-size="6" font-weight="700" text-anchor="middle" fill="#12232B" font-family="Fredoka,sans-serif">HR</text>
       <path d="${boyArmL}" fill="none" stroke="#17B8A6" stroke-width="9" stroke-linecap="round"/>
       <path d="${boyArmR}" fill="none" stroke="#17B8A6" stroke-width="9" stroke-linecap="round"/>
       <circle cx="148" cy="64" r="28" fill="#FCD9A0"/>

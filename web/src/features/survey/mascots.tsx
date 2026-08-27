@@ -94,8 +94,6 @@ export function q1IntroMascotSvgMarkup(variant: 'team' | 'anno'): string {
         <rect x="36" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
         <rect x="49" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
         <rect x="24" y="68" width="44" height="46" rx="14" fill="#FF6E86"/>
-        <rect x="36" y="82" width="20" height="11" rx="3" fill="rgba(255,255,255,0.9)"/>
-        <text x="46" y="91" font-size="6.5" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
         <!-- Head -->
         <circle cx="46" cy="52" r="18" fill="#FCD9A0"/>
         <!-- Hair -->
@@ -121,8 +119,6 @@ export function q1IntroMascotSvgMarkup(variant: 'team' | 'anno'): string {
         <rect x="110" y="106" width="9" height="38" rx="3.5" fill="#2A2338"/>
         <rect x="127" y="106" width="9" height="38" rx="3.5" fill="#2A2338"/>
         <rect x="96" y="62" width="52" height="50" rx="16" fill="#17B8A6"/>
-        <rect x="110" y="78" width="24" height="13" rx="3" fill="rgba(255,255,255,0.9)"/>
-        <text x="122" y="88" font-size="7.5" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
         <!-- Head -->
         <circle cx="122" cy="44" r="22" fill="#FCD9A0"/>
         <!-- Hair dark -->
@@ -146,8 +142,6 @@ export function q1IntroMascotSvgMarkup(variant: 'team' | 'anno'): string {
         <rect x="188" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
         <rect x="201" y="108" width="7" height="34" rx="3" fill="#2A2338"/>
         <rect x="176" y="68" width="44" height="46" rx="14" fill="#2E86DE"/>
-        <rect x="188" y="82" width="20" height="11" rx="3" fill="rgba(255,255,255,0.9)"/>
-        <text x="198" y="91" font-size="6.5" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
         <!-- Head -->
         <circle cx="198" cy="52" r="18" fill="#FCD9A0"/>
         <!-- Hair short dark -->
@@ -206,8 +200,6 @@ export function q1IntroMascotSvgMarkup(variant: 'team' | 'anno'): string {
 
     <!-- Body (amber maglia) -->
     <rect x="86" y="76" width="48" height="50" rx="15" fill="var(--amber,#FFB648)"/>
-    <rect x="98" y="90" width="26" height="14" rx="3" fill="rgba(255,255,255,0.9)"/>
-    <text x="111" y="101" font-size="8" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">HR</text>
 
     <!-- Head -->
     <circle cx="110" cy="58" r="22" fill="#FCD9A0"/>
