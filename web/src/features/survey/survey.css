@@ -91,6 +91,45 @@
 .altro-input:focus { outline: none; border-color: var(--coral); }
 .altro-hint { font-size: 12px; color: var(--coral); margin: -10px 0 14px 4px; font-weight: 600; }
 
+/* ── Termometro layout ─────────────────────────────────────────────────── */
+.therm-layout { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; width: 100%; }
+.therm-figures { flex: 0 0 160px; width: 160px; }
+.therm-figures svg { width: 100%; height: auto; overflow: visible; }
+.therm-right { flex: 1; display: flex; align-items: center; gap: 12px; min-width: 0; }
+/* Thermometer: numbers + tube side by side */
+.therm-wrap { display: flex; align-items: flex-end; gap: 8px; }
+.therm-numbers-left { display: flex; flex-direction: column; gap: 0; }
+.therm-num-btn { font-family: var(--font-fredoka), sans-serif; font-size: 14px; font-weight: 700; color: rgba(42,35,56,0.25); background: none; border: none; cursor: pointer; line-height: 1; height: 26px; width: 28px; text-align: right; padding: 0 4px 0 0; transition: color .15s ease, transform .12s ease; }
+.therm-num-btn.active { color: #FFB648; }
+.therm-num-btn:hover { transform: scale(1.18); }
+.therm-tube-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.therm-tube { position: relative; width: 28px; height: 260px; border-radius: 20px 20px 0 0; background: rgba(42,35,56,0.08); overflow: hidden; border: 2px solid rgba(42,35,56,0.12); border-bottom: none; }
+.therm-fill { position: absolute; bottom: 0; left: 0; right: 0; border-radius: 0; transition: height .35s cubic-bezier(.34,1.28,.64,1), background .35s ease; }
+.therm-hit { position: absolute; left: 0; right: 0; background: transparent; border: none; cursor: pointer; }
+.therm-hit:nth-child(2)  { top:   0%;   height: 10%; }
+.therm-hit:nth-child(3)  { top:  10%;   height: 10%; }
+.therm-hit:nth-child(4)  { top:  20%;   height: 10%; }
+.therm-hit:nth-child(5)  { top:  30%;   height: 10%; }
+.therm-hit:nth-child(6)  { top:  40%;   height: 10%; }
+.therm-hit:nth-child(7)  { top:  50%;   height: 10%; }
+.therm-hit:nth-child(8)  { top:  60%;   height: 10%; }
+.therm-hit:nth-child(9)  { top:  70%;   height: 10%; }
+.therm-hit:nth-child(10) { top:  80%;   height: 10%; }
+.therm-hit:nth-child(11) { top:  90%;   height: 10%; }
+.therm-bulb { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(42,35,56,0.12); transition: background .35s ease; margin-top: -2px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+/* Info panel */
+.therm-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.therm-level-num { font-family: var(--font-fredoka), sans-serif; font-size: 52px; font-weight: 700; line-height: 1; transition: color .3s ease; }
+.therm-level-num span { font-size: 22px; opacity: 0.6; }
+.therm-msg { font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.6; }
+@media (max-width: 480px) {
+  .therm-layout { flex-direction: column; align-items: center; }
+  .therm-figures { flex: none; width: 180px; }
+  .therm-tube { height: 200px; }
+  .therm-numbers-left .therm-num-btn { height: 20px; }
+  .therm-level-num { font-size: 40px; }
+}
+
 .slider-wrap { margin-bottom: 22px; }
 .slider-display { text-align: center; padding: 24px 16px; border-radius: 20px; background: var(--card); border: 1.5px solid var(--card-border); margin-bottom: 16px; }
 .mascot-wrap { width: 100px; height: 118px; margin: 0 auto 8px; }

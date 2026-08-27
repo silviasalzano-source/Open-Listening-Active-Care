@@ -2,6 +2,7 @@ import type { Phase1Question } from '../types'
 import { QuestionMultiIcon } from './QuestionMultiIcon'
 import { QuestionSingleIcon } from './QuestionSingleIcon'
 import { QuestionSlider } from './QuestionSlider'
+import { ThermometroSlider } from './ThermometroSlider'
 
 export function QuestionScreen({
   question,
@@ -58,7 +59,14 @@ export function QuestionScreen({
           onAltroChange={onAltroChange}
         />
       )}
-      {question.type === 'slider' && (
+      {question.type === 'slider' && question.id === 'termometro' && (
+        <ThermometroSlider
+          question={question}
+          value={value as number | undefined}
+          onAnswer={onAnswer}
+        />
+      )}
+      {question.type === 'slider' && question.id !== 'termometro' && (
         <QuestionSlider
           question={question}
           value={value as number | undefined}
