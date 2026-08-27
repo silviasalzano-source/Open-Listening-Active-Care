@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { mascotBucket } from '../flow'
-import { EnergyMascot } from '../mascots'
+import { ResultFigure } from './ResultFigure'
 import type { Phase1Answers } from '../types'
 
 const CAUSA_ICONS: Record<string, string> = {
@@ -67,47 +67,43 @@ export function ResultScreen({
   const isUplifting = bucket === 'good' || bucket === 'high'
   const isLow = bucket === 'low' || bucket === 'lowmid'
 
-  const [revealed, setRevealed] = useState({ mascot: false, title: false, card: false, button: false })
+  const [revealed, setRevealed] = useState({ title: false, card: false, button: false })
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setRevealed((r) => ({ ...r, mascot: true })), 80),
-      setTimeout(() => setRevealed((r) => ({ ...r, title: true })), 400),
-      setTimeout(() => setRevealed((r) => ({ ...r, card: true })), 580),
-      setTimeout(() => setRevealed((r) => ({ ...r, button: true })), 780),
+      setTimeout(() => setRevealed((r) => ({ ...r, title: true })), 80),
+      setTimeout(() => setRevealed((r) => ({ ...r, card: true })), 300),
+      setTimeout(() => setRevealed((r) => ({ ...r, button: true })), 520),
     ]
     return () => timers.forEach(clearTimeout)
   }, [])
 
   return (
     <div className="survey-screen result-screen">
-      <div className="result-mascot-stage">
-        {isLow && <div className="result-calm-glow" />}
-        <div className={`result-reveal-mascot${revealed.mascot ? ' show' : ''}`}>
-          <EnergyMascot level={level} idPrefix="result" />
-        </div>
-        {/* Badge livello energia */}
-        {revealed.mascot && (
-          <div className="result-level-badge">{level}<span>/10</span></div>
-        )}
-        {isUplifting &&
-          CONFETTI_PIECES.map((piece, i) => (
-            <span
-              key={i}
-              className="confetti-piece"
-              style={{ left: `${8 + i * 20}%`, animationDelay: `${0.9 + i * 0.15}s` }}
-            >
-              {piece}
-            </span>
-          ))}
-      </div>
-
-      <h2 className={`result-reveal result-title-brand${revealed.title ? ' show' : ''}`}>
+      {/* Titolo FUORI dal box */}
+      <h2 className={`result-title-brand result-reveal${revealed.title ? ' show' : ''}`}>
         My Energy Battery
       </h2>
 
+      {/* Card: figura animata + testo */}
       <div className={`result-card result-reveal${revealed.card ? ' show' : ''}`}>
-        {/* Frase principale con parola chiave in grassetto */}
+        {/* Figura animata in cima al box */}
+        <div className="result-card-figure">
+          {isLow && <div className="result-calm-glow" />}
+          <ResultFigure bucket={bucket} />
+          {isUplifting &&
+            CONFETTI_PIECES.map((piece, i) => (
+              <span
+                key={i}
+                className="confetti-piece"
+                style={{ left: `${8 + i * 20}%`, animationDelay: `${0.3 + i * 0.15}s` }}
+              >
+                {piece}
+              </span>
+            ))}
+        </div>
+
+        {/* Frase principale */}
         <p>
           {phrase.pre} <strong>{phrase.key}</strong>{phrase.post}
           {climaText ? <> — {climaText}.</> : '.'}
@@ -117,7 +113,6 @@ export function ResultScreen({
         {trendText && (
           <p>Guardando ai mesi passati, <BoldText text={trendText} />.</p>
         )}
-
 
         {/* Cause come chip visivi */}
         {causa.length > 0 && (

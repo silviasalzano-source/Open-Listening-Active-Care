@@ -257,25 +257,22 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .transition-body strong { color: var(--teal); font-weight: 700; }
 .microcopy { font-size: 12px; color: rgba(42, 35, 56, 0.45); max-width: 290px; line-height: 1.5; }
 
-.result-screen { justify-content: center; align-items: center; text-align: center; min-height: 70vh; gap: 14px; padding: 0 6px; }
+.result-screen { justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 0 6px; }
 .result-screen h2 { font-size: 21px; margin: 0; color: var(--ink); }
-.result-title-brand { font-family: var(--font-fredoka), sans-serif; font-weight: 700; font-size: 24px; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.result-card { background: var(--card); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 22px 22px; max-width: 330px; text-align: left; display: flex; flex-direction: column; gap: 14px; }
-.result-card p { font-size: 15px; line-height: 1.8; color: var(--ink); margin: 0; }
+.result-title-brand { font-family: var(--font-fredoka), sans-serif; font-weight: 700; font-size: 26px; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.result-card { background: var(--card); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 0 0 22px; max-width: 330px; width: 100%; text-align: left; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+.result-card p { font-size: 15px; line-height: 1.8; color: var(--ink); margin: 0; padding: 0 22px; }
 .result-card strong,
 .end-message strong { background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
-.result-card p:last-child { margin-bottom: 0; }
 .result-screen .btn { margin-top: 4px; }
 .result-reveal { opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .45s ease; }
 .result-reveal.show { opacity: 1; transform: translateY(0); }
-.result-mascot-stage { position: relative; width: 150px; height: 184px; margin: 2px auto 0; }
-.result-reveal-mascot { opacity: 0; transform: scale(0.6) translateY(10px); transition: opacity .55s cubic-bezier(.34, 1.56, .64, 1), transform .55s cubic-bezier(.34, 1.56, .64, 1); }
-.result-reveal-mascot.show { opacity: 1; transform: scale(1) translateY(0); }
-.result-mascot-stage .mascot-wrap { width: 150px; height: 180px; }
-.result-calm-glow { position: absolute; inset: 6px -14px; border-radius: 50%; background: radial-gradient(circle, rgba(150, 190, 255, 0.32), transparent 70%); animation: calmPulse 3.2s ease-in-out infinite; z-index: 0; }
-.result-level-badge { position: absolute; bottom: -6px; right: -14px; background: linear-gradient(135deg, var(--amber), var(--coral)); color: #fff; font-family: var(--font-fredoka), sans-serif; font-weight: 800; font-size: 22px; line-height: 1; padding: 6px 10px 5px; border-radius: 12px; box-shadow: 0 4px 12px rgba(255,110,134,0.35); animation: endBadgePop 0.5s cubic-bezier(.34,1.56,.64,1); }
-.result-level-badge span { font-size: 13px; font-weight: 600; opacity: 0.85; margin-left: 1px; }
-.result-causa-section { margin-top: 10px; }
+/* Figura animata dentro il card */
+.result-card-figure { position: relative; width: 100%; display: flex; justify-content: center; align-items: flex-end; padding: 20px 0 4px; overflow: visible; }
+.result-figure-svg { width: 140px; height: 160px; flex-shrink: 0; }
+.result-figure-svg svg { width: 100%; height: 100%; overflow: visible; }
+.result-calm-glow { position: absolute; inset: 0 -20px; border-radius: 50%; background: radial-gradient(circle, rgba(150,190,255,0.3), transparent 68%); animation: calmPulse 3.2s ease-in-out infinite; pointer-events: none; }
+.result-causa-section { padding: 0 22px; margin-top: -2px; }
 .result-causa-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 8px; }
 .result-causa-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .result-causa-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(255,182,72,0.15); border: 1.5px solid rgba(255,182,72,0.35); border-radius: 100px; padding: 5px 12px; }
