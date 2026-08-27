@@ -304,6 +304,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .ob-tag-cool { background: rgba(23,184,166,0.12); color: #0A7A6E; border: 1px solid rgba(23,184,166,0.3); }
 .ob-section-body { font-size: 13px; color: var(--ink-dim); line-height: 1.55; margin: 0; }
 .ob-section-body strong { color: var(--ink); font-weight: 700; }
+.ob-section-body-sub { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(42,35,56,0.1); }
 
 .ob-footer { padding: 12px 22px 20px; border-top: 1px solid rgba(42,35,56,0.07); display: flex; flex-direction: column; gap: 10px; }
 .ob-scroll-hint { text-align: center; font-size: 12px; color: var(--ink-dim); opacity: 0.7; margin: 0; }

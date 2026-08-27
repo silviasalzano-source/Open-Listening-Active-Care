@@ -153,22 +153,16 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Survey nominativa</span></div>
             <p className="ob-section-body">Analizziamo il tuo <strong>livello di energia</strong> in OT e quello del tuo team. Le risposte saranno associate al tuo profilo per organizzare il tuo momento di ascolto personale con HR.</p>
-          </div>
-        </div>
-
-        <div className="ob-section">
-          <div className="ob-dot ob-dot-teal" />
-          <div>
-            <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Survey anonima</span></div>
-            <p className="ob-section-body">Desideriamo sapere quali sono le <strong>variabili che influenzano la tua carica</strong> di energia.</p>
+            <p className="ob-section-body ob-section-body-sub">Le tue risposte ci aiuteranno a organizzare il tuo <strong>momento di ascolto one to one</strong> con HR. Ci permetteranno anche di capire il <strong>livello di energia</strong> nelle varie BU e team, e cosa può spronare la tua carica.</p>
           </div>
         </div>
 
         <div className="ob-section ob-section-last">
-          <div className="ob-dot ob-dot-coral" />
+          <div className="ob-dot ob-dot-teal" />
           <div>
-            <div className="ob-section-title">Privacy</div>
-            <p className="ob-section-body">I <strong>dati in forma aggregata</strong> verranno analizzati. I manager non avranno accesso alle risposte individuali.</p>
+            <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Survey anonima</span></div>
+            <p className="ob-section-body">Desideriamo sapere quali sono le <strong>variabili che influenzano la tua carica</strong> di energia.</p>
+            <p className="ob-section-body ob-section-body-sub">I dati vengono raccolti in modo <strong>completamente anonimo</strong> e analizzati solo in forma aggregata. I manager <strong>non</strong> avranno accesso alle risposte individuali.</p>
           </div>
         </div>
       </div>
