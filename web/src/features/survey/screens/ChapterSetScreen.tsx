@@ -1,6 +1,16 @@
 'use client'
 
-import type { Phase2Question, ChapterDef, SurveyAnswers } from '../types'
+import type { Phase2Question, ChapterDef, SurveyAnswers, MascotType } from '../types'
+
+const CHAPTER_COLORS: Record<MascotType, { bg: string; text: string }> = {
+  commute:  { bg: '#FF6E86', text: '#fff' },
+  talk:     { bg: '#FF6E86', text: '#fff' },
+  growth:   { bg: '#FFB648', text: '#fff' },
+  tech:     { bg: '#C96CC9', text: '#fff' },
+  flow:     { bg: '#17B8A6', text: '#fff' },
+  timeline: { bg: '#78C7FF', text: '#2A2338' },
+  finish:   { bg: '#FF6E86', text: '#fff' },
+}
 
 type Props = {
   def: ChapterDef
@@ -203,7 +213,10 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
         return (
           <div key={q.id}>
             {showGroup && (
-              <div className="cs-group-label">{q.group}</div>
+              <div
+                className="cs-group-label"
+                style={{ background: CHAPTER_COLORS[def.mascot].bg, color: CHAPTER_COLORS[def.mascot].text }}
+              >{q.group}</div>
             )}
             <QuestionBlock q={q} answers={answers} onAnswer={onAnswer} />
           </div>
