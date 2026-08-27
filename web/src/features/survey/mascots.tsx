@@ -305,25 +305,97 @@ import type { MascotType } from './types'
 
 function chapterMascotSvgMarkup(type: MascotType): string {
   if (type === 'commute') {
-    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+    return `<svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ombra a terra -->
+      <ellipse cx="52" cy="164" rx="26" ry="4" fill="rgba(42,35,56,0.07)"/>
+      <ellipse cx="208" cy="164" rx="26" ry="4" fill="rgba(42,35,56,0.07)"/>
+
+      <!-- Persona sinistra – coral -->
       <g class="chm-walk-a">
-        <rect x="26" y="46" width="52" height="66" rx="16" fill="hsl(340,70%,93%)" stroke="hsl(340,60%,55%)" stroke-width="4"/>
-        <rect x="42" y="34" width="20" height="16" rx="5" fill="hsl(340,60%,55%)"/>
-        <path d="M40,64 Q31,58 34,50" fill="none" stroke="hsl(340,60%,45%)" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="42" cy="72" r="4.5" fill="#2A2338"/><circle cx="62" cy="72" r="4.5" fill="#2A2338"/>
-        <path d="M42,86 Q52,94 62,86" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-        <rect x="34" y="108" width="10" height="26" rx="3" fill="hsl(340,60%,55%)"/>
-        <rect x="60" y="108" width="10" height="26" rx="3" fill="hsl(340,60%,45%)"/>
-        <rect x="18" y="86" width="16" height="14" rx="3" fill="#8B5E34"/>
+        <!-- Gambe -->
+        <rect x="41" y="128" width="10" height="30" rx="4" fill="#FF6E86"/>
+        <rect x="57" y="128" width="10" height="30" rx="4" fill="#E85A72"/>
+        <!-- Corpo -->
+        <rect x="32" y="82" width="44" height="52" rx="14" fill="#FF6E86"/>
+        <!-- Braccia -->
+        <path d="M36,90 Q22,98 24,114" fill="none" stroke="#FF6E86" stroke-width="9" stroke-linecap="round"/>
+        <path d="M72,90 Q86,98 84,114" fill="none" stroke="#FF6E86" stroke-width="9" stroke-linecap="round"/>
+        <!-- Collo -->
+        <rect x="49" y="72" width="10" height="14" rx="4" fill="#FCD9A0"/>
+        <!-- Testa -->
+        <circle cx="54" cy="60" r="22" fill="#FCD9A0"/>
+        <!-- Capelli -->
+        <path d="M32,56 Q32,36 54,36 Q76,36 76,56 Q74,44 54,44 Q34,44 32,56Z" fill="#5B3A29"/>
+        <path d="M31,52 Q27,64 34,74" fill="none" stroke="#5B3A29" stroke-width="7" stroke-linecap="round"/>
+        <path d="M77,52 Q81,64 74,74" fill="none" stroke="#5B3A29" stroke-width="7" stroke-linecap="round"/>
+        <!-- Occhi -->
+        <circle cx="46" cy="60" r="4" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="47" cy="59" r="1.8" fill="#2A2338"/>
+        <circle cx="62" cy="60" r="4" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="63" cy="59" r="1.8" fill="#2A2338"/>
+        <!-- Sorriso -->
+        <path d="M46,70 Q54,77 62,70" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
       </g>
+
+      <!-- Organigramma centrale -->
+      <g>
+        <!-- Scatola principale OT Consulting -->
+        <rect x="96" y="42" width="68" height="32" rx="8" fill="#17B8A6" opacity="0.95">
+          <animate attributeName="opacity" values="0.85;1;0.85" dur="2.5s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        </rect>
+        <text x="130" y="55" font-size="8.5" font-weight="700" text-anchor="middle" fill="#fff" font-family="Fredoka, sans-serif">OT</text>
+        <text x="130" y="68" font-size="7" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.88)" font-family="Fredoka, sans-serif">Consulting</text>
+        <!-- Linea centrale verticale -->
+        <line x1="130" y1="74" x2="130" y2="92" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
+        <!-- Linea orizzontale -->
+        <line x1="96" y1="92" x2="164" y2="92" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
+        <!-- Tre rami verso il basso -->
+        <line x1="96" y1="92" x2="96" y2="108" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
+        <line x1="130" y1="92" x2="130" y2="108" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
+        <line x1="164" y1="92" x2="164" y2="108" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
+        <!-- Box figlio sinistro -->
+        <rect x="76" y="108" width="40" height="22" rx="5" fill="#17B8A6" opacity="0.22"/>
+        <rect x="76" y="108" width="40" height="22" rx="5" fill="none" stroke="#17B8A6" stroke-width="1.5" opacity="0.55"/>
+        <!-- Box figlio centrale -->
+        <rect x="110" y="108" width="40" height="22" rx="5" fill="#17B8A6" opacity="0.22"/>
+        <rect x="110" y="108" width="40" height="22" rx="5" fill="none" stroke="#17B8A6" stroke-width="1.5" opacity="0.55"/>
+        <!-- Box figlio destro -->
+        <rect x="144" y="108" width="40" height="22" rx="5" fill="#17B8A6" opacity="0.22"/>
+        <rect x="144" y="108" width="40" height="22" rx="5" fill="none" stroke="#17B8A6" stroke-width="1.5" opacity="0.55"/>
+        <!-- Stelline decorative -->
+        <circle cx="110" cy="28" r="3" fill="#FFB648" opacity="0">
+          <animate attributeName="opacity" values="0;0.9;0" dur="2.2s" begin="0s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="150" cy="24" r="2" fill="#FFB648" opacity="0">
+          <animate attributeName="opacity" values="0;0.9;0" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+
+      <!-- Persona destra – teal -->
       <g class="chm-walk-b">
-        <rect x="142" y="50" width="52" height="62" rx="16" fill="hsl(195,70%,93%)" stroke="hsl(195,60%,50%)" stroke-width="4"/>
-        <rect x="158" y="38" width="20" height="16" rx="5" fill="hsl(195,60%,50%)"/>
-        <circle cx="158" cy="76" r="4.5" fill="#2A2338"/><circle cx="178" cy="76" r="4.5" fill="#2A2338"/>
-        <path d="M158,90 Q168,98 178,90" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-        <rect x="150" y="108" width="10" height="26" rx="3" fill="hsl(195,60%,50%)"/>
-        <rect x="176" y="108" width="10" height="26" rx="3" fill="hsl(195,60%,40%)"/>
-        <rect x="194" y="90" width="16" height="14" rx="3" fill="#8B5E34"/>
+        <!-- Gambe -->
+        <rect x="193" y="128" width="10" height="30" rx="4" fill="#17B8A6"/>
+        <rect x="209" y="128" width="10" height="30" rx="4" fill="#11988A"/>
+        <!-- Corpo -->
+        <rect x="184" y="82" width="44" height="52" rx="14" fill="#17B8A6"/>
+        <!-- Braccia -->
+        <path d="M188,90 Q174,98 176,114" fill="none" stroke="#17B8A6" stroke-width="9" stroke-linecap="round"/>
+        <path d="M224,90 Q238,98 236,114" fill="none" stroke="#17B8A6" stroke-width="9" stroke-linecap="round"/>
+        <!-- Collo -->
+        <rect x="201" y="72" width="10" height="14" rx="4" fill="#FCD9A0"/>
+        <!-- Testa -->
+        <circle cx="206" cy="60" r="22" fill="#FCD9A0"/>
+        <!-- Capelli -->
+        <path d="M184,56 Q184,36 206,36 Q228,36 228,56 Q226,44 206,44 Q186,44 184,56Z" fill="#F4C542"/>
+        <path d="M183,52 Q179,64 186,74" fill="none" stroke="#F4C542" stroke-width="7" stroke-linecap="round"/>
+        <path d="M229,52 Q233,64 226,74" fill="none" stroke="#F4C542" stroke-width="7" stroke-linecap="round"/>
+        <!-- Occhi -->
+        <circle cx="198" cy="60" r="4" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="199" cy="59" r="1.8" fill="#2A2338"/>
+        <circle cx="214" cy="60" r="4" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="215" cy="59" r="1.8" fill="#2A2338"/>
+        <!-- Sorriso -->
+        <path d="M198,70 Q206,77 214,70" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
       </g>
     </svg>`
   }
@@ -439,7 +511,7 @@ function chapterMascotSvgMarkup(type: MascotType): string {
 }
 
 export function ChapterMascot({ type }: { type: MascotType }) {
-  const isLarge = type === 'timeline'
+  const isLarge = type === 'timeline' || type === 'commute'
   return (
     <div
       className={`chapter-mascot-stage${isLarge ? ' large' : ''}`}

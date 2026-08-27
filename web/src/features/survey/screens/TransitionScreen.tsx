@@ -62,7 +62,7 @@ export function TransitionScreen({ onContinue, onBack }: { onContinue: () => voi
         <path d="M0 15 L220 15" stroke="#17B8A6" strokeWidth={2} fill="none" opacity={0.8} />
       </svg>
       <button className="btn cool" onClick={onContinue}>
-        Continua in anonimato
+        Continua
       </button>
       <button className="btn ghost" onClick={onBack} style={{ marginTop: 8 }}>
         Indietro
