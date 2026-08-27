@@ -195,7 +195,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
 // ─── Step 2: Name input ───────────────────────────────────────────────────────
 
-function Step2({ onNext }: { onNext: (nome: string, cognome: string) => void }) {
+function Step2({ onNext, onBack }: { onNext: (nome: string, cognome: string) => void; onBack: () => void }) {
   const [nome, setNome] = useState('')
   const [cognome, setCognome] = useState('')
 
@@ -215,7 +215,7 @@ function Step2({ onNext }: { onNext: (nome: string, cognome: string) => void }) 
       <div className="ob-step2-fig-area">
         <FigMan className="ob-fig-man" />
         <div className="ob-speech-bubble">
-          Questa info è riservata solo a noi HR, ci aiuterà per il tuo momento di ascolto one to one.
+          Esclusivamente HR avrà accesso a queste informazioni. I manager avranno solo una panoramica generale con dati aggregati delle BU e team.
         </div>
       </div>
 
@@ -230,6 +230,9 @@ function Step2({ onNext }: { onNext: (nome: string, cognome: string) => void }) 
         </div>
         <button className="btn ob-btn-start" type="submit" disabled={!valid}>
           Incominciamo!
+        </button>
+        <button className="btn ghost ob-btn-back" type="button" onClick={onBack}>
+          Indietro
         </button>
       </form>
     </div>
@@ -289,7 +292,7 @@ function OnboardingContent({ onConfirm, onClose }: Props) {
     <div className="ob-overlay">
       <div className="ob-card">
         {step === 1 && <Step1 onNext={() => setStep(2)} onBack={onClose} />}
-        {step === 2 && <Step2 onNext={(n, c) => { setNome(n); setCognome(c); setStep(3) }} />}
+        {step === 2 && <Step2 onNext={(n, c) => { setNome(n); setCognome(c); setStep(3) }} onBack={() => setStep(1)} />}
       </div>
     </div>
   )
