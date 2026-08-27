@@ -23,8 +23,8 @@ function faceMarkup(cx: number, cy: number, bucket: MascotBucket): string {
     <circle cx="${rx + 2.5}" cy="${ey - 3.5}" r="0.9" fill="#fff"/>
     <path d="M${cx - 13},${by - 3} Q${lx},${by - 8} ${lx + 8},${by - 3}" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
     <path d="M${rx - 8},${by - 3} Q${rx},${by - 8} ${cx + 13},${by - 3}" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M${cx - 12},${my} Q${cx},${my + 13} ${cx + 12},${my} Q${cx},${my + 6} ${cx - 12},${my}Z" fill="#B8342E" stroke="#2A2338" stroke-width="2"/>
-    <path d="M${cx - 7},${my + 3} Q${cx},${my + 6} ${cx + 7},${my + 3}" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M${cx - 13},${my - 1} Q${cx},${my + 12} ${cx + 13},${my - 1} Q${cx + 7},${my + 4} ${cx - 7},${my + 4}Z" fill="#FFCEC4" stroke="#2A2338" stroke-width="1.8"/>
+    <path d="M${cx - 13},${my - 1} Q${cx - 5},${my + 2} ${cx + 13},${my - 1}" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>
   `
   if (bucket === 'good') return `
     <circle cx="${lx}" cy="${ey}" r="4.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
@@ -43,19 +43,23 @@ function faceMarkup(cx: number, cy: number, bucket: MascotBucket): string {
     <line x1="${cx - 9}" y1="${my}" x2="${cx + 9}" y2="${my}" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
   `
   if (bucket === 'lowmid') return `
-    <ellipse cx="${lx}" cy="${ey}" rx="5" ry="3" fill="#2A2338"/>
-    <ellipse cx="${rx}" cy="${ey}" rx="5" ry="3" fill="#2A2338"/>
-    <path d="M${lx - 4},${by} L${lx + 2},${by + 3}" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
-    <path d="M${rx + 4},${by} L${rx - 2},${by + 3}" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
-    <path d="M${cx - 10},${my} Q${cx},${my - 3} ${cx + 10},${my}" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="${lx}" cy="${ey}" rx="4.5" ry="3.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+    <ellipse cx="${lx}" cy="${ey + 1}" rx="2" ry="1.8" fill="#2A2338"/>
+    <ellipse cx="${rx}" cy="${ey}" rx="4.5" ry="3.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+    <ellipse cx="${rx}" cy="${ey + 1}" rx="2" ry="1.8" fill="#2A2338"/>
+    <path d="M${lx - 3},${by + 1} L${lx + 3},${by + 4}" stroke="#2A2338" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M${rx + 3},${by + 1} L${rx - 3},${by + 4}" stroke="#2A2338" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M${cx - 9},${my} Q${cx},${my - 2} ${cx + 9},${my}" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
   `
-  // low
+  // low — occhi mezzi chiusi (stanchi ma non spaventosi), sopracciglia leggermente abbassate, piccola smorfia
   return `
-    <line x1="${lx - 4}" y1="${ey}" x2="${lx + 4}" y2="${ey}" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="${rx - 4}" y1="${ey}" x2="${rx + 4}" y2="${ey}" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M${lx - 3},${by + 1} L${lx + 3},${by + 4}" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
-    <path d="M${rx + 3},${by + 1} L${rx - 3},${by + 4}" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
-    <path d="M${cx - 10},${my} Q${cx},${my - 7} ${cx + 10},${my}" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="${lx}" cy="${ey}" rx="4.5" ry="3.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+    <ellipse cx="${lx}" cy="${ey + 1}" rx="2" ry="1.6" fill="#2A2338"/>
+    <ellipse cx="${rx}" cy="${ey}" rx="4.5" ry="3.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+    <ellipse cx="${rx}" cy="${ey + 1}" rx="2" ry="1.6" fill="#2A2338"/>
+    <path d="M${lx - 3},${by + 2} L${lx + 3},${by + 5}" stroke="#2A2338" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M${rx + 3},${by + 2} L${rx - 3},${by + 5}" stroke="#2A2338" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M${cx - 9},${my} Q${cx},${my - 5} ${cx + 9},${my}" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
   `
 }
 
@@ -119,6 +123,8 @@ function twoFiguresSvg(level: number): string {
 function Thermometer({ level, onChange }: { level: number; onChange: (l: number) => void }) {
   const color = LEVEL_COLORS[level]
   const fillPercent = (level / 10) * 100
+  // Ball center at (level/10)*260 from bottom, clamped so ball stays inside tube
+  const ballBottom = Math.max(3, Math.min(238, (level / 10) * 260 - 11))
 
   return (
     <div className="therm-wrap">
@@ -140,11 +146,23 @@ function Thermometer({ level, onChange }: { level: number; onChange: (l: number)
       </div>
 
       <div className="therm-tube-wrap">
-        <div className="therm-tube">
+        {/* Outer container — tube outline always fully visible */}
+        <div className="therm-outer">
+          {/* Fill clipped inside */}
+          <div className="therm-bg">
+            <div
+              className="therm-fill"
+              style={{ height: `${fillPercent}%`, background: `linear-gradient(to top, ${LEVEL_COLORS[1]}, ${color})` }}
+            />
+          </div>
+          {/* Permanent border overlay — never hidden */}
+          <div className="therm-border" />
+          {/* Moving ball indicator */}
           <div
-            className="therm-fill"
-            style={{ height: `${fillPercent}%`, background: `linear-gradient(to top, ${LEVEL_COLORS[1]}, ${color})` }}
+            className="therm-ball"
+            style={{ bottom: ballBottom, background: color }}
           />
+          {/* Click hit areas */}
           {Array.from({ length: 10 }, (_, i) => {
             const l = 10 - i
             return (
@@ -152,6 +170,7 @@ function Thermometer({ level, onChange }: { level: number; onChange: (l: number)
                 key={l}
                 type="button"
                 className="therm-hit"
+                style={{ top: `${i * 10}%`, height: '10%' }}
                 onClick={() => onChange(l)}
                 aria-label={`Livello ${l}`}
               />

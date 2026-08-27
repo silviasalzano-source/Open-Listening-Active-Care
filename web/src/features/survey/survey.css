@@ -103,29 +103,27 @@
 .therm-num-btn.active { color: #FFB648; }
 .therm-num-btn:hover { transform: scale(1.18); }
 .therm-tube-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; }
-.therm-tube { position: relative; width: 28px; height: 260px; border-radius: 20px 20px 0 0; background: rgba(42,35,56,0.08); overflow: hidden; border: 2px solid rgba(42,35,56,0.12); border-bottom: none; }
-.therm-fill { position: absolute; bottom: 0; left: 0; right: 0; border-radius: 0; transition: height .35s cubic-bezier(.34,1.28,.64,1), background .35s ease; }
-.therm-hit { position: absolute; left: 0; right: 0; background: transparent; border: none; cursor: pointer; }
-.therm-hit:nth-child(2)  { top:   0%;   height: 10%; }
-.therm-hit:nth-child(3)  { top:  10%;   height: 10%; }
-.therm-hit:nth-child(4)  { top:  20%;   height: 10%; }
-.therm-hit:nth-child(5)  { top:  30%;   height: 10%; }
-.therm-hit:nth-child(6)  { top:  40%;   height: 10%; }
-.therm-hit:nth-child(7)  { top:  50%;   height: 10%; }
-.therm-hit:nth-child(8)  { top:  60%;   height: 10%; }
-.therm-hit:nth-child(9)  { top:  70%;   height: 10%; }
-.therm-hit:nth-child(10) { top:  80%;   height: 10%; }
-.therm-hit:nth-child(11) { top:  90%;   height: 10%; }
-.therm-bulb { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(42,35,56,0.12); transition: background .35s ease; margin-top: -2px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+/* Outer wrapper — position:relative, overflow:visible so ball can show at edges */
+.therm-outer { position: relative; width: 28px; height: 260px; flex-shrink: 0; overflow: visible; }
+/* Background + clipped fill */
+.therm-bg { position: absolute; inset: 0; border-radius: 14px 14px 0 0; background: rgba(42,35,56,0.07); overflow: hidden; }
+.therm-fill { position: absolute; bottom: 0; left: 0; right: 0; transition: height .35s cubic-bezier(.34,1.28,.64,1), background .35s ease; }
+/* Permanent border overlay — always fully visible regardless of fill level */
+.therm-border { position: absolute; inset: 0; border-radius: 14px 14px 0 0; border: 2px solid rgba(42,35,56,0.18); border-bottom: none; pointer-events: none; z-index: 2; }
+/* Moving ball indicator */
+.therm-ball { position: absolute; width: 22px; height: 22px; border-radius: 50%; left: 3px; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.22); transition: bottom .35s cubic-bezier(.34,1.28,.64,1), background .35s ease; z-index: 3; }
+/* Hit areas — z-index above ball so clicks are captured */
+.therm-hit { position: absolute; left: 0; right: 0; background: transparent; border: none; cursor: pointer; z-index: 4; }
+.therm-bulb { width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(42,35,56,0.18); transition: background .35s ease; margin-top: -2px; box-shadow: 0 4px 14px rgba(0,0,0,0.14); }
 /* Info panel */
 .therm-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 .therm-level-num { font-family: var(--font-fredoka), sans-serif; font-size: 52px; font-weight: 700; line-height: 1; transition: color .3s ease; }
 .therm-level-num span { font-size: 22px; opacity: 0.6; }
-.therm-msg { font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.6; }
+.therm-msg { font-size: 16px; color: var(--ink); font-weight: 700; line-height: 1.5; }
 @media (max-width: 480px) {
   .therm-layout { flex-direction: column; align-items: center; }
   .therm-figures { flex: none; width: 180px; }
-  .therm-tube { height: 200px; }
+  .therm-outer { height: 200px; }
   .therm-numbers-left .therm-num-btn { height: 20px; }
   .therm-level-num { font-size: 40px; }
 }
