@@ -207,7 +207,10 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
 
   return (
     <div className="survey-screen chapterset">
-      <div className="q-eyebrow">{def.title}</div>
+      <div
+        className="q-eyebrow cs-chapter-eyebrow"
+        style={{ background: CHAPTER_COLORS[def.mascot].bg, color: CHAPTER_COLORS[def.mascot].text }}
+      >{def.title}</div>
       {questions.map((q, i) => {
         const showGroup = q.group && q.group !== questions[i - 1]?.group
         return (
