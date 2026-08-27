@@ -152,8 +152,8 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           <div className="ob-dot ob-dot-amber" />
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Survey nominativa</span></div>
-            <p className="ob-section-body">Vogliamo conoscere il tuo livello di energia in OT e quello del tuo team.</p>
-            <p className="ob-section-body ob-section-body-sub">I dati, in questa sezione, sono associati al tuo nome e cognome, utili per il momento one to one con HR.</p>
+            <p className="ob-section-body">Vogliamo conoscere il tuo <strong>livello di energia</strong> in OT e quello del tuo team.</p>
+            <p className="ob-section-body ob-section-body-sub">I dati, in questa sezione, sono <strong>associati al tuo nome e cognome</strong>, utili per il momento one to one con HR.</p>
           </div>
         </div>
 
