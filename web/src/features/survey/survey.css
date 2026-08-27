@@ -338,7 +338,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* ── Chapter set screen ─────────────────────────────────────────────────── */
 .chapterset { display: flex; flex-direction: column; }
-.cs-group-label { display: flex; align-items: center; gap: 7px; margin: 20px 0 4px; font-family: var(--font-fredoka), sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; padding: 5px 12px; border-radius: 8px; align-self: flex-start; width: fit-content; }
+.cs-group-label { display: inline-flex; align-items: center; gap: 6px; margin: 20px 0 4px; font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; padding: 4px 12px; border-radius: 20px; max-width: 210px; overflow: hidden; white-space: nowrap; }
+.cs-group-label-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
 .cs-group-label:first-child { margin-top: 4px; }
 .cs-block { padding: 16px 0; border-bottom: 1px solid var(--card-border); }
 .cs-block:last-of-type { border-bottom: none; }

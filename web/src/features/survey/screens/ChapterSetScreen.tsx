@@ -235,7 +235,7 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
     <div className="survey-screen chapterset">
       <div
         className="q-eyebrow cs-chapter-eyebrow"
-        style={{ background: CHAPTER_COLORS[def.mascot].bg, color: CHAPTER_COLORS[def.mascot].text }}
+        style={{ background: 'linear-gradient(135deg, #17B8A6, #2E86DE)', color: '#fff' }}
       >{def.title}</div>
       {questions.map((q, i) => {
         const showGroup = q.group && q.group !== questions[i - 1]?.group
@@ -244,12 +244,12 @@ export function ChapterSetScreen({ def, questions, answers, onAnswer, onBack, on
             {showGroup && (
               <div
                 className="cs-group-label"
-                style={{ background: CHAPTER_COLORS[def.mascot].bg, color: CHAPTER_COLORS[def.mascot].text }}
+                style={{ background: 'linear-gradient(135deg, #17B8A6, #2E86DE)', color: '#fff' }}
               >
                 {groupIcon(q.group ?? '') && (
-                  <span dangerouslySetInnerHTML={{ __html: groupIcon(q.group ?? '') ?? '' }} style={{ display: 'flex', alignItems: 'center' }} />
+                  <span dangerouslySetInnerHTML={{ __html: groupIcon(q.group ?? '') ?? '' }} style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} />
                 )}
-                {stripEmoji(q.group ?? '')}
+                <span className="cs-group-label-text">{stripEmoji(q.group ?? '')}</span>
               </div>
             )}
             <QuestionBlock q={q} answers={answers} onAnswer={onAnswer} />
