@@ -257,7 +257,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .transition-body strong { color: var(--teal); font-weight: 700; }
 .microcopy { font-size: 12px; color: rgba(42, 35, 56, 0.45); max-width: 290px; line-height: 1.5; }
 
-.result-screen { justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 0 6px; }
+.result-screen { justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 16px 6px 0; }
 .result-screen h2 { font-size: 21px; margin: 0; color: var(--ink); }
 .result-title-brand { font-family: var(--font-fredoka), sans-serif; font-weight: 700; font-size: 26px; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .result-card { background: var(--card); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 0 0 22px; max-width: 330px; width: 100%; text-align: left; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
@@ -275,7 +275,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .result-causa-section { padding: 0 22px; margin-top: -2px; }
 .result-causa-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 8px; }
 .result-causa-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.result-causa-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(255,182,72,0.15); border: 1.5px solid rgba(255,182,72,0.35); border-radius: 100px; padding: 5px 12px; }
+.result-causa-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(255,182,72,0.15); border: 1.5px solid rgba(255,182,72,0.35); border-radius: 100px; padding: 5px 12px 5px 8px; }
+.result-causa-icon { width: 26px; height: 26px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.result-causa-icon svg { width: 26px; height: 26px; }
 @keyframes calmPulse { 0%, 100% { transform: scale(0.92); opacity: 0.55; } 50% { transform: scale(1.08); opacity: 0.9; } }
 .confetti-piece { position: absolute; top: -4px; font-size: 15px; opacity: 0; animation: confettiFall 1.7s ease-in forwards; pointer-events: none; z-index: 2; }
 @keyframes confettiFall { 0% { transform: translateY(-8px) rotate(0deg); opacity: 0; } 12% { opacity: 1; } 100% { transform: translateY(150px) rotate(220deg); opacity: 0; } }

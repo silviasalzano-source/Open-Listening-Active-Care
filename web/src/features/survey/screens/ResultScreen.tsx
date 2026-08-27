@@ -3,16 +3,8 @@
 import { useEffect, useState } from 'react'
 import { mascotBucket } from '../flow'
 import { ResultFigure } from './ResultFigure'
+import { CausaSvg } from './CausaIcons'
 import type { Phase1Answers } from '../types'
-
-const CAUSA_ICONS: Record<string, string> = {
-  'Carico di lavoro': '🔋',
-  'Relazioni con colleghi': '🤝',
-  'Rapporto con il/la responsabile': '🎯',
-  'Crescita e sviluppo professionale': '🌱',
-  'Motivi personali/extra-lavorativi': '🏠',
-  'Strumenti e organizzazione': '🛠️',
-}
 
 const BUCKET_PHRASES: Record<string, { pre: string; key: string; post: string }> = {
   low:    { pre: 'Oggi senti la batteria', key: 'piuttosto scarica', post: '' },
@@ -82,7 +74,7 @@ export function ResultScreen({
     <div className="survey-screen result-screen">
       {/* Titolo FUORI dal box */}
       <h2 className={`result-title-brand result-reveal${revealed.title ? ' show' : ''}`}>
-        My Energy Battery
+        My Energy
       </h2>
 
       {/* Card: figura animata + testo */}
@@ -122,10 +114,10 @@ export function ResultScreen({
               {causa.map((c) => {
                 const isAltro = c === 'Altro'
                 const label = isAltro ? (causaAltro || 'Altro') : c
-                const icon = CAUSA_ICONS[c] ?? '💬'
                 return (
                   <span key={c} className="result-causa-chip">
-                    {icon} {label}
+                    <span className="result-causa-icon"><CausaSvg label={c} /></span>
+                    {label}
                   </span>
                 )
               })}
