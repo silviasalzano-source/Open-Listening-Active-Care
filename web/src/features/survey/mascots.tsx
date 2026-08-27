@@ -241,39 +241,70 @@ export function Q1IntroMascot({ variant }: { variant: 'team' | 'anno' }) {
 }
 
 export function FocusMascot() {
-  const svg = `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-    <!-- Cavo dalla presa alla batteria -->
-    <path d="M34,110 Q34,130 70,130 Q90,130 90,115" stroke="#8B7FA8" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <!-- Presa elettrica -->
-    <rect x="10" y="88" width="48" height="36" rx="10" fill="#E8E4F2" stroke="#8B7FA8" stroke-width="3"/>
-    <rect x="24" y="96" width="6" height="12" rx="2" fill="#8B7FA8"/>
-    <rect x="38" y="96" width="6" height="12" rx="2" fill="#8B7FA8"/>
-    <!-- Batteria corpo -->
-    <rect x="70" y="42" width="72" height="88" rx="18" fill="hsl(45,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="4"/>
-    <!-- Terminale batteria -->
-    <rect x="96" y="30" width="20" height="14" rx="4" fill="var(--amber,#FFB648)"/>
-    <!-- Fill batteria (parziale) -->
-    <rect x="74" y="96" width="64" height="30" rx="0" fill="hsl(45,80%,78%)" opacity="0.5" clip-path="url(#batt-clip)"/>
-    <clipPath id="batt-clip"><rect x="70" y="42" width="72" height="88" rx="18"/></clipPath>
-    <!-- Barre energia interne -->
-    <rect x="82" y="100" width="10" height="22" rx="3" fill="var(--amber,#FFB648)" opacity="0.7"/>
-    <rect x="97" y="94" width="10" height="28" rx="3" fill="var(--amber,#FFB648)" opacity="0.85"/>
-    <rect x="112" y="88" width="10" height="34" rx="3" fill="var(--amber,#FFB648)"/>
-    <!-- Occhi (sguardo in su, pensieroso) -->
-    <circle cx="92" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/>
-    <circle cx="92" cy="68" r="3" fill="#2A2338"/>
-    <circle cx="118" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/>
-    <circle cx="118" cy="68" r="3" fill="#2A2338"/>
-    <!-- Sopracciglia pensierose -->
-    <path d="M84,62 Q91,58 98,62" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M110,62 Q117,58 124,62" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Bocca neutra / pensierosa -->
-    <path d="M94,84 Q106,88 118,84" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Bubble pensiero -->
-    <circle cx="144" cy="54" r="3" fill="#C9C4D6" class="q1i-think-dot" style="animation-delay:0s"/>
-    <circle cx="154" cy="42" r="5" fill="#C9C4D6" class="q1i-think-dot" style="animation-delay:0.2s"/>
-    <ellipse cx="168" cy="28" rx="16" ry="12" fill="#fff" stroke="#C9C4D6" stroke-width="2" class="q1i-think-bubble"/>
-    <text x="168" y="33" font-size="13" text-anchor="middle" fill="#8B7FA8" font-family="Fredoka, sans-serif" class="q1i-think-bubble">···</text>
+  const svg = `<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- Ombra pavimento -->
+    <ellipse cx="130" cy="172" rx="46" ry="5" fill="rgba(42,35,56,0.07)"/>
+
+    <!-- Corpo che respira piano -->
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0,0;0,-1.5;0,0" dur="3.2s" repeatCount="indefinite" calcMode="ease-in-out"/>
+
+      <!-- Gambe -->
+      <rect x="116" y="138" width="13" height="24" rx="5" fill="#2A2338"/>
+      <rect x="135" y="138" width="13" height="24" rx="5" fill="#2A2338"/>
+
+      <!-- Corpo (ambra) -->
+      <rect x="104" y="86" width="54" height="58" rx="16" fill="var(--amber,#FFB648)"/>
+
+      <!-- Braccio destro (pende) -->
+      <path d="M158,100 Q172,112 170,128" fill="none" stroke="var(--amber,#FFB648)" stroke-width="10" stroke-linecap="round"/>
+
+      <!-- Braccio sinistro (piegato verso il mento) -->
+      <path d="M104,102 Q82,100 76,84" fill="none" stroke="var(--amber,#FFB648)" stroke-width="10" stroke-linecap="round"/>
+      <!-- Mano al mento -->
+      <circle cx="74" cy="80" r="8" fill="#FCD9A0"/>
+
+      <!-- Testa -->
+      <circle cx="131" cy="60" r="27" fill="#FCD9A0"/>
+
+      <!-- Capelli (castani scuri) -->
+      <path d="M104,54 Q104,30 131,30 Q158,30 158,54 Q155,38 131,38 Q107,38 104,54Z" fill="#5C3A1E"/>
+      <path d="M103,50 Q100,63 108,73" fill="none" stroke="#5C3A1E" stroke-width="7" stroke-linecap="round"/>
+      <path d="M159,50 Q162,63 154,73" fill="none" stroke="#5C3A1E" stroke-width="7" stroke-linecap="round"/>
+
+      <!-- Sopracciglia (espressione pensierosa: sinistra alzata) -->
+      <path d="M118,49 Q124,46 130,48" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M132,47 Q138,43 145,46" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Occhi che guardano in alto a sinistra -->
+      <circle cx="123" cy="61" r="6" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+      <circle cx="121" cy="59" r="2.5" fill="#2A2338"/>
+      <circle cx="120" cy="58" r="1" fill="#fff"/>
+
+      <circle cx="141" cy="60" r="6" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+      <circle cx="139" cy="58" r="2.5" fill="#2A2338"/>
+      <circle cx="138" cy="57" r="1" fill="#fff"/>
+
+      <!-- Bocca socchiusa (pensierosa) -->
+      <path d="M122,74 Q131,77 140,74" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Puntini bolla pensiero (appaiono in sequenza verso il bubble) -->
+    <circle cx="66" cy="68" r="3" fill="#C9C4D6" opacity="0">
+      <animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.25;0.65;1" dur="2s" begin="0s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="2;3.5;2" dur="2s" begin="0s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="55" cy="52" r="5" fill="#C9C4D6" opacity="0">
+      <animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.3;0.65;1" dur="2s" begin="0.35s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="3;5.5;3" dur="2s" begin="0.35s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Bolla pensiero -->
+    <g opacity="0">
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.4;0.75;1" dur="2s" begin="0.65s" repeatCount="indefinite"/>
+      <ellipse cx="36" cy="35" rx="22" ry="17" fill="#fff" stroke="#C9C4D6" stroke-width="2.5"/>
+      <text x="36" y="41" font-size="20" text-anchor="middle" fill="var(--amber,#E88A00)" font-family="Fredoka, sans-serif" font-weight="600">?</text>
+    </g>
   </svg>`
   return <div className="q1intro-mascot" dangerouslySetInnerHTML={{ __html: svg }} />
 }
