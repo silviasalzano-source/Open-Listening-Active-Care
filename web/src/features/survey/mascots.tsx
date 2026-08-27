@@ -337,38 +337,30 @@ function chapterMascotSvgMarkup(type: MascotType): string {
         <path d="M46,70 Q54,77 62,70" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
       </g>
 
-      <!-- Organigramma centrale -->
+      <!-- Palazzo OT Consulting -->
       <g>
-        <!-- Scatola principale OT Consulting -->
-        <rect x="96" y="42" width="68" height="32" rx="8" fill="#17B8A6" opacity="0.95">
-          <animate attributeName="opacity" values="0.85;1;0.85" dur="2.5s" repeatCount="indefinite" calcMode="ease-in-out"/>
-        </rect>
-        <text x="130" y="55" font-size="8.5" font-weight="700" text-anchor="middle" fill="#fff" font-family="Fredoka, sans-serif">OT</text>
-        <text x="130" y="68" font-size="7" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.88)" font-family="Fredoka, sans-serif">Consulting</text>
-        <!-- Linea centrale verticale -->
-        <line x1="130" y1="74" x2="130" y2="92" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
-        <!-- Linea orizzontale -->
-        <line x1="96" y1="92" x2="164" y2="92" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
-        <!-- Tre rami verso il basso -->
-        <line x1="96" y1="92" x2="96" y2="108" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
-        <line x1="130" y1="92" x2="130" y2="108" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
-        <line x1="164" y1="92" x2="164" y2="108" stroke="#2A2338" stroke-width="1.5" opacity="0.25"/>
-        <!-- Box figlio sinistro -->
-        <rect x="76" y="108" width="40" height="22" rx="5" fill="#17B8A6" opacity="0.22"/>
-        <rect x="76" y="108" width="40" height="22" rx="5" fill="none" stroke="#17B8A6" stroke-width="1.5" opacity="0.55"/>
-        <!-- Box figlio centrale -->
-        <rect x="110" y="108" width="40" height="22" rx="5" fill="#17B8A6" opacity="0.22"/>
-        <rect x="110" y="108" width="40" height="22" rx="5" fill="none" stroke="#17B8A6" stroke-width="1.5" opacity="0.55"/>
-        <!-- Box figlio destro -->
-        <rect x="144" y="108" width="40" height="22" rx="5" fill="#17B8A6" opacity="0.22"/>
-        <rect x="144" y="108" width="40" height="22" rx="5" fill="none" stroke="#17B8A6" stroke-width="1.5" opacity="0.55"/>
-        <!-- Stelline decorative -->
-        <circle cx="110" cy="28" r="3" fill="#FFB648" opacity="0">
-          <animate attributeName="opacity" values="0;0.9;0" dur="2.2s" begin="0s" repeatCount="indefinite"/>
+        <!-- Ombra palazzo -->
+        <ellipse cx="130" cy="158" rx="28" ry="4" fill="rgba(42,35,56,0.09)"/>
+        <!-- Corpo edificio -->
+        <rect x="100" y="82" width="60" height="72" rx="3" fill="#EAF8F6" stroke="#17B8A6" stroke-width="2"/>
+        <!-- Tetto a triangolo -->
+        <polygon points="95,84 130,58 165,84" fill="#17B8A6"/>
+        <!-- Finestre riga 1 -->
+        <rect x="109" y="94" width="13" height="14" rx="2" fill="#17B8A6" opacity="0.5"/>
+        <rect x="138" y="94" width="13" height="14" rx="2" fill="#17B8A6" opacity="0.5"/>
+        <!-- Finestre riga 2 -->
+        <rect x="109" y="116" width="13" height="14" rx="2" fill="#17B8A6" opacity="0.5"/>
+        <rect x="138" y="116" width="13" height="14" rx="2" fill="#17B8A6" opacity="0.5"/>
+        <!-- Porta -->
+        <rect x="121" y="134" width="18" height="20" rx="3" fill="#17B8A6"/>
+        <!-- Logo OT sul tetto: cerchio rosso con buco -->
+        <circle cx="130" cy="68" r="9" fill="#CC2200">
+          <animate attributeName="opacity" values="0.85;1;0.85" dur="2.4s" repeatCount="indefinite" calcMode="ease-in-out"/>
         </circle>
-        <circle cx="150" cy="24" r="2" fill="#FFB648" opacity="0">
-          <animate attributeName="opacity" values="0;0.9;0" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
-        </circle>
+        <circle cx="130" cy="68" r="5" fill="white"/>
+        <!-- Targhetta OT Consulting -->
+        <rect x="104" y="86" width="52" height="14" rx="2" fill="white" opacity="0.9"/>
+        <text x="130" y="97" font-size="6.5" font-weight="700" text-anchor="middle" fill="#17B8A6" font-family="Fredoka, sans-serif">OT Consulting</text>
       </g>
 
       <!-- Persona destra – teal -->
