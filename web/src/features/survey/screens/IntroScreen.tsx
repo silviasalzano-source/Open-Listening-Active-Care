@@ -18,7 +18,7 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
         <span className="intro-db-label">Dashboard HR</span>
       </button>
       {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
-      <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" />
+      <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" aria-hidden="false" />
       <div className="intro-badge">Open Listening · Active Care</div>
       <div className="battery-hero">
         <div className="battery-hero-fill" />

@@ -51,14 +51,14 @@
 .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--card-border); box-shadow: none; }
 .btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; transform: none; }
 
-.intro { justify-content: flex-start; align-items: center; text-align: center; min-height: 70vh; gap: 14px; position: relative; padding-top: 56px; }
+.intro { justify-content: flex-start; align-items: center; text-align: center; min-height: 70vh; gap: 20px; position: relative; padding-top: 76px; }
 .intro-badge { font-family: var(--font-fredoka), sans-serif; font-size: 22px; font-weight: 600; letter-spacing: 0.4px; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .intro h1 { font-size: 32px; line-height: 1.18; }
 .intro h1 span { background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .intro p { color: var(--ink); font-size: 16px; line-height: 1.6; max-width: 380px; font-weight: 500; }
 .intro p span { font-weight: 700; background: linear-gradient(90deg, #E88A00, var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.intro-logo { width: 160px; opacity: 0.9; margin-bottom: 6px; }
-.intro-db-btn { display: flex; flex-direction: row; align-items: center; gap: 6px; background: rgba(255,255,255,0.88); border: 1px solid rgba(42,35,56,0.10); border-radius: 100px; padding: 7px 14px; cursor: pointer; white-space: nowrap; position: absolute; top: 14px; left: 14px; box-shadow: 0 2px 10px rgba(42,35,56,0.08); backdrop-filter: blur(8px); transition: box-shadow .18s ease, transform .15s ease; }
+.intro-logo { width: 96px; opacity: 0.85; position: absolute; top: 16px; left: 16px; }
+.intro-db-btn { display: flex; flex-direction: row; align-items: center; gap: 6px; background: rgba(255,255,255,0.88); border: 1px solid rgba(42,35,56,0.10); border-radius: 100px; padding: 7px 14px; cursor: pointer; white-space: nowrap; position: absolute; top: 14px; right: 14px; box-shadow: 0 2px 10px rgba(42,35,56,0.08); backdrop-filter: blur(8px); transition: box-shadow .18s ease, transform .15s ease; }
 .intro-db-btn:hover { box-shadow: 0 6px 18px rgba(42,35,56,0.13); transform: translateY(-1px); }
 .intro-db-label { font-family: var(--font-fredoka), sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: #17B8A6; }
 /* batteria verticale con terminale in cima */
