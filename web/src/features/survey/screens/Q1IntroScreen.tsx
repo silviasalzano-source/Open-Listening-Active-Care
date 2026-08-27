@@ -5,12 +5,12 @@ import { Q1IntroMascot } from '../mascots'
 
 const CONTENT = {
   team: {
-    badge: '1 domanda su 4',
+    badge: '1ª domanda su 4',
     title: 'Ora ti chiediamo di concentrarti sul clima attuale del tuo team',
     desc: 'Pensa alle ultime settimane — le interazioni con i colleghi, l\'atmosfera, il ritmo di lavoro.',
   },
   anno: {
-    badge: '4 domanda su 4',
+    badge: '4ª domanda su 4',
     title: 'Ora ti chiediamo di concentrarti sul tuo ultimo anno',
     desc: 'Guarda indietro agli ultimi 12 mesi — come è cambiata la tua energia nel tempo.',
   },
