@@ -139,7 +139,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
             <div className="ob-bubble">Compilerai <strong>due survey!</strong></div>
           </div>
           <div className="ob-fig-pair ob-fig-pair-rev">
-            <div className="ob-bubble">Timing di compilazione circa <strong>10 minuti!</strong></div>
+            <div className="ob-bubble">Timing compilazione <strong>10 minuti!</strong></div>
             <FigBrunette className="ob-fig-svg" />
           </div>
         </div>
