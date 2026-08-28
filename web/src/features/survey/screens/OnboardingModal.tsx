@@ -79,10 +79,17 @@ function FigBrunette({ className }: { className?: string }) {
 function FigMan({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 96 122" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <defs>
+        <linearGradient id="figManBody" x1="0.2" y1="0" x2="0.8" y2="1">
+          <stop offset="0%" stopColor="#CEAFF2" />
+          <stop offset="45%" stopColor="#9E76D8" />
+          <stop offset="100%" stopColor="#7248BB" />
+        </linearGradient>
+      </defs>
       <ellipse cx="40" cy="119" rx="26" ry="4" fill="rgba(42,35,56,0.07)" />
-      <rect x="26" y="88" width="8" height="28" rx="3" fill="#2A2338" />
-      <rect x="42" y="88" width="8" height="28" rx="3" fill="#2A2338" />
-      <rect x="14" y="44" width="48" height="50" rx="14" fill="#9575CD" />
+      <rect x="26" y="88" width="8" height="28" rx="3" fill="#7248BB" />
+      <rect x="42" y="88" width="8" height="28" rx="3" fill="#7248BB" />
+      <rect x="14" y="44" width="48" height="50" rx="14" fill="url(#figManBody)" />
       <rect x="26" y="60" width="24" height="13" rx="3" fill="#fff" />
       <text x="38" y="71" fontSize="8" fontWeight="700" textAnchor="middle" fill="#2A2338" fontFamily="Fredoka, sans-serif">HR</text>
       <circle cx="38" cy="26" r="19" fill="#FCD9A0" />
@@ -99,7 +106,7 @@ function FigMan({ className }: { className?: string }) {
       <path d="M32,35 Q38,40 44,35" fill="none" stroke="#2A2338" strokeWidth="2" strokeLinecap="round" />
       {/* Pointing arm — extends right toward fields */}
       <g>
-        <path d="M62,64 Q80,60 84,68" fill="none" stroke="#9575CD" strokeWidth="9" strokeLinecap="round" />
+        <path d="M62,64 Q80,60 84,68" fill="none" stroke="#9265C8" strokeWidth="9" strokeLinecap="round" />
         <circle cx="86" cy="70" r="6" fill="#FCD9A0" />
         <rect x="83" y="63" width="5" height="10" rx="2.5" fill="#FCD9A0" />
         <animateTransform
