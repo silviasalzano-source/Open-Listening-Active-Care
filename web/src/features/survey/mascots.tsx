@@ -392,91 +392,226 @@ function chapterMascotSvgMarkup(type: MascotType): string {
     </svg>`
   }
   if (type === 'talk') {
-    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="66" width="46" height="58" rx="14" fill="hsl(28,80%,92%)" stroke="hsl(28,70%,55%)" stroke-width="4"/>
-      <circle cx="34" cy="92" r="4" fill="#2A2338"/><circle cx="52" cy="92" r="4" fill="#2A2338"/>
-      <path d="M34,104 Q43,109 52,104" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-      <rect x="154" y="66" width="46" height="58" rx="14" fill="hsl(210,80%,93%)" stroke="hsl(210,60%,55%)" stroke-width="4"/>
-      <circle cx="168" cy="92" r="4" fill="#2A2338"/><circle cx="186" cy="92" r="4" fill="#2A2338"/>
-      <path d="M168,104 Q177,109 186,104" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
-      <rect x="82" y="34" width="56" height="70" rx="18" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
-      <rect x="102" y="20" width="16" height="16" rx="5" fill="var(--teal,#17B8A6)"/>
-      <circle cx="98" cy="64" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="98" cy="64" r="3" fill="#2A2338"/>
-      <circle cx="122" cy="64" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="122" cy="64" r="3" fill="#2A2338"/>
-      <path d="M100,82 Q110,90 120,82" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-      <g class="chm-bubble"><ellipse cx="46" cy="46" rx="16" ry="12" fill="#fff" stroke="#2A2338" stroke-width="2"/><text x="46" y="50" font-size="13" text-anchor="middle">···</text></g>
-      <g class="chm-bubble" style="animation-delay:0.4s"><ellipse cx="176" cy="46" rx="16" ry="12" fill="#fff" stroke="#2A2338" stroke-width="2"/><text x="176" y="50" font-size="13" text-anchor="middle">!</text></g>
+    return `<svg viewBox="0 0 210 140" xmlns="http://www.w3.org/2000/svg">
+      <!-- Personaggio sinistra (amber) -->
+      <rect x="5" y="86" width="36" height="48" rx="12" fill="hsl(38,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="3.5"/>
+      <rect x="13" y="72" width="14" height="14" rx="5" fill="var(--amber,#FFB648)"/>
+      <circle cx="20" cy="100" r="3.5" fill="#2A2338"/><circle cx="34" cy="100" r="3.5" fill="#2A2338"/>
+      <path d="M20,110 Q27,115 34,110" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
+      <g class="chm-bubble">
+        <ellipse cx="16" cy="56" rx="15" ry="11" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
+        <polygon points="14,67 10,74 20,67" fill="#fff"/>
+        <text x="16" y="60" font-size="11" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">···</text>
+      </g>
+
+      <!-- Personaggio centro (teal, più grande) -->
+      <rect x="80" y="68" width="50" height="66" rx="17" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
+      <rect x="97" y="50" width="16" height="18" rx="5" fill="var(--teal,#17B8A6)"/>
+      <circle cx="97" cy="94" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="97" cy="94" r="2.8" fill="#2A2338"/>
+      <circle cx="113" cy="94" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="113" cy="94" r="2.8" fill="#2A2338"/>
+      <path d="M97,116 Q105,124 113,116" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+      <g class="chm-bubble" style="animation-delay:0.35s">
+        <ellipse cx="105" cy="30" rx="17" ry="13" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
+        <polygon points="100,43 105,50 110,43" fill="#fff"/>
+        <text x="105" y="35" font-size="14" text-anchor="middle" fill="var(--teal,#17B8A6)" font-family="Fredoka, sans-serif">♪</text>
+      </g>
+
+      <!-- Personaggio destra (coral) -->
+      <rect x="169" y="86" width="36" height="48" rx="12" fill="hsl(350,80%,93%)" stroke="var(--coral,#FF6E86)" stroke-width="3.5"/>
+      <rect x="177" y="72" width="14" height="14" rx="5" fill="var(--coral,#FF6E86)"/>
+      <circle cx="183" cy="100" r="3.5" fill="#2A2338"/><circle cx="197" cy="100" r="3.5" fill="#2A2338"/>
+      <path d="M183,110 Q190,115 197,110" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
+      <g class="chm-bubble" style="animation-delay:0.7s">
+        <ellipse cx="194" cy="56" rx="15" ry="11" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
+        <polygon points="186,67 190,74 196,67" fill="#fff"/>
+        <text x="194" y="61" font-size="14" text-anchor="middle" fill="var(--coral,#FF6E86)" font-family="Fredoka, sans-serif">!</text>
+      </g>
     </svg>`
   }
   if (type === 'growth') {
-    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20,132 Q55,118 58,94 Q60,70 96,60 Q132,50 138,30 Q142,18 172,20" fill="none" stroke="hsl(255,15%,85%)" stroke-width="14" stroke-linecap="round"/>
-      <path class="chm-road-dash" d="M20,132 Q55,118 58,94 Q60,70 96,60 Q132,50 138,30 Q142,18 172,20" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 10"/>
-      <circle cx="58" cy="94" r="4.5" fill="var(--teal,#17B8A6)"/>
-      <circle cx="96" cy="60" r="4.5" fill="var(--teal,#17B8A6)"/>
-      <line x1="172" y1="20" x2="172" y2="4" stroke="#2A2338" stroke-width="3"/>
-      <polygon points="172,4 192,10 172,16" fill="var(--magenta,#FF3D8A)"/>
-      <g class="chm-walk-a" transform="translate(14,126)">
-        <rect x="0" y="0" width="34" height="40" rx="12" fill="hsl(150,60%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="3.5"/>
-        <rect x="10" y="-10" width="14" height="12" rx="4" fill="var(--teal,#17B8A6)"/>
-        <circle cx="10" cy="18" r="4" fill="#2A2338"/><circle cx="24" cy="18" r="4" fill="#2A2338"/>
-        <path d="M10,28 Q17,33 24,28" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
+    return `<svg viewBox="0 0 210 140" xmlns="http://www.w3.org/2000/svg">
+      <!-- Strada -->
+      <path d="M10,132 L200,132" fill="none" stroke="hsl(255,15%,78%)" stroke-width="16" stroke-linecap="round"/>
+      <path class="chm-road-dash" d="M10,132 L200,132" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="12 10" stroke-linecap="round"/>
+
+      <!-- Palo traguardo -->
+      <line x1="186" y1="132" x2="186" y2="52" stroke="#2A2338" stroke-width="3"/>
+      <!-- Bandiera a scacchi 3×2 rettangoli 9×8 -->
+      <rect x="186" y="52" width="9" height="8" fill="#2A2338"/>
+      <rect x="195" y="52" width="9" height="8" fill="#fff" stroke="#2A2338" stroke-width="0.5"/>
+      <rect x="204" y="52" width="9" height="8" fill="#2A2338"/>
+      <rect x="186" y="60" width="9" height="8" fill="#fff" stroke="#2A2338" stroke-width="0.5"/>
+      <rect x="195" y="60" width="9" height="8" fill="#2A2338"/>
+      <rect x="204" y="60" width="9" height="8" fill="#fff" stroke="#2A2338" stroke-width="0.5"/>
+      <!-- Nastro arrivo -->
+      <line x1="172" y1="118" x2="186" y2="118" stroke="var(--coral,#FF6E86)" stroke-width="4" stroke-linecap="round"/>
+
+      <!-- Ragazza (sinistra, animata) -->
+      <g class="chm-walk-a" transform="translate(8,84)">
+        <!-- Capelli (coral) -->
+        <rect x="2" y="-28" width="22" height="20" rx="7" fill="var(--coral,#FF6E86)"/>
+        <!-- Coda cavallo -->
+        <ellipse cx="25" cy="-18" rx="6" ry="5" fill="var(--coral,#FF6E86)"/>
+        <!-- Body -->
+        <rect x="0" y="0" width="34" height="46" rx="12" fill="hsl(350,80%,93%)" stroke="var(--coral,#FF6E86)" stroke-width="3.5"/>
+        <!-- Testa -->
+        <rect x="7" y="-14" width="14" height="16" rx="5" fill="hsl(38,80%,80%)"/>
+        <!-- Occhi -->
+        <circle cx="11" cy="-7" r="3.5" fill="#2A2338"/>
+        <circle cx="18" cy="-7" r="3.5" fill="#2A2338"/>
+        <!-- Sorriso -->
+        <path d="M10,-1 Q14,3 19,-1" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
       </g>
     </svg>`
   }
   if (type === 'tech') {
-    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
-      <rect x="82" y="42" width="56" height="70" rx="18" fill="hsl(265,55%,93%)" stroke="var(--magenta,#FF3D8A)" stroke-width="4.5"/>
-      <rect x="102" y="28" width="16" height="16" rx="5" fill="var(--magenta,#FF3D8A)"/>
-      <circle cx="98" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="98" cy="72" r="3" fill="#2A2338"/>
-      <circle cx="122" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="122" cy="72" r="3" fill="#2A2338"/>
-      <path d="M100,90 Q110,98 120,90" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-      <g class="chm-gear">
-        <circle cx="182" cy="46" r="17" fill="none" stroke="#8B7FA8" stroke-width="5"/>
-        <circle cx="182" cy="46" r="6" fill="#8B7FA8"/>
-        <path d="M182,25 L182,15 M182,67 L182,77 M161,46 L151,46 M203,46 L213,46 M167,31 L160,24 M197,31 L204,24 M167,61 L160,68 M197,61 L204,68" stroke="#8B7FA8" stroke-width="4" stroke-linecap="round"/>
+    return `<svg viewBox="0 0 210 140" xmlns="http://www.w3.org/2000/svg">
+      <!-- Computer (sinistra) -->
+      <!-- Screen -->
+      <rect x="14" y="16" width="86" height="60" rx="5" fill="#1A2535" stroke="hsl(220,30%,45%)" stroke-width="3"/>
+      <rect x="18" y="20" width="78" height="52" rx="3" fill="hsl(215,60%,14%)"/>
+      <!-- Grafico animato sul monitor -->
+      <path d="M24,54 Q38,32 52,44 Q66,56 80,34" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="2.5" stroke-dasharray="100">
+        <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2s" repeatCount="indefinite"/>
+      </path>
+      <!-- Cursore lampeggiante -->
+      <rect x="82" y="58" width="3" height="11" rx="1" fill="#fff">
+        <animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/>
+      </rect>
+      <!-- Base laptop -->
+      <rect x="8" y="76" width="98" height="8" rx="2" fill="hsl(220,25%,30%)"/>
+      <!-- Tastiera -->
+      <rect x="4" y="84" width="106" height="40" rx="5" fill="hsl(220,15%,88%)" stroke="hsl(220,15%,70%)" stroke-width="2"/>
+      <!-- Righe tasti -->
+      <line x1="14" y1="96" x2="100" y2="96" stroke="hsl(220,10%,68%)" stroke-width="1"/>
+      <line x1="14" y1="108" x2="100" y2="108" stroke="hsl(220,10%,68%)" stroke-width="1"/>
+      <line x1="14" y1="118" x2="100" y2="118" stroke="hsl(220,10%,68%)" stroke-width="1"/>
+
+      <!-- Bussola (destra) -->
+      <circle cx="162" cy="70" r="40" fill="#fff" stroke="hsl(255,15%,72%)" stroke-width="2.5"/>
+      <circle cx="162" cy="70" r="34" fill="none" stroke="hsl(255,15%,88%)" stroke-width="1"/>
+      <!-- Lettere cardinali -->
+      <text x="162" y="38" font-size="11" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">N</text>
+      <text x="162" y="112" font-size="11" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">S</text>
+      <text x="198" y="74" font-size="11" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">E</text>
+      <text x="126" y="74" font-size="11" font-weight="700" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">O</text>
+      <!-- Ago bussola oscillante -->
+      <g>
+        <animateTransform attributeName="transform" type="rotate" values="-14 162 70;14 162 70;-14 162 70" dur="3s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <polygon points="162,34 157,70 167,70" fill="var(--coral,#FF6E86)"/>
+        <polygon points="162,106 157,70 167,70" fill="hsl(255,15%,55%)"/>
+        <circle cx="162" cy="70" r="5" fill="#2A2338"/>
+        <circle cx="162" cy="70" r="2.5" fill="#fff"/>
       </g>
-      <path class="chm-wifi" d="M28,58 Q46,38 64,58" fill="none" stroke="var(--cyan,#2E86DE)" stroke-width="4" stroke-linecap="round"/>
-      <path class="chm-wifi" d="M36,66 Q46,54 56,66" fill="none" stroke="var(--cyan,#2E86DE)" stroke-width="4" stroke-linecap="round" style="animation-delay:0.2s"/>
-      <circle cx="46" cy="76" r="3.5" fill="var(--cyan,#2E86DE)"/>
     </svg>`
   }
   if (type === 'flow') {
-    return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
-      <rect x="82" y="40" width="56" height="76" rx="18" fill="hsl(40,70%,93%)" stroke="var(--amber,#FFB648)" stroke-width="4.5"/>
-      <rect x="102" y="26" width="16" height="16" rx="5" fill="var(--amber,#FFB648)"/>
-      <rect x="90" y="74" width="40" height="34" rx="6" fill="hsl(40,80%,80%)" opacity="0.6"/>
-      <circle cx="98" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="98" cy="72" r="3" fill="#2A2338"/>
-      <circle cx="122" cy="72" r="7" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="122" cy="72" r="3" fill="#2A2338"/>
-      <path d="M100,92 Q110,100 120,92" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-      <g class="chm-arrow-in">
-        <path d="M46,50 L46,86" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round"/>
-        <path d="M34,74 L46,90 L58,74" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    return `<svg viewBox="0 0 210 140" xmlns="http://www.w3.org/2000/svg">
+      <!-- Linea divisoria centrale -->
+      <line x1="105" y1="20" x2="105" y2="138" stroke="hsl(255,15%,88%)" stroke-width="1.5" stroke-dasharray="6 5"/>
+
+      <!-- Persona triste (sinistra, seduta) -->
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,3;0,0" dur="3s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <!-- Body -->
+        <rect x="10" y="82" width="42" height="50" rx="14" fill="hsl(220,35%,90%)" stroke="hsl(220,40%,62%)" stroke-width="4"/>
+        <!-- Head tab -->
+        <rect x="18" y="68" width="16" height="16" rx="5" fill="hsl(220,40%,62%)"/>
+        <!-- Sopracciglia tristi -->
+        <path d="M18,90 Q24,88 30,90" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+        <!-- Pupille -->
+        <circle cx="21" cy="96" r="3.5" fill="#2A2338"/>
+        <circle cx="30" cy="96" r="3.5" fill="#2A2338"/>
+        <!-- Bocca triste -->
+        <path d="M17,113 Q24,108 31,113" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Lacrimuccia -->
+        <ellipse cx="30" cy="101" rx="2" ry="3" fill="hsl(210,80%,70%)">
+          <animate attributeName="cy" values="101;108;101" dur="2s" repeatCount="indefinite"/>
+        </ellipse>
       </g>
-      <g class="chm-arrow-out">
-        <path d="M174,86 L174,50" stroke="var(--coral,#FF6E86)" stroke-width="6" stroke-linecap="round"/>
-        <path d="M162,62 L174,46 L186,62" fill="none" stroke="var(--coral,#FF6E86)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Superficie seduta -->
+      <line x1="5" y1="132" x2="60" y2="132" stroke="hsl(255,15%,80%)" stroke-width="3"/>
+
+      <!-- Persona felice (destra, salta) -->
+      <g transform="translate(148,62)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-14;0,0" dur="0.75s" repeatCount="indefinite" calcMode="ease-in-out" additive="sum"/>
+        <!-- Body -->
+        <rect x="0" y="0" width="50" height="64" rx="17" fill="hsl(40,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="4.5"/>
+        <!-- Head tab -->
+        <rect x="16" y="-14" width="18" height="16" rx="5" fill="var(--amber,#FFB648)"/>
+        <!-- Occhi -->
+        <circle cx="16" cy="22" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/>
+        <circle cx="16" cy="22" r="2.8" fill="#2A2338"/>
+        <circle cx="34" cy="22" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/>
+        <circle cx="34" cy="22" r="2.8" fill="#2A2338"/>
+        <!-- Sorriso grande -->
+        <path d="M10,42 Q25,56 40,42" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+        <!-- Scintille -->
+        <text x="-12" y="10" font-size="10" fill="var(--amber,#FFB648)" font-family="Fredoka, sans-serif" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.1s" repeatCount="indefinite"/>✦
+        </text>
+        <text x="52" y="6" font-size="10" fill="var(--coral,#FF6E86)" font-family="Fredoka, sans-serif" opacity="0.9">
+          <animate attributeName="opacity" values="0.2;0.9;0.2" dur="1.1s" repeatCount="indefinite"/>✦
+        </text>
+        <text x="54" y="44" font-size="9" fill="var(--amber,#FFB648)" font-family="Fredoka, sans-serif" opacity="0.7">
+          <animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.4s" repeatCount="indefinite"/>✦
+        </text>
       </g>
     </svg>`
   }
   if (type === 'timeline') {
     return `<svg viewBox="0 0 240 190" xmlns="http://www.w3.org/2000/svg">
-      <rect x="82" y="14" width="76" height="92" rx="22" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="5"/>
-      <rect x="110" y="0" width="20" height="16" rx="5" fill="var(--teal,#17B8A6)"/>
-      <g class="chm-eyes-scan">
-        <circle cx="108" cy="58" r="10" fill="#fff" stroke="#2A2338" stroke-width="2.5"/><circle cx="108" cy="58" r="4" fill="#2A2338"/>
-        <circle cx="132" cy="58" r="10" fill="#fff" stroke="#2A2338" stroke-width="2.5"/><circle cx="132" cy="58" r="4" fill="#2A2338"/>
+      <!-- Strada/timeline -->
+      <line x1="20" y1="155" x2="220" y2="155" stroke="hsl(255,15%,82%)" stroke-width="5" stroke-linecap="round"/>
+      <!-- Sezione futuro tratteggiata (teal) -->
+      <line x1="140" y1="155" x2="215" y2="155" stroke="var(--teal,#17B8A6)" stroke-width="3" stroke-dasharray="8 6" stroke-linecap="round"/>
+
+      <!-- Marker Passato -->
+      <circle cx="40" cy="155" r="6" fill="hsl(255,15%,68%)"/>
+      <text x="40" y="174" font-size="11" text-anchor="middle" fill="hsl(255,15%,50%)" font-family="Fredoka, sans-serif">Passato</text>
+
+      <!-- Marker Presente -->
+      <circle cx="120" cy="155" r="8" fill="var(--magenta,#FF3D8A)"/>
+      <text x="120" y="139" font-size="12" font-weight="700" text-anchor="middle" fill="var(--magenta,#FF3D8A)" font-family="Fredoka, sans-serif">Presente</text>
+
+      <!-- Marker Futuro -->
+      <circle cx="200" cy="155" r="8" fill="var(--amber,#FFB648)"/>
+      <text x="200" y="174" font-size="12" font-weight="700" text-anchor="middle" fill="var(--ink,#2A2338)" font-family="Fredoka, sans-serif">Futuro</text>
+
+      <!-- Stella dorata sopra futuro -->
+      <text x="200" y="136" font-size="22" text-anchor="middle" fill="var(--amber,#FFB648)" font-family="Fredoka, sans-serif">★</text>
+
+      <!-- Linee velocità (dietro il runner) -->
+      <g class="chm-speed-lines">
+        <line x1="38" y1="100" x2="54" y2="100" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="34" y1="110" x2="52" y2="110" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="40" y1="120" x2="54" y2="120" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
       </g>
-      <path d="M108,84 Q120,92 132,84" fill="none" stroke="#2A2338" stroke-width="3.5" stroke-linecap="round"/>
-      <line x1="30" y1="150" x2="210" y2="150" stroke="#FFD400" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="50" cy="150" r="6" fill="hsl(255,15%,68%)"/>
-      <text x="50" y="172" font-size="12" text-anchor="middle" fill="var(--ink-dim,#6b6478)" font-family="Fredoka, sans-serif">Passato</text>
-      <circle cx="120" cy="150" r="8" fill="var(--magenta,#FF3D8A)"/>
-      <text x="120" y="134" font-size="13" font-weight="700" text-anchor="middle" fill="var(--magenta,#FF3D8A)" font-family="Fredoka, sans-serif">Presente</text>
-      <line x1="190" y1="150" x2="190" y2="122" stroke="#2A2338" stroke-width="3"/>
-      <rect x="190" y="122" width="6" height="6" fill="#2A2338"/><rect x="196" y="122" width="6" height="6" fill="#fff" stroke="#2A2338" stroke-width="1"/>
-      <rect x="190" y="128" width="6" height="6" fill="#fff" stroke="#2A2338" stroke-width="1"/><rect x="196" y="128" width="6" height="6" fill="#2A2338"/>
-      <text x="190" y="172" font-size="12" font-weight="700" text-anchor="middle" fill="var(--ink,#2A2338)" font-family="Fredoka, sans-serif">Futuro</text>
+
+      <!-- Personaggio che corre -->
+      <g class="chm-finish-run" transform="translate(55,80)">
+        <!-- Body -->
+        <rect x="0" y="0" width="54" height="72" rx="20" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
+        <!-- Head tab -->
+        <rect x="18" y="-16" width="18" height="18" rx="6" fill="var(--teal,#17B8A6)"/>
+        <!-- Occhi -->
+        <circle cx="18" cy="24" r="8" fill="#fff" stroke="#2A2338" stroke-width="2"/>
+        <circle cx="18" cy="24" r="3.4" fill="#2A2338"/>
+        <circle cx="36" cy="24" r="8" fill="#fff" stroke="#2A2338" stroke-width="2"/>
+        <circle cx="36" cy="24" r="3.4" fill="#2A2338"/>
+        <!-- Sorriso -->
+        <path d="M14,50 Q27,64 40,50" fill="none" stroke="#2A2338" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Braccia (running pose) -->
+        <path d="M0,20 Q-14,14 -12,4" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M54,30 Q68,40 66,54" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="7" stroke-linecap="round"/>
+      </g>
+
+      <!-- Polvere dietro il runner -->
+      <g class="chm-dust">
+        <circle cx="52" cy="148" r="4" fill="hsl(255,15%,80%)"/>
+        <circle cx="42" cy="152" r="3" fill="hsl(255,15%,78%)"/>
+        <circle cx="55" cy="155" r="2.5" fill="hsl(255,15%,82%)"/>
+      </g>
     </svg>`
   }
   // finish

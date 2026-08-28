@@ -335,6 +335,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .chm-finish-run { animation: chmRun 0.9s ease-in-out infinite; }
 @keyframes chmRun { 0%, 100% { transform: translateX(0) translateY(0); } 50% { transform: translateX(4px) translateY(-3px); } }
 .chm-dust { animation: chmBubble 0.9s ease-in-out infinite; }
+.chm-speed-lines { animation: chmSpeedLines 0.65s ease-in-out infinite alternate; }
+@keyframes chmSpeedLines { from { opacity: 0.25; transform: translateX(0); } to { opacity: 0.55; transform: translateX(-7px); } }
 
 /* ── Chapter set screen ─────────────────────────────────────────────────── */
 .chapterset { display: flex; flex-direction: column; }
