@@ -466,7 +466,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .ob-checkbox { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; accent-color: var(--amber); cursor: pointer; }
 .ob-btn-next { width: 100%; }
 .ob-btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-.ob-btn-back { width: 100%; margin-top: 8px; }
+.ob-btn-back { width: auto; align-self: center; margin-top: 4px; padding: 9px 28px; font-size: 14px; box-shadow: none; }
 
 /* Step 2 */
 .ob-step2 { display: flex; flex-direction: column; overflow-y: auto; max-height: 94svh; }
@@ -477,10 +477,10 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .ob-speech-bubble { background: #fff; border: 1.5px solid rgba(149,117,205,0.35); border-radius: 14px 14px 14px 4px; padding: 12px 14px; font-size: 13.5px; line-height: 1.55; color: var(--ink); flex: 1; box-shadow: 0 2px 8px rgba(149,117,205,0.1); }
 .ob-name-form { display: flex; flex-direction: column; gap: 16px; padding: 20px 22px 28px; }
 .ob-field { display: flex; flex-direction: column; gap: 7px; }
-.ob-field-label { font-size: 17px; font-weight: 700; color: var(--ink); }
+.ob-field-label { font-family: var(--font-fredoka), sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); }
 .ob-input { border: 1.5px solid rgba(42,35,56,0.14); border-radius: 14px; padding: 12px 16px; font-family: var(--font-nunito), sans-serif; font-size: 15px; background: rgba(42,35,56,0.03); color: var(--ink); outline: none; transition: border-color .15s ease; }
 .ob-input:focus { border-color: var(--amber); background: #fff; }
-.ob-btn-start { width: 100%; }
+.ob-btn-start { width: 100%; color: #1A1228; font-weight: 700; }
 .ob-btn-start:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 
 /* Step 3 — countdown */
