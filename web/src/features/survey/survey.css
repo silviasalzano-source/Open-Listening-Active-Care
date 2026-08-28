@@ -24,6 +24,8 @@
   padding: 32px 16px;
   font-family: var(--font-nunito), sans-serif;
   color: var(--ink);
+  /* forza light mode per tutti gli elementi form dentro la survey */
+  color-scheme: light;
 }
 @media (max-width: 480px) {
   .survey-page { padding: 0; min-height: 100svh; }
@@ -78,7 +80,7 @@
 .q-sub { color: var(--ink); font-size: 14px; margin-bottom: 22px; line-height: 1.5; font-weight: 500; }
 
 .options { display: flex; flex-direction: column; gap: 11px; margin-bottom: 20px; }
-.opt-card { display: flex; align-items: center; gap: 14px; padding: 15px; border-radius: 16px; background: var(--card); border: 1.5px solid var(--card-border); cursor: pointer; transition: all .16s ease; text-align: left; box-shadow: 0 1px 3px rgba(42, 35, 56, 0.04); font-family: inherit; }
+.opt-card { display: flex; align-items: center; gap: 14px; padding: 15px; border-radius: 16px; background: var(--card); border: 1.5px solid var(--card-border); cursor: pointer; transition: all .16s ease; text-align: left; box-shadow: 0 1px 3px rgba(42, 35, 56, 0.04); font-family: inherit; color: var(--ink); }
 .opt-card:hover { background: var(--card-hover); transform: translateY(-1px); }
 .opt-card.selected { border-color: var(--coral); background: rgba(255, 110, 134, 0.10); box-shadow: 0 0 0 1.5px var(--coral) inset; }
 .opt-icon { font-size: 25px; width: 38px; text-align: center; flex-shrink: 0; }
@@ -361,7 +363,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* ── Likert5 ────────────────────────────────────────────────────────────── */
 .likert { display: flex; gap: 8px; margin-bottom: 6px; }
-.likert-btn { flex: 1; aspect-ratio: 1/1; border-radius: 14px; border: 1.5px solid var(--card-border); background: var(--card); color: var(--ink); font-family: var(--font-fredoka), sans-serif; font-weight: 600; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s ease; }
+.likert-btn { flex: 1; aspect-ratio: 1/1; border-radius: 14px; border: 1.5px solid var(--card-border); background: var(--card); color: var(--ink) !important; font-family: var(--font-fredoka), sans-serif; font-weight: 600; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s ease; }
 .likert-btn:hover { background: var(--card-hover); }
 .likert-btn.selected { background: linear-gradient(135deg, var(--amber), var(--coral)); color: #2A2338; border-color: transparent; transform: scale(1.06); }
 .likert-labels {
