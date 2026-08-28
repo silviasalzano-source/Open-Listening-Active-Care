@@ -136,10 +136,10 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         <div className="ob-figs-duo">
           <div className="ob-fig-pair">
             <FigBlonde className="ob-fig-svg" />
-            <div className="ob-bubble">Compilerai <strong>due survey!</strong></div>
+            <div className="ob-bubble" style={{ borderColor: '#FF6E86', borderWidth: '2px' }}><strong>2 Survey</strong></div>
           </div>
           <div className="ob-fig-pair ob-fig-pair-rev">
-            <div className="ob-bubble">Timing compilazione <strong>10 minuti!</strong></div>
+            <div className="ob-bubble" style={{ borderColor: '#17B8A6', borderWidth: '2px' }}>Timing <strong>10 minuti</strong></div>
             <FigBrunette className="ob-fig-svg" />
           </div>
         </div>
