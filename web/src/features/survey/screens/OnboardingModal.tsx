@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = { onConfirm: (nome: string, cognome: string) => void; onClose: () => void }
@@ -126,14 +126,6 @@ function FigMan({ className }: { className?: string }) {
 
 function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   const [agreed, setAgreed] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  function handleScroll() {
-    const el = scrollRef.current
-    if (!el) return
-    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 20) setScrolled(true)
-  }
 
   return (
     <div className="ob-step1">
@@ -153,7 +145,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       {/* Scrollable content */}
-      <div className="ob-scroll" ref={scrollRef} onScroll={handleScroll}>
+      <div className="ob-scroll">
 
         <div className="ob-section">
           <div className="ob-dot ob-dot-amber" />
@@ -176,16 +168,12 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
       {/* Footer */}
       <div className="ob-footer">
-        {!scrolled && (
-          <p className="ob-scroll-hint">↓ Scorri per leggere tutto</p>
-        )}
-        <label className={`ob-check-row${!scrolled ? ' ob-check-dim' : ''}`}>
+        <label className="ob-check-row">
           <input
             type="checkbox"
             className="ob-checkbox"
             checked={agreed}
             onChange={e => setAgreed(e.target.checked)}
-            disabled={!scrolled}
           />
           <span>Ho letto e capito come funziona questa survey</span>
         </label>
