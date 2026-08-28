@@ -260,7 +260,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
       {/* Footer */}
       <div className="ob-footer">
-        <label className={`ob-check-row${agreed ? ' ob-checked' : ''}`}>
+        <label className="ob-check-row">
           <input
             type="checkbox"
             className="ob-checkbox"

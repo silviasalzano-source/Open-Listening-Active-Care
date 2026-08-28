@@ -7,7 +7,7 @@ export const chapters: Record<ChapterKey, ChapterDef & { mascot: MascotType }> =
   valori: { mascot: 'tech', title: 'Tecnologia e Valori', desc: "Qual è la tua percezione del ruolo di OT in questi ambiti?" },
   energia2: { mascot: 'flow', title: 'Carico ed energia', desc: 'Sostenibilità del lavoro e possibilità di recupero.' },
   riflessione: { mascot: 'timeline', title: 'Prospettive', desc: 'Desideriamo conoscere ancora qualcos\'altro…' },
-  chiusura: { mascot: 'finish', title: 'Ultimo step', desc: 'Ti chiediamo le ultime curiosità…' },
+  chiusura: { mascot: 'finish', title: 'Ultimo step', desc: 'Passione & Consiglio' },
 }
 
 type Step2Item = Phase2Question & { chapter: ChapterKey | null }

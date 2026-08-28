@@ -462,8 +462,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .ob-footer { padding: 0 16px 20px; border-top: none; display: flex; flex-direction: column; gap: 10px; background: #fff; position: relative; }
 .ob-footer::before { content: ''; display: block; height: 32px; margin: 0 -16px 8px; background: linear-gradient(to bottom, rgba(255,255,255,0), #fff); pointer-events: none; }
 .ob-scroll { position: relative; }
-.ob-check-row { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; cursor: pointer; user-select: none; background: rgba(42,35,56,0.04); border: 1.5px solid rgba(42,35,56,0.12); border-radius: 14px; padding: 11px 14px; transition: background .15s, border-color .15s; }
-.ob-check-row.ob-checked { background: rgba(255,182,72,0.10); border-color: rgba(255,182,72,0.55); }
+.ob-check-row { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; cursor: pointer; user-select: none; }
 .ob-checkbox { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--amber); cursor: pointer; }
 .ob-btn-next { width: 100%; }
 .ob-btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
