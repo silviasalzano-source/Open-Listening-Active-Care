@@ -556,6 +556,8 @@ function chapterMascotSvgMarkup(type: MascotType): string {
         <circle cx="162" cy="70" r="5" fill="#2A2338"/>
         <circle cx="162" cy="70" r="2.5" fill="#fff"/>
       </g>
+      <!-- Etichetta OT Consulting -->
+      <text x="162" y="128" font-size="10" font-weight="700" text-anchor="middle" fill="var(--teal,#17B8A6)" font-family="Fredoka, sans-serif" letter-spacing="0.5">OT Consulting</text>
     </svg>`
   }
   if (type === 'flow') {
