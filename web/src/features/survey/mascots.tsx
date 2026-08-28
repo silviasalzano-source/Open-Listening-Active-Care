@@ -392,39 +392,80 @@ function chapterMascotSvgMarkup(type: MascotType): string {
     </svg>`
   }
   if (type === 'talk') {
-    return `<svg viewBox="0 0 210 140" xmlns="http://www.w3.org/2000/svg">
-      <!-- Personaggio sinistra (amber) -->
-      <rect x="5" y="86" width="36" height="48" rx="12" fill="hsl(38,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="3.5"/>
-      <rect x="13" y="72" width="14" height="14" rx="5" fill="var(--amber,#FFB648)"/>
-      <circle cx="20" cy="100" r="3.5" fill="#2A2338"/><circle cx="34" cy="100" r="3.5" fill="#2A2338"/>
-      <path d="M20,110 Q27,115 34,110" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
+    return `<svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ombre -->
+      <ellipse cx="48" cy="164" rx="20" ry="3.5" fill="rgba(42,35,56,0.08)"/>
+      <ellipse cx="130" cy="164" rx="20" ry="3.5" fill="rgba(42,35,56,0.08)"/>
+      <ellipse cx="212" cy="164" rx="20" ry="3.5" fill="rgba(42,35,56,0.08)"/>
+
+      <!-- DONNA 1 (sinistra, coral, capelli castani) -->
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="2s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <rect x="38" y="140" width="8" height="22" rx="4" fill="#FF6E86"/>
+        <rect x="52" y="140" width="8" height="22" rx="4" fill="#E85A72"/>
+        <rect x="33" y="102" width="30" height="40" rx="10" fill="#FF6E86"/>
+        <path d="M33,112 Q17,118 19,132" fill="none" stroke="#FF6E86" stroke-width="7" stroke-linecap="round"/>
+        <path d="M63,112 Q79,118 77,132" fill="none" stroke="#FF6E86" stroke-width="7" stroke-linecap="round"/>
+        <rect x="44" y="92" width="8" height="12" rx="3" fill="#FCD9A0"/>
+        <circle cx="48" cy="78" r="14" fill="#FCD9A0"/>
+        <path d="M34,74 Q34,60 48,60 Q62,60 62,74 Q60,68 48,68 Q36,68 34,74Z" fill="#5B3A29"/>
+        <path d="M33,70 Q29,80 34,90" fill="none" stroke="#5B3A29" stroke-width="6" stroke-linecap="round"/>
+        <path d="M63,70 Q67,80 62,90" fill="none" stroke="#5B3A29" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="43" cy="78" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="44" cy="77" r="1.3" fill="#2A2338"/>
+        <circle cx="53" cy="78" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="54" cy="77" r="1.3" fill="#2A2338"/>
+        <path d="M43,86 Q48,91 53,86" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+      </g>
       <g class="chm-bubble">
-        <ellipse cx="16" cy="56" rx="15" ry="11" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
-        <polygon points="14,67 10,74 20,67" fill="#fff"/>
-        <text x="16" y="60" font-size="11" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">···</text>
+        <ellipse cx="26" cy="46" rx="18" ry="12" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
+        <text x="26" y="51" font-size="12" text-anchor="middle" fill="#2A2338" font-family="Fredoka, sans-serif">···</text>
       </g>
 
-      <!-- Personaggio centro (teal, più grande) -->
-      <rect x="80" y="68" width="50" height="66" rx="17" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
-      <rect x="97" y="50" width="16" height="18" rx="5" fill="var(--teal,#17B8A6)"/>
-      <circle cx="97" cy="94" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="97" cy="94" r="2.8" fill="#2A2338"/>
-      <circle cx="113" cy="94" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="113" cy="94" r="2.8" fill="#2A2338"/>
-      <path d="M97,116 Q105,124 113,116" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-      <g class="chm-bubble" style="animation-delay:0.35s">
-        <ellipse cx="105" cy="30" rx="17" ry="13" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
-        <polygon points="100,43 105,50 110,43" fill="#fff"/>
-        <text x="105" y="35" font-size="14" text-anchor="middle" fill="var(--teal,#17B8A6)" font-family="Fredoka, sans-serif">♪</text>
+      <!-- UOMO (centro, teal, capelli corti scuri) -->
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="2s" begin="0.4s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <rect x="120" y="140" width="8" height="22" rx="4" fill="#17B8A6"/>
+        <rect x="134" y="140" width="8" height="22" rx="4" fill="#11988A"/>
+        <rect x="115" y="102" width="30" height="40" rx="10" fill="#17B8A6"/>
+        <path d="M115,112 Q99,118 101,132" fill="none" stroke="#17B8A6" stroke-width="7" stroke-linecap="round"/>
+        <path d="M145,112 Q161,118 159,132" fill="none" stroke="#17B8A6" stroke-width="7" stroke-linecap="round"/>
+        <rect x="126" y="92" width="8" height="12" rx="3" fill="#FCD9A0"/>
+        <circle cx="130" cy="78" r="14" fill="#FCD9A0"/>
+        <path d="M116,76 Q116,62 130,62 Q144,62 144,76 Q142,70 130,70 Q118,70 116,76Z" fill="#2A2338"/>
+        <circle cx="125" cy="78" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="126" cy="77" r="1.3" fill="#2A2338"/>
+        <circle cx="135" cy="78" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="136" cy="77" r="1.3" fill="#2A2338"/>
+        <path d="M125,86 Q130,91 135,86" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g class="chm-bubble" style="animation-delay:0.4s">
+        <ellipse cx="130" cy="40" rx="20" ry="13" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
+        <text x="130" y="45" font-size="13" text-anchor="middle" fill="var(--teal,#17B8A6)" font-family="Fredoka, sans-serif">♪</text>
       </g>
 
-      <!-- Personaggio destra (coral) -->
-      <rect x="169" y="86" width="36" height="48" rx="12" fill="hsl(350,80%,93%)" stroke="var(--coral,#FF6E86)" stroke-width="3.5"/>
-      <rect x="177" y="72" width="14" height="14" rx="5" fill="var(--coral,#FF6E86)"/>
-      <circle cx="183" cy="100" r="3.5" fill="#2A2338"/><circle cx="197" cy="100" r="3.5" fill="#2A2338"/>
-      <path d="M183,110 Q190,115 197,110" fill="none" stroke="#2A2338" stroke-width="2.2" stroke-linecap="round"/>
-      <g class="chm-bubble" style="animation-delay:0.7s">
-        <ellipse cx="194" cy="56" rx="15" ry="11" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
-        <polygon points="186,67 190,74 196,67" fill="#fff"/>
-        <text x="194" y="61" font-size="14" text-anchor="middle" fill="var(--coral,#FF6E86)" font-family="Fredoka, sans-serif">!</text>
+      <!-- DONNA 2 (destra, amber, capelli biondi) -->
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="2s" begin="0.8s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <rect x="202" y="140" width="8" height="22" rx="4" fill="#FFB648"/>
+        <rect x="216" y="140" width="8" height="22" rx="4" fill="#E8A030"/>
+        <rect x="197" y="102" width="30" height="40" rx="10" fill="#FFB648"/>
+        <path d="M197,112 Q181,118 183,132" fill="none" stroke="#FFB648" stroke-width="7" stroke-linecap="round"/>
+        <path d="M227,112 Q243,118 241,132" fill="none" stroke="#FFB648" stroke-width="7" stroke-linecap="round"/>
+        <rect x="208" y="92" width="8" height="12" rx="3" fill="#FCD9A0"/>
+        <circle cx="212" cy="78" r="14" fill="#FCD9A0"/>
+        <path d="M198,74 Q198,60 212,60 Q226,60 226,74 Q224,68 212,68 Q200,68 198,74Z" fill="#F4C542"/>
+        <path d="M197,70 Q193,80 198,90" fill="none" stroke="#F4C542" stroke-width="6" stroke-linecap="round"/>
+        <path d="M227,70 Q231,80 226,90" fill="none" stroke="#F4C542" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="207" cy="78" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="208" cy="77" r="1.3" fill="#2A2338"/>
+        <circle cx="217" cy="78" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="218" cy="77" r="1.3" fill="#2A2338"/>
+        <path d="M207,86 Q212,91 217,86" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g class="chm-bubble" style="animation-delay:0.8s">
+        <ellipse cx="234" cy="46" rx="18" ry="12" fill="#fff" stroke="rgba(42,35,56,0.18)" stroke-width="1.5"/>
+        <text x="234" y="51" font-size="14" text-anchor="middle" fill="var(--coral,#FF6E86)" font-family="Fredoka, sans-serif">!</text>
       </g>
     </svg>`
   }
@@ -446,21 +487,33 @@ function chapterMascotSvgMarkup(type: MascotType): string {
       <!-- Nastro arrivo -->
       <line x1="172" y1="118" x2="186" y2="118" stroke="var(--coral,#FF6E86)" stroke-width="4" stroke-linecap="round"/>
 
-      <!-- Ragazza (sinistra, animata) -->
-      <g class="chm-walk-a" transform="translate(8,84)">
-        <!-- Capelli (coral) -->
-        <rect x="2" y="-28" width="22" height="20" rx="7" fill="var(--coral,#FF6E86)"/>
-        <!-- Coda cavallo -->
-        <ellipse cx="25" cy="-18" rx="6" ry="5" fill="var(--coral,#FF6E86)"/>
-        <!-- Body -->
-        <rect x="0" y="0" width="34" height="46" rx="12" fill="hsl(350,80%,93%)" stroke="var(--coral,#FF6E86)" stroke-width="3.5"/>
+      <!-- Persona (donna, stile commute) -->
+      <g class="chm-walk-a">
+        <!-- Ombra -->
+        <ellipse cx="31" cy="135" rx="16" ry="3" fill="rgba(42,35,56,0.08)"/>
+        <!-- Gambe -->
+        <rect x="22" y="112" width="7" height="20" rx="3" fill="#FF6E86"/>
+        <rect x="33" y="112" width="7" height="20" rx="3" fill="#E85A72"/>
+        <!-- Corpo -->
+        <rect x="15" y="78" width="30" height="36" rx="10" fill="#FF6E86"/>
+        <!-- Braccia -->
+        <path d="M15,88 Q5,93 7,106" fill="none" stroke="#FF6E86" stroke-width="6" stroke-linecap="round"/>
+        <path d="M45,88 Q55,93 53,106" fill="none" stroke="#FF6E86" stroke-width="6" stroke-linecap="round"/>
+        <!-- Collo -->
+        <rect x="27" y="68" width="8" height="12" rx="3" fill="#FCD9A0"/>
         <!-- Testa -->
-        <rect x="7" y="-14" width="14" height="16" rx="5" fill="hsl(38,80%,80%)"/>
+        <circle cx="31" cy="56" r="14" fill="#FCD9A0"/>
+        <!-- Capelli castani (donna, con ciocche laterali) -->
+        <path d="M17,52 Q17,38 31,38 Q45,38 45,52 Q43,46 31,46 Q19,46 17,52Z" fill="#5B3A29"/>
+        <path d="M16,48 Q12,58 17,68" fill="none" stroke="#5B3A29" stroke-width="6" stroke-linecap="round"/>
+        <path d="M46,48 Q50,58 45,68" fill="none" stroke="#5B3A29" stroke-width="6" stroke-linecap="round"/>
         <!-- Occhi -->
-        <circle cx="11" cy="-7" r="3.5" fill="#2A2338"/>
-        <circle cx="18" cy="-7" r="3.5" fill="#2A2338"/>
+        <circle cx="26" cy="56" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="27" cy="55" r="1.3" fill="#2A2338"/>
+        <circle cx="36" cy="56" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="37" cy="55" r="1.3" fill="#2A2338"/>
         <!-- Sorriso -->
-        <path d="M10,-1 Q14,3 19,-1" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
+        <path d="M26,64 Q31,69 36,64" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
       </g>
     </svg>`
   }
@@ -638,7 +691,7 @@ function chapterMascotSvgMarkup(type: MascotType): string {
 }
 
 export function ChapterMascot({ type }: { type: MascotType }) {
-  const isLarge = type === 'timeline' || type === 'commute'
+  const isLarge = type === 'timeline' || type === 'commute' || type === 'talk'
   return (
     <div
       className={`chapter-mascot-stage${isLarge ? ' large' : ''}`}
