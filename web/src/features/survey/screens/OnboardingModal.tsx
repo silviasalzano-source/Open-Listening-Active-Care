@@ -5,6 +5,88 @@ import { createPortal } from 'react-dom'
 
 type Props = { onConfirm: (nome: string, cognome: string) => void; onClose: () => void }
 
+// ─── Info card SVG icons (CausaSvg-style animated icons) ─────────────────────
+
+function ChipGrowthSvg() {
+  return (
+    <svg viewBox="0 0 44 44" width="22" height="22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="7" y1="36" x2="37" y2="36" stroke="rgba(42,35,56,0.18)" strokeWidth="1.5" strokeLinecap="round"/>
+      <rect x="9" y="24" width="8" height="12" rx="3" fill="#FFB648">
+        <animate attributeName="y" values="30;24;30" dur="2.2s" begin="0s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <animate attributeName="height" values="6;12;6" dur="2.2s" begin="0s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      </rect>
+      <rect x="19" y="18" width="8" height="18" rx="3" fill="#FF9052">
+        <animate attributeName="y" values="28;18;28" dur="2.2s" begin="0.3s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <animate attributeName="height" values="8;18;8" dur="2.2s" begin="0.3s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      </rect>
+      <rect x="29" y="12" width="8" height="24" rx="3" fill="#FF6E86">
+        <animate attributeName="y" values="24;12;24" dur="2.2s" begin="0.6s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <animate attributeName="height" values="12;24;12" dur="2.2s" begin="0.6s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      </rect>
+    </svg>
+  )
+}
+
+function ChipWorkloadSvg() {
+  return (
+    <svg viewBox="0 0 44 44" width="22" height="22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="6" y="28" width="32" height="12" rx="3" fill="#F0DFC0" stroke="#C9862B" strokeWidth="1.5"/>
+      <rect x="7" y="22" width="30" height="12" rx="3" fill="#F8EDD4" stroke="#C9862B" strokeWidth="1.5"/>
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="1.8s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <rect x="8" y="14" width="28" height="12" rx="3" fill="#FFB648" stroke="#C9862B" strokeWidth="1.5"/>
+        <line x1="12" y1="19" x2="32" y2="19" stroke="rgba(42,35,56,0.4)" strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="12" y1="22.5" x2="26" y2="22.5" stroke="rgba(42,35,56,0.4)" strokeWidth="1.5" strokeLinecap="round"/>
+      </g>
+    </svg>
+  )
+}
+
+function CardGrowthSvg() {
+  return (
+    <svg viewBox="0 0 44 44" width="28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="7" y1="36" x2="37" y2="36" stroke="rgba(42,35,56,0.18)" strokeWidth="1.5" strokeLinecap="round"/>
+      <rect x="9" y="24" width="8" height="12" rx="3" fill="#FFB648">
+        <animate attributeName="y" values="30;24;30" dur="2.2s" begin="0.1s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <animate attributeName="height" values="6;12;6" dur="2.2s" begin="0.1s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      </rect>
+      <rect x="19" y="18" width="8" height="18" rx="3" fill="#FF9052">
+        <animate attributeName="y" values="28;18;28" dur="2.2s" begin="0.4s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <animate attributeName="height" values="8;18;8" dur="2.2s" begin="0.4s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      </rect>
+      <rect x="29" y="12" width="8" height="24" rx="3" fill="#FF6E86">
+        <animate attributeName="y" values="24;12;24" dur="2.2s" begin="0.7s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <animate attributeName="height" values="12;24;12" dur="2.2s" begin="0.7s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      </rect>
+    </svg>
+  )
+}
+
+function CardRelationsSvg() {
+  return (
+    <svg viewBox="0 0 44 44" width="28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;2,0;0,0" dur="1.6s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <circle cx="13" cy="17" r="9" fill="#17B8A6"/>
+        <circle cx="11" cy="15" r="3" fill="#fff" opacity="0.4"/>
+        <circle cx="11" cy="18" r="1.8" fill="#2A2338"/>
+        <circle cx="15" cy="18" r="1.8" fill="#2A2338"/>
+        <path d="M10,23 Q13,25.5 16,23" fill="none" stroke="#2A2338" strokeWidth="1.4" strokeLinecap="round"/>
+        <rect x="5" y="26" width="16" height="12" rx="5" fill="#17B8A6"/>
+      </g>
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;-2,0;0,0" dur="1.6s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <circle cx="31" cy="17" r="9" fill="#4DD9CC"/>
+        <circle cx="29" cy="15" r="3" fill="#fff" opacity="0.4"/>
+        <circle cx="29" cy="18" r="1.8" fill="#2A2338"/>
+        <circle cx="33" cy="18" r="1.8" fill="#2A2338"/>
+        <path d="M28,23 Q31,25.5 34,23" fill="none" stroke="#2A2338" strokeWidth="1.4" strokeLinecap="round"/>
+        <rect x="23" y="26" width="16" height="12" rx="5" fill="#4DD9CC"/>
+      </g>
+    </svg>
+  )
+}
+
 // ─── SVG Figures ─────────────────────────────────────────────────────────────
 
 function FigBlonde({ className }: { className?: string }) {
@@ -133,12 +215,18 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       <div className="ob-step1-header">
         <h2 className="ob-title">Benvenuto/a</h2>
         <div className="ob-figs-duo">
-          <div className="ob-fig-pair">
+          <div className="ob-fig-col">
+            <div className="ob-chip" style={{ borderColor: '#FF6E86' }}>
+              <ChipGrowthSvg />
+              2 Survey
+            </div>
             <FigBlonde className="ob-fig-svg" />
-            <div className="ob-bubble" style={{ borderColor: '#FF6E86', borderWidth: '2px' }}><strong>2 Survey</strong></div>
           </div>
-          <div className="ob-fig-pair ob-fig-pair-rev">
-            <div className="ob-bubble" style={{ borderColor: '#17B8A6', borderWidth: '2px' }}>Timing <strong>10 minuti</strong></div>
+          <div className="ob-fig-col">
+            <div className="ob-chip" style={{ borderColor: '#17B8A6' }}>
+              <ChipWorkloadSvg />
+              10 minuti
+            </div>
             <FigBrunette className="ob-fig-svg" />
           </div>
         </div>
@@ -147,17 +235,21 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       {/* Scrollable content */}
       <div className="ob-scroll">
 
-        <div className="ob-section">
-          <div className="ob-dot ob-dot-amber" />
+        <div className="ob-section-card ob-card-warm">
+          <div className="ob-card-icon ob-card-icon-warm">
+            <CardGrowthSvg />
+          </div>
           <div>
             <div className="ob-section-title">My Energy Battery <span className="ob-section-tag ob-tag-warm">Survey nominativa</span></div>
             <p className="ob-section-body">Vogliamo conoscere il tuo <strong>livello di energia</strong> in OT e quello del tuo team.</p>
-            <p className="ob-section-body ob-section-body-sub">I dati, in questa sezione, sono <strong>associati al tuo nome e cognome</strong>, utili per il momento one to one con HR e per comprendere lo stato di energia attuale in OT.</p>
+            <p className="ob-section-body ob-section-body-sub">I dati sono <strong>associati al tuo nome e cognome</strong>, utili per il momento one to one con HR.</p>
           </div>
         </div>
 
-        <div className="ob-section ob-section-last">
-          <div className="ob-dot ob-dot-teal" />
+        <div className="ob-section-card ob-card-cool">
+          <div className="ob-card-icon ob-card-icon-cool">
+            <CardRelationsSvg />
+          </div>
           <div>
             <div className="ob-section-title">Fattori Energy Battery <span className="ob-section-tag ob-tag-cool">Survey anonima</span></div>
             <p className="ob-section-body">Desideriamo sapere quali sono le <strong>variabili che influenzano la tua carica</strong> di energia.</p>
@@ -168,7 +260,7 @@ function Step1({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
       {/* Footer */}
       <div className="ob-footer">
-        <label className="ob-check-row">
+        <label className={`ob-check-row${agreed ? ' ob-checked' : ''}`}>
           <input
             type="checkbox"
             className="ob-checkbox"
