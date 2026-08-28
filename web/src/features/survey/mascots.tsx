@@ -561,54 +561,63 @@ function chapterMascotSvgMarkup(type: MascotType): string {
   if (type === 'flow') {
     return `<svg viewBox="0 0 210 140" xmlns="http://www.w3.org/2000/svg">
       <!-- Linea divisoria centrale -->
-      <line x1="105" y1="20" x2="105" y2="138" stroke="hsl(255,15%,88%)" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <line x1="105" y1="12" x2="105" y2="136" stroke="hsl(255,15%,88%)" stroke-width="1.5" stroke-dasharray="6 5"/>
 
-      <!-- Persona triste (sinistra, seduta) -->
+      <!-- PERSONA STANCA (sinistra, teal, capelli scuri) -->
       <g>
-        <animateTransform attributeName="transform" type="translate" values="0,0;0,3;0,0" dur="3s" repeatCount="indefinite" calcMode="ease-in-out"/>
-        <!-- Body -->
-        <rect x="10" y="82" width="42" height="50" rx="14" fill="hsl(220,35%,90%)" stroke="hsl(220,40%,62%)" stroke-width="4"/>
-        <!-- Head tab -->
-        <rect x="18" y="68" width="16" height="16" rx="5" fill="hsl(220,40%,62%)"/>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,4;0,0" dur="3s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <ellipse cx="49" cy="133" rx="18" ry="3" fill="rgba(42,35,56,0.07)"/>
+        <rect x="39" y="112" width="7" height="18" rx="3" fill="#17B8A6"/>
+        <rect x="51" y="112" width="7" height="18" rx="3" fill="#11988A"/>
+        <rect x="33" y="74" width="30" height="40" rx="10" fill="#17B8A6"/>
+        <path d="M33,84 Q20,96 22,112" fill="none" stroke="#17B8A6" stroke-width="6" stroke-linecap="round"/>
+        <path d="M63,84 Q76,96 74,112" fill="none" stroke="#17B8A6" stroke-width="6" stroke-linecap="round"/>
+        <rect x="45" y="64" width="8" height="12" rx="3" fill="#FCD9A0"/>
+        <circle cx="49" cy="52" r="14" fill="#FCD9A0"/>
+        <path d="M35,48 Q35,34 49,34 Q63,34 63,48 Q61,42 49,42 Q37,42 35,48Z" fill="#2A2338"/>
         <!-- Sopracciglia tristi -->
-        <path d="M18,90 Q24,88 30,90" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
-        <!-- Pupille -->
-        <circle cx="21" cy="96" r="3.5" fill="#2A2338"/>
-        <circle cx="30" cy="96" r="3.5" fill="#2A2338"/>
+        <path d="M40,47 Q44,45 48,47" fill="none" stroke="#2A2338" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M50,47 Q54,45 58,47" fill="none" stroke="#2A2338" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="44" cy="52" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="45" cy="53" r="1.3" fill="#2A2338"/>
+        <circle cx="54" cy="52" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="55" cy="53" r="1.3" fill="#2A2338"/>
         <!-- Bocca triste -->
-        <path d="M17,113 Q24,108 31,113" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M44,62 Q49,58 54,62" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
         <!-- Lacrimuccia -->
-        <ellipse cx="30" cy="101" rx="2" ry="3" fill="hsl(210,80%,70%)">
-          <animate attributeName="cy" values="101;108;101" dur="2s" repeatCount="indefinite"/>
+        <ellipse cx="56" cy="57" rx="2" ry="3" fill="hsl(210,80%,70%)">
+          <animate attributeName="cy" values="57;64;57" dur="2s" repeatCount="indefinite"/>
         </ellipse>
       </g>
-      <!-- Superficie seduta -->
-      <line x1="5" y1="132" x2="60" y2="132" stroke="hsl(255,15%,80%)" stroke-width="3"/>
+      <!-- Panchina -->
+      <line x1="20" y1="131" x2="80" y2="131" stroke="hsl(255,15%,78%)" stroke-width="3" stroke-linecap="round"/>
 
-      <!-- Persona felice (destra, salta) -->
-      <g transform="translate(148,62)">
-        <animateTransform attributeName="transform" type="translate" values="0,0;0,-14;0,0" dur="0.75s" repeatCount="indefinite" calcMode="ease-in-out" additive="sum"/>
-        <!-- Body -->
-        <rect x="0" y="0" width="50" height="64" rx="17" fill="hsl(40,80%,92%)" stroke="var(--amber,#FFB648)" stroke-width="4.5"/>
-        <!-- Head tab -->
-        <rect x="16" y="-14" width="18" height="16" rx="5" fill="var(--amber,#FFB648)"/>
-        <!-- Occhi -->
-        <circle cx="16" cy="22" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/>
-        <circle cx="16" cy="22" r="2.8" fill="#2A2338"/>
-        <circle cx="34" cy="22" r="6.5" fill="#fff" stroke="#2A2338" stroke-width="2"/>
-        <circle cx="34" cy="22" r="2.8" fill="#2A2338"/>
-        <!-- Sorriso grande -->
-        <path d="M10,42 Q25,56 40,42" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
+      <!-- PERSONA FELICE (destra, coral, capelli biondi, salta) -->
+      <g transform="translate(130,0)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-14;0,0" dur="0.78s" repeatCount="indefinite" calcMode="ease-in-out" additive="sum"/>
+        <ellipse cx="30" cy="133" rx="18" ry="3" fill="rgba(42,35,56,0.07)">
+          <animate attributeName="rx" values="18;10;18" dur="0.78s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        </ellipse>
+        <rect x="19" y="112" width="7" height="18" rx="3" fill="#FF6E86"/>
+        <rect x="30" y="112" width="7" height="18" rx="3" fill="#E85A72"/>
+        <rect x="13" y="74" width="30" height="40" rx="10" fill="#FF6E86"/>
+        <!-- Braccia alzate -->
+        <path d="M13,80 Q0,60 2,46" fill="none" stroke="#FF6E86" stroke-width="6" stroke-linecap="round"/>
+        <path d="M43,80 Q56,60 54,46" fill="none" stroke="#FF6E86" stroke-width="6" stroke-linecap="round"/>
+        <rect x="25" y="64" width="8" height="12" rx="3" fill="#FCD9A0"/>
+        <circle cx="29" cy="52" r="14" fill="#FCD9A0"/>
+        <path d="M15,48 Q15,34 29,34 Q43,34 43,48 Q41,42 29,42 Q17,42 15,48Z" fill="#F4C542"/>
+        <path d="M14,44 Q10,54 15,64" fill="none" stroke="#F4C542" stroke-width="6" stroke-linecap="round"/>
+        <path d="M44,44 Q48,54 43,64" fill="none" stroke="#F4C542" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="24" cy="52" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="25" cy="51" r="1.3" fill="#2A2338"/>
+        <circle cx="34" cy="52" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="35" cy="51" r="1.3" fill="#2A2338"/>
+        <path d="M22,62 Q29,68 36,62" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
         <!-- Scintille -->
-        <text x="-12" y="10" font-size="10" fill="var(--amber,#FFB648)" font-family="Fredoka, sans-serif" opacity="0.9">
-          <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.1s" repeatCount="indefinite"/>✦
-        </text>
-        <text x="52" y="6" font-size="10" fill="var(--coral,#FF6E86)" font-family="Fredoka, sans-serif" opacity="0.9">
-          <animate attributeName="opacity" values="0.2;0.9;0.2" dur="1.1s" repeatCount="indefinite"/>✦
-        </text>
-        <text x="54" y="44" font-size="9" fill="var(--amber,#FFB648)" font-family="Fredoka, sans-serif" opacity="0.7">
-          <animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.4s" repeatCount="indefinite"/>✦
-        </text>
+        <text x="-10" y="42" font-size="10" fill="var(--amber,#FFB648)"><animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.1s" repeatCount="indefinite"/>✦</text>
+        <text x="50" y="38" font-size="10" fill="var(--coral,#FF6E86)"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="1.1s" repeatCount="indefinite"/>✦</text>
+        <text x="52" y="76" font-size="9" fill="var(--amber,#FFB648)"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.4s" repeatCount="indefinite"/>✦</text>
       </g>
     </svg>`
   }
@@ -634,64 +643,106 @@ function chapterMascotSvgMarkup(type: MascotType): string {
       <!-- Stella dorata sopra futuro -->
       <text x="200" y="136" font-size="22" text-anchor="middle" fill="var(--amber,#FFB648)" font-family="Fredoka, sans-serif">★</text>
 
-      <!-- Linee velocità (dietro il runner) -->
+      <!-- Linee velocità -->
       <g class="chm-speed-lines">
-        <line x1="38" y1="100" x2="54" y2="100" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
-        <line x1="34" y1="110" x2="52" y2="110" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
-        <line x1="40" y1="120" x2="54" y2="120" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="30" y1="108" x2="52" y2="108" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="118" x2="50" y2="118" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="32" y1="128" x2="52" y2="128" stroke="hsl(255,15%,75%)" stroke-width="2" stroke-linecap="round"/>
       </g>
 
-      <!-- Personaggio che corre -->
-      <g class="chm-finish-run" transform="translate(55,80)">
-        <!-- Body -->
-        <rect x="0" y="0" width="54" height="72" rx="20" fill="hsl(160,55%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
-        <!-- Head tab -->
-        <rect x="18" y="-16" width="18" height="18" rx="6" fill="var(--teal,#17B8A6)"/>
-        <!-- Occhi -->
-        <circle cx="18" cy="24" r="8" fill="#fff" stroke="#2A2338" stroke-width="2"/>
-        <circle cx="18" cy="24" r="3.4" fill="#2A2338"/>
-        <circle cx="36" cy="24" r="8" fill="#fff" stroke="#2A2338" stroke-width="2"/>
-        <circle cx="36" cy="24" r="3.4" fill="#2A2338"/>
+      <!-- PERSONA (donna, teal, indica il futuro) -->
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="2s" repeatCount="indefinite" calcMode="ease-in-out"/>
+        <ellipse cx="82" cy="157" rx="20" ry="3.5" fill="rgba(42,35,56,0.07)"/>
+        <!-- Gambe -->
+        <rect x="72" y="135" width="8" height="20" rx="3" fill="#17B8A6"/>
+        <rect x="84" y="135" width="8" height="20" rx="3" fill="#11988A"/>
+        <!-- Corpo -->
+        <rect x="67" y="97" width="30" height="40" rx="10" fill="#17B8A6"/>
+        <!-- Braccio che indica il futuro (destra, esteso in avanti) -->
+        <path d="M97,107 Q118,98 138,94" fill="none" stroke="#17B8A6" stroke-width="7" stroke-linecap="round"/>
+        <!-- Punta del dito -->
+        <circle cx="138" cy="94" r="5" fill="#17B8A6"/>
+        <!-- Braccio sinistro (dietro) -->
+        <path d="M67,107 Q54,114 56,128" fill="none" stroke="#17B8A6" stroke-width="6" stroke-linecap="round"/>
+        <!-- Collo -->
+        <rect x="78" y="87" width="8" height="12" rx="3" fill="#FCD9A0"/>
+        <!-- Testa -->
+        <circle cx="82" cy="75" r="14" fill="#FCD9A0"/>
+        <!-- Capelli castani -->
+        <path d="M68,71 Q68,57 82,57 Q96,57 96,71 Q94,65 82,65 Q70,65 68,71Z" fill="#5B3A29"/>
+        <path d="M67,67 Q63,77 68,87" fill="none" stroke="#5B3A29" stroke-width="6" stroke-linecap="round"/>
+        <path d="M97,67 Q101,77 96,87" fill="none" stroke="#5B3A29" stroke-width="6" stroke-linecap="round"/>
+        <!-- Occhi (guardano a destra) -->
+        <circle cx="77" cy="75" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="78" cy="74" r="1.3" fill="#2A2338"/>
+        <circle cx="87" cy="75" r="3" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+        <circle cx="88" cy="74" r="1.3" fill="#2A2338"/>
         <!-- Sorriso -->
-        <path d="M14,50 Q27,64 40,50" fill="none" stroke="#2A2338" stroke-width="3.5" stroke-linecap="round"/>
-        <!-- Braccia (running pose) -->
-        <path d="M0,20 Q-14,14 -12,4" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="7" stroke-linecap="round"/>
-        <path d="M54,30 Q68,40 66,54" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M77,83 Q82,88 87,83" fill="none" stroke="#2A2338" stroke-width="2" stroke-linecap="round"/>
       </g>
 
-      <!-- Polvere dietro il runner -->
+      <!-- Polvere ai piedi -->
       <g class="chm-dust">
-        <circle cx="52" cy="148" r="4" fill="hsl(255,15%,80%)"/>
-        <circle cx="42" cy="152" r="3" fill="hsl(255,15%,78%)"/>
-        <circle cx="55" cy="155" r="2.5" fill="hsl(255,15%,82%)"/>
+        <circle cx="62" cy="152" r="3.5" fill="hsl(255,15%,80%)"/>
+        <circle cx="54" cy="156" r="2.5" fill="hsl(255,15%,78%)"/>
       </g>
     </svg>`
   }
   // finish
-  return `<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
-    <line x1="24" y1="128" x2="196" y2="128" stroke="hsl(255,15%,80%)" stroke-width="4"/>
-    <rect x="150" y="30" width="6" height="98" fill="#2A2338"/>
+  return `<svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+    <!-- Sfondo stelle decorative -->
+    <text x="32" y="42" font-size="16" fill="var(--amber,#FFB648)" opacity="0.7"><animate attributeName="opacity" values="0.7;0.2;0.7" dur="1.4s" repeatCount="indefinite"/>★</text>
+    <text x="218" y="38" font-size="12" fill="var(--coral,#FF6E86)" opacity="0.6"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="1.8s" repeatCount="indefinite"/>★</text>
+    <text x="240" y="70" font-size="10" fill="var(--amber,#FFB648)" opacity="0.5"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.1s" repeatCount="indefinite"/>✦</text>
+    <text x="16" y="80" font-size="10" fill="var(--teal,#17B8A6)" opacity="0.5"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="1.6s" repeatCount="indefinite"/>✦</text>
+
+    <!-- Persona HR (donna, teal, capelli biondi, pollice su) -->
     <g>
-      <rect x="156" y="30" width="14" height="10" fill="#2A2338"/>
-      <rect x="170" y="30" width="14" height="10" fill="#fff" stroke="#2A2338" stroke-width="1"/>
-      <rect x="156" y="40" width="14" height="10" fill="#fff" stroke="#2A2338" stroke-width="1"/>
-      <rect x="170" y="40" width="14" height="10" fill="#2A2338"/>
+      <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="1.8s" repeatCount="indefinite" calcMode="ease-in-out"/>
+      <ellipse cx="110" cy="163" rx="22" ry="4" fill="rgba(42,35,56,0.08)"/>
+      <!-- Gambe -->
+      <rect x="99" y="138" width="9" height="22" rx="4" fill="#17B8A6"/>
+      <rect x="113" y="138" width="9" height="22" rx="4" fill="#11988A"/>
+      <!-- Corpo -->
+      <rect x="94" y="98" width="32" height="42" rx="11" fill="#17B8A6"/>
+      <!-- Braccio destro alzato (pollice su) -->
+      <path d="M126,108 Q142,90 140,72" fill="none" stroke="#17B8A6" stroke-width="7" stroke-linecap="round"/>
+      <!-- Pollice -->
+      <circle cx="140" cy="70" r="6" fill="#FCD9A0"/>
+      <rect x="137" y="56" width="6" height="16" rx="3" fill="#FCD9A0"/>
+      <!-- Braccio sinistro (naturale) -->
+      <path d="M94,108 Q80,116 82,130" fill="none" stroke="#17B8A6" stroke-width="7" stroke-linecap="round"/>
+      <!-- Collo -->
+      <rect x="106" y="88" width="8" height="12" rx="3" fill="#FCD9A0"/>
+      <!-- Testa -->
+      <circle cx="110" cy="76" r="16" fill="#FCD9A0"/>
+      <!-- Capelli biondi -->
+      <path d="M94,72 Q94,56 110,56 Q126,56 126,72 Q124,64 110,64 Q96,64 94,72Z" fill="#F4C542"/>
+      <path d="M93,68 Q89,80 94,92" fill="none" stroke="#F4C542" stroke-width="7" stroke-linecap="round"/>
+      <path d="M127,68 Q131,80 126,92" fill="none" stroke="#F4C542" stroke-width="7" stroke-linecap="round"/>
+      <!-- Occhi -->
+      <circle cx="104" cy="76" r="3.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+      <circle cx="105" cy="75" r="1.5" fill="#2A2338"/>
+      <circle cx="116" cy="76" r="3.5" fill="#fff" stroke="#2A2338" stroke-width="1.5"/>
+      <circle cx="117" cy="75" r="1.5" fill="#2A2338"/>
+      <!-- Sorriso grande -->
+      <path d="M103,87 Q110,94 117,87" fill="none" stroke="#2A2338" stroke-width="2.5" stroke-linecap="round"/>
     </g>
-    <g class="chm-finish-run">
-      <rect x="60" y="70" width="48" height="60" rx="16" fill="hsl(150,60%,92%)" stroke="var(--teal,#17B8A6)" stroke-width="4.5"/>
-      <rect x="76" y="58" width="16" height="14" rx="4" fill="var(--teal,#17B8A6)"/>
-      <circle cx="76" cy="94" r="6" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="76" cy="94" r="2.6" fill="#2A2338"/>
-      <circle cx="96" cy="94" r="6" fill="#fff" stroke="#2A2338" stroke-width="2"/><circle cx="96" cy="94" r="2.6" fill="#2A2338"/>
-      <path d="M78,110 Q84,116 90,110" fill="none" stroke="#2A2338" stroke-width="3" stroke-linecap="round"/>
-      <path d="M50,110 Q40,105 44,96" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round"/>
-      <path d="M118,120 Q128,110 122,100" fill="none" stroke="var(--teal,#17B8A6)" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Bolla discorso "Dai, manca poco!" -->
+    <g class="chm-bubble">
+      <rect x="144" y="58" width="104" height="48" rx="14" fill="#fff" stroke="rgba(23,184,166,0.35)" stroke-width="2"/>
+      <polygon points="152,106 144,118 164,106" fill="#fff"/>
+      <polygon points="152,104 145,116 163,104" fill="#fff" stroke="rgba(23,184,166,0.35)" stroke-width="1"/>
+      <text x="196" y="82" font-size="13" font-weight="700" text-anchor="middle" fill="var(--teal,#17B8A6)" font-family="Fredoka, sans-serif">Dai, manca</text>
+      <text x="196" y="98" font-size="13" font-weight="700" text-anchor="middle" fill="var(--teal,#17B8A6)" font-family="Fredoka, sans-serif">poco! 💪</text>
     </g>
-    <g class="chm-dust"><circle cx="46" cy="120" r="3" fill="#C9C4D6"/><circle cx="38" cy="124" r="2.4" fill="#C9C4D6"/></g>
   </svg>`
 }
 
 export function ChapterMascot({ type }: { type: MascotType }) {
-  const isLarge = type === 'timeline' || type === 'commute' || type === 'talk'
+  const isLarge = type === 'timeline' || type === 'commute' || type === 'talk' || type === 'finish'
   return (
     <div
       className={`chapter-mascot-stage${isLarge ? ' large' : ''}`}
