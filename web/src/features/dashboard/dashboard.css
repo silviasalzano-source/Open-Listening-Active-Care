@@ -999,8 +999,8 @@
 .db-factor-label {
   flex: 1;
   min-width: 0;
-  font-size: 11px;
-  color: #6B5F7A;
+  font-size: 13px;
+  color: #2A2338;
   line-height: 1.4;
 }
 .db-factor-score {
@@ -1019,9 +1019,9 @@
   border-top: 1px dashed #EDE8F5;
 }
 .db-factor-multi-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  color: #6B5F7A;
+  color: #2A2338;
   margin-bottom: 8px;
   line-height: 1.4;
 }
@@ -1031,9 +1031,9 @@
   margin-top: 8px;
 }
 .db-factor-nps-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  color: #6B5F7A;
+  color: #2A2338;
   line-height: 1.4;
   margin-bottom: 4px;
 }

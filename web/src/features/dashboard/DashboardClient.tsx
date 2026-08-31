@@ -790,28 +790,28 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
                 {/* 2. Supporto del Manager */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">👤 Supporto del Manager</div>
+                  <div className="db-factor-section-hdr">💪 Supporto del Manager</div>
                   <FactorRow label="Il/la mio/a referente mi supporta nella mia crescita professionale" fieldKey="referente_crescita" data={filtered} />
                   <FactorRow label="Il/la mio/a referente dà obiettivi strutturati" fieldKey="referente_obiettivi" data={filtered} />
                 </div>
 
                 {/* 3. Supporto e valore percepito dell'HR */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🏢 Supporto e valore percepito dell&apos;HR</div>
+                  <div className="db-factor-section-hdr">🙌 Supporto e valore percepito dell&apos;HR</div>
                   <FactorRow label="L'HR è un punto di riferimento accessibile e disponibile" fieldKey="hr_access" data={filtered} />
                   <FactorRow label="Riconosco un valore reale nel supporto che l'HR mi offre" fieldKey="hr_valore" data={filtered} />
                 </div>
 
                 {/* 4. Supporto Management */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">📊 Supporto Management</div>
+                  <div className="db-factor-section-hdr">🚀 Supporto Management</div>
                   <FactorRow label="Il management comunica in modo trasparente la strategia e le priorità" fieldKey="mgmt_trasp" data={filtered} />
                   <FactorRow label="Ho fiducia nelle scelte strategiche del management" fieldKey="mgmt_fiducia" data={filtered} />
                 </div>
 
                 {/* 5. Jobcrafting */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🔧 Jobcrafting</div>
+                  <div className="db-factor-section-hdr">💡 Jobcrafting</div>
                   <FactorRow label="Ho la possibilità di proporre nuove modalità per svolgere i miei compiti" fieldKey="jc_task" data={filtered} />
                   <FactorRow label="Mi sento libero/a di sperimentare soluzioni diverse da quelle standard" fieldKey="jc_schemi" data={filtered} />
                 </div>
@@ -833,26 +833,26 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
                 {/* 7. Identificazione con i valori aziendali */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">💎 Identificazione con i valori aziendali</div>
+                  <div className="db-factor-section-hdr">🌟 Identificazione con i valori aziendali</div>
                   <FactorRow label="Mi identifico nei valori e nel modo di lavorare di OT" fieldKey="engagement" data={filtered} />
                 </div>
 
                 {/* 8. Percezione dell'investimento in innovazione */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">💻 Percezione dell&apos;investimento in innovazione</div>
+                  <div className="db-factor-section-hdr">🔥 Percezione dell&apos;investimento in innovazione</div>
                   <FactorRow label="OT investe in modo adeguato nell'innovazione tecnologica" fieldKey="tecnologia" data={filtered} />
                 </div>
 
                 {/* 9. Stress */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">⚡ Stress</div>
+                  <div className="db-factor-section-hdr">🪫 Stress</div>
                   <FactorRow label="Il carico di lavoro che gestisco quotidianamente è sostenibile" fieldKey="stress_carico" data={filtered} />
                   <FactorRow label="Riesco a staccare dal lavoro e recuperare le energie nel tempo libero" fieldKey="stress_recupero" data={filtered} />
                 </div>
 
                 {/* 10. Follow-up Open Listening */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🔁 Follow-up Open Listening</div>
+                  <div className="db-factor-section-hdr">🙂 Follow-up Open Listening</div>
                   <FactorRow label="Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)" fieldKey="open_listening" data={filtered} />
                 </div>
 
