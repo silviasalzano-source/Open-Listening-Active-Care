@@ -36,7 +36,7 @@ interface SurveyResponse {
 }
 
 const LS_KEY = 'ol_responses'
-const LS_SEED_KEY = 'ol_seeded_v5'
+const LS_SEED_KEY = 'ol_seeded'
 const PRIVACY_MIN = 5
 const TOTAL_INVITED = 80
 
@@ -66,18 +66,13 @@ function mkRng(seed: number) {
 }
 
 const TEAMS_BY_BU: Record<string, string[]> = {
-  'Operation & Delivery':          ['SYS Banking', 'SYS CROSS', 'SYS Fashion', 'APA'],
-  'Sales & Marketing':             [],
-  'IT (interno, helpdesk)':        [],
-  'Consulente esterno presso (One sys e Venio-AI)': [],
+  'Operation & Delivery':          ['SYS', 'APA', 'Team Operations'],
+  'Sales & Marketing':             ['Sales', 'Marketing & Comunicazione'],
+  'IT (interno, helpdesk)':        ['Helpdesk', 'IT Infrastructure'],
   'HR':                            ['HR Payroll', 'Recruiting & Development', 'Language Specialist'],
-  'Servizi Generali':              ['Amministrazione', 'Office Coordinator'],
+  'Servizi generali':              ['Amministrazione', 'Office Coordinator'],
+  'Consulenti esterni su One sys': ['Consulenti One sys'],
 }
-
-const COMPANY_GROUPS: { label: string; bus: string[]; color: string; bg: string }[] = [
-  { label: 'OT Consulting', bus: ['Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'Consulente esterno presso (One sys e Venio-AI)'], color: '#B91C1C', bg: 'rgba(220,38,38,.10)' },
-  { label: 'Open Source',   bus: ['HR', 'Servizi Generali'], color: '#6D28D9', bg: 'rgba(109,40,217,.10)' },
-]
 
 function generateMockData(): SurveyResponse[] {
   const rng = mkRng(0xdeadbeef)
@@ -147,34 +142,6 @@ function Strip({ distrib, total }: { distrib: Record<number, number>; total: num
   )
 }
 
-function LikertCard({ title, eyebrow, items, data }: {
-  title: string; eyebrow: string
-  items: { label: string; short?: string; key: keyof SurveyResponse }[]
-  data: SurveyResponse[]
-}) {
-  return (
-    <div className="db-card">
-      <div className="db-card-eyebrow">{eyebrow}</div>
-      <div className="db-card-title">{title}</div>
-      <div className="db-item-list">
-        {items.map(it => {
-          const vals = data.map(r => r[it.key] as number | null)
-          const mean = avg(vals)
-          const distrib = buildDistrib(vals)
-          const n = vals.filter(v => v != null).length
-          return (
-            <div key={it.key as string} className="db-item">
-              <div className="db-item-label">{it.short ?? it.label}</div>
-              <Strip distrib={distrib} total={n} />
-              <span className={`db-score-num ${scoreClass(mean)}`}>{mean.toFixed(1)}</span>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
 function DistBar({ label, count, total, color }: { label: string; count: number; total: number; color: string }) {
   const pct = total ? Math.round((count / total) * 100) : 0
   return (
@@ -188,19 +155,32 @@ function DistBar({ label, count, total, color }: { label: string; count: number;
   )
 }
 
+function FactorRow({ label, fieldKey, data }: { label: string; fieldKey: keyof SurveyResponse; data: SurveyResponse[] }) {
+  const vals = data.map(r => r[fieldKey] as number | null)
+  const mean = avg(vals)
+  const n = vals.filter(v => v != null).length
+  const distrib = buildDistrib(vals)
+  return (
+    <div className="db-factor-row">
+      <span className="db-factor-label">{label}</span>
+      <Strip distrib={distrib} total={n} />
+      <span className={`db-factor-score ${scoreClass(mean)}`}>{mean.toFixed(1)}</span>
+    </div>
+  )
+}
+
 /* ---- Main component ---- */
 export function DashboardClient({ userEmail, userRole }: { userEmail: string; userRole: 'hr_admin' | 'bu_manager' }) {
   const isHR = userRole === 'hr_admin'
-  const [tab, setTab] = useState<'q1' | 'q2'>(isHR ? 'q1' : 'q2')
   const [buF, setBuF] = useState('')
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [q1BuFilter, setQ1BuFilter] = useState('')
-  const [q1TeamFilter, setQ1TeamFilter] = useState('')
   const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'mid' | 'high'>('all')
   const [expandedBu, setExpandedBu] = useState<Record<string, boolean>>({})
+  const [openBoxes, setOpenBoxes] = useState<Record<string, boolean>>({})
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -223,7 +203,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     (!ruoloF || ruoloF === 'Tutti i ruoli' || r.ruolo === ruoloF)
   )
   const N = filtered.length
-  const privacyBlock = tab === 'q2' && N < PRIVACY_MIN
+  const privacyBlock = N < PRIVACY_MIN
 
   const termVals = all.map(r => r.termometro).filter((v): v is number => v != null)
   const termAvg = avg(termVals)
@@ -250,26 +230,20 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const descrCount: Record<string, number> = {}
   all.forEach(r => { if (r.descrizione) descrCount[r.descrizione] = (descrCount[r.descrizione] ?? 0) + 1 })
 
-  // Energia per BU → team
   const buStats = Object.keys(TEAMS_BY_BU).map(buName => {
     const buRows = all.filter(r => r.bu === buName)
     const buAvg = avg(buRows.map(r => r.termometro))
     const teams = TEAMS_BY_BU[buName].map(teamName => {
       const teamRows = buRows.filter(r => r.team === teamName)
       return { name: teamName, n: teamRows.length, avg: avg(teamRows.map(r => r.termometro)) }
-    }).sort((a, b) => a.avg - b.avg)
+    }).filter(t => t.n > 0).sort((a, b) => a.avg - b.avg)
     return { name: buName, n: buRows.length, avg: buAvg, teams }
   }).filter(b => b.n > 0).sort((a, b) => a.avg - b.avg)
 
-  const climaPositivoN = (climaCount['Soleggiato'] ?? 0) + (climaCount['Parzialmente nuvoloso'] ?? 0)
-  const climaPositivoPct = all.length ? Math.round(climaPositivoN / all.length * 100) : 0
+  const descrPositivoPct = all.length ? Math.round(((descrCount['Crescita'] ?? 0) + (descrCount['Stabile'] ?? 0)) / all.length * 100) : 0
+  const descrTop = descOpts.reduce((a, b) => (descrCount[a.key] ?? 0) >= (descrCount[b.key] ?? 0) ? a : b)
   const climaTop = climaOpts.reduce((a, b) => (climaCount[a.label] ?? 0) >= (climaCount[b.label] ?? 0) ? a : b)
 
-  const descrPositivoN = (descrCount['Crescita'] ?? 0) + (descrCount['Stabile'] ?? 0)
-  const descrPositivoPct = all.length ? Math.round(descrPositivoN / all.length * 100) : 0
-  const descrTop = descOpts.reduce((a, b) => (descrCount[a.key] ?? 0) >= (descrCount[b.key] ?? 0) ? a : b)
-
-  /* NPS */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
   const det = npsVals.filter(v => v <= 6).length
   const pas = npsVals.filter(v => v >= 7 && v <= 8).length
@@ -285,9 +259,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   filtered.forEach(r => r.sv_crescita?.forEach(p => { crescitaCount[p] = (crescitaCount[p] ?? 0) + 1 }))
   const crescitaTop = Object.entries(crescitaCount).sort((a, b) => b[1] - a[1])
 
-  const soddAvg = avg(filtered.map(r => r.soddisfazione))
-
-  const BUS = ['Tutte le aree', ...Object.keys(TEAMS_BY_BU)]
+  const BUS = ['Tutte le aree', 'Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Servizi generali', 'Consulenti esterni su One sys']
   const ANZS = ['Tutte le anzianità', '< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const RUOLI = ['Tutti i ruoli', 'Manager', 'Worker']
 
@@ -296,12 +268,13 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       const fullName = `${r.nome ?? ''} ${r.cognome ?? ''}`.toLowerCase()
       const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
       const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
-      const teamMatch = !q1TeamFilter || q1TeamFilter === 'Tutti i team' || r.team === q1TeamFilter
       const t = r.termometro ?? 0
       const energyMatch = q1EnergyFilter === 'all' || (q1EnergyFilter === 'low' && t <= 4) || (q1EnergyFilter === 'mid' && t >= 5 && t <= 7) || (q1EnergyFilter === 'high' && t >= 8)
-      return searchMatch && buMatch && teamMatch && energyMatch
+      return searchMatch && buMatch && energyMatch
     })
     .sort((a, b) => (a.termometro ?? 0) - (b.termometro ?? 0))
+
+  const toggleBox = (id: string) => setOpenBoxes(p => ({ ...p, [id]: !p[id] }))
 
   async function askAI(q: string) {
     if (!q.trim()) return
@@ -344,7 +317,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
     const descrLabel: Record<string, string> = { 'Crescita': '⚡ Energia in Crescita', 'Stabile': '🔋 Energia Stabile', 'Ricarica': '🔌 Energia in Ricarica', 'Assestamento': '🌱 Energia in Assestamento' }
 
-    // Spunti di conversazione generati dai dati
     const spunti: string[] = []
     if (t <= 4) spunti.push('Energia bassa: inizia chiedendo come sta davvero, senza presupporre nulla. Dai spazio prima di entrare nei dettagli.')
     if (t >= 5 && t <= 7) spunti.push('Energia nella media: esplora cosa potrebbe aumentarla o cosa la frena. Chiedi cosa manca per sentirsi davvero bene al lavoro.')
@@ -404,7 +376,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   ${r.ruolo ? `<span class="meta-chip">👤 ${r.ruolo}</span>` : ''}
   ${r.anzianita ? `<span class="meta-chip">📅 ${r.anzianita}</span>` : ''}
 </div>
-
 <div class="hero">
   <div class="hero-score">${t}<span>/10</span></div>
   <div class="hero-right">
@@ -415,7 +386,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     <div class="hero-vs">Media del team: <strong>${termAvg.toFixed(1)}/10</strong> · Scarto: <strong style="color:${t >= termAvg ? '#17B8A6' : '#FF6E86'}">${t >= termAvg ? '+' : ''}${(t - termAvg).toFixed(1)}</strong></div>
   </div>
 </div>
-
 <div class="grid">
   <div class="section">
     <div class="section-label">Clima del team · Oggi</div>
@@ -433,16 +403,13 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     <div class="tags">${(r.causa ?? []).map(c => `<span class="tag">${c}</span>`).join('') || '<span style="color:#9A93A8">—</span>'}</div>
   </div>
 </div>
-
 <div class="spunti">
   <div class="spunti-title">💬 Spunti per il colloquio</div>
   ${spunti.map(s => `<div class="spunto"><div class="spunto-dot"></div><div>${s}</div></div>`).join('')}
 </div>
-
 <div class="note-box">
   <div class="note-title">📝 Note HR — da compilare durante il colloquio</div>
 </div>
-
 <footer>
   <span>OT Consulting — Open Listening · Active Care</span>
   <span>Uso interno riservato · Non distribuire</span>
@@ -465,7 +432,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
         <div className="db-brand-row">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/ot-logo-icon.svg" alt="OT Consulting" className="db-header-logo" />
-          <span className="db-brand">Dashboard Open Listening · <strong>ACTIVE CARE</strong></span>
+          <span className="db-brand">Dashboard HR</span>
         </div>
         <div className="db-user-row">
           <span className="db-user-chip">👤 {userEmail}</span>
@@ -474,13 +441,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       </header>
 
       <div className="db-content">
-        <div className="db-tabs">
-          {isHR && (
-            <button className={`db-tab warm${tab === 'q1' ? ' active' : ''}`} onClick={() => setTab('q1')}>🔋 My Energy Battery</button>
-          )}
-          <button className={`db-tab${tab === 'q2' ? ' active' : ''}`} onClick={() => setTab('q2')}>⚡ Fattori Energy Battery</button>
-        </div>
-
+        {/* Survey completion strip */}
         <div className="db-survey-strip">
           <div className="db-survey-stat">
             <span className="db-survey-stat-num">{all.length}</span>
@@ -502,474 +463,455 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           </div>
         </div>
 
-        {tab === 'q1' && (
-          <div className="db-tab-body">
-            <div className="db-section-hdr">
-              <span className="db-section-title">Energia oggi e nell&apos;anno</span>
-            </div>
+        {/* Filtri sempre visibili */}
+        <div className="db-filters db-filters-persistent">
+          <div className="db-filter-group">
+            <label className="db-filter-label">AREA ORGANIZZATIVA</label>
+            <select className="db-filter-select" value={buF || 'Tutte le aree'} onChange={e => setBuF(e.target.value)}>
+              {BUS.map(o => <option key={o}>{o}</option>)}
+            </select>
+          </div>
+          <div className="db-filter-group">
+            <label className="db-filter-label">ANZIANITÀ</label>
+            <select className="db-filter-select" value={anzF || 'Tutte le anzianità'} onChange={e => setAnzF(e.target.value)}>
+              {ANZS.map(o => <option key={o}>{o}</option>)}
+            </select>
+          </div>
+          <div className="db-filter-group">
+            <label className="db-filter-label">RUOLO</label>
+            <select className="db-filter-select" value={ruoloF || 'Tutti i ruoli'} onChange={e => setRuoloF(e.target.value)}>
+              {RUOLI.map(o => <option key={o}>{o}</option>)}
+            </select>
+          </div>
+        </div>
 
-            <div className="db-row-2col">
-              {(() => {
-                const neg = (climaCount['Piovoso'] ?? 0) + (climaCount['Temporalesco'] ?? 0)
-                const negPct = all.length ? Math.round(neg / all.length * 100) : 0
-                const sev = negPct >= 40 ? 'red' : negPct >= 20 ? 'amber' : 'green'
-                const statusText = sev === 'red'
-                  ? `${negPct}% riporta clima difficile`
-                  : sev === 'amber'
-                  ? `${negPct}% segnala pressione — monitora`
-                  : `${100 - negPct}% vive un clima positivo`
-                return (
-                  <div className={`db-card alert-${sev}`}>
-                    <div className={`db-card-badge sev-${sev}`}>☀️ Clima del team · Oggi</div>
-                    <div className="db-card-title">Che tempo fa nel tuo team?</div>
-                    <div className="db-card-status">{statusText}</div>
-                    <div className="db-dist-list">
-                      {climaOpts.map(o => {
-                        const n = climaCount[o.label] ?? 0
-                        const pct = all.length ? Math.round(n / all.length * 100) : 0
-                        return (
-                          <div key={o.label} className="db-dist-row icon">
-                            <span className="db-dist-icon">{o.icon}</span>
-                            <span className="db-dist-label">{o.label}</span>
-                            <div className="db-dist-track">
-                              <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
+        {/* Layout a due pannelli */}
+        <div className="db-main-panels">
+
+          {/* Pannello sinistro: Energy OT People (solo HR) */}
+          {isHR && (
+            <div className="db-panel-left">
+              <div className="db-panel-heading">⚡ Energy OT People</div>
+              <div className="db-boxes-grid">
+
+                {/* Box 1: Clima del team */}
+                <div className={`db-box${openBoxes['clima'] ? ' expanded' : ''}`}>
+                  <button className="db-box-header" onClick={() => toggleBox('clima')}>
+                    <span className="db-box-brand-label">Open Listening Active Care</span>
+                    <span className="db-box-eyebrow">CLIMA DEL TEAM · OGGI</span>
+                    <span className="db-box-value-row">
+                      <span className="db-box-icon">{climaTop.icon}</span>
+                      <span className="db-box-value small">{climaTop.label}</span>
+                    </span>
+                    <span className="db-box-sub">{all.length ? Math.round((climaCount[climaTop.label] ?? 0) / all.length * 100) : 0}% prevalente</span>
+                    <span className="db-box-chevron">{openBoxes['clima'] ? '▲' : '▼'}</span>
+                  </button>
+                  {openBoxes['clima'] && (
+                    <div className="db-box-body">
+                      <div className="db-dist-list">
+                        {climaOpts.map(o => {
+                          const n = climaCount[o.label] ?? 0
+                          const pct = all.length ? Math.round(n / all.length * 100) : 0
+                          return (
+                            <div key={o.label} className="db-dist-row icon">
+                              <span className="db-dist-icon">{o.icon}</span>
+                              <span className="db-dist-label">{o.label}</span>
+                              <div className="db-dist-track"><div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} /></div>
+                              <span className="db-dist-count">{n}</span>
+                              <span className="db-dist-pct">{pct}%</span>
                             </div>
-                            <span className="db-dist-count">{n}</span>
-                            <span className="db-dist-pct">{pct}%</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )
-              })()}
-
-              {(() => {
-                const sev = termAvg < 5 ? 'red' : termAvg < 6.5 ? 'amber' : 'green'
-                const statusText = sev === 'red'
-                  ? `Media ${termAvg.toFixed(1)}/10 — livello critico`
-                  : sev === 'amber'
-                  ? `${termVals.filter(v => v <= 4).length} persone sotto soglia (1–4)`
-                  : `${termVals.filter(v => v >= 8).length} persone ad alta energia (8–10)`
-                return (
-                  <div className={`db-card alert-${sev}`}>
-                    <div className={`db-card-badge sev-${sev}`}>⚡ Termometro energetico · Oggi</div>
-                    <div className="db-card-title">Il livello di energia attuale</div>
-                    <div className="db-card-status">{statusText}</div>
-                    <div className="db-gauge-row">
-                      <div className="db-gauge">
-                        <svg viewBox="0 0 100 100" width="90" height="90">
-                          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="10" />
-                          <circle cx="50" cy="50" r="42" fill="none"
-                            stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
-                            strokeWidth="10" strokeDasharray={`${(termAvg / 10) * 264} 264`}
-                            strokeLinecap="round" transform="rotate(-90 50 50)" />
-                          <text x="50" y="55" textAnchor="middle" fontSize="20" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
-                        </svg>
-                      </div>
-                      <div className="db-gauge-legend">
-                        <span className="db-gauge-sub">{termVals.length} risposte</span>
-                        <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa (1–4)</span>
-                        <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media (5–7)</span>
-                        <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta (8–10)</span>
+                          )
+                        })}
                       </div>
                     </div>
-                  </div>
-                )
-              })()}
-            </div>
-
-            <div className="db-two-col">
-            {(() => {
-              const [topCausa, topN] = causeTop[0] ?? ['—', 0]
-              const topPct = all.length ? Math.round(topN / all.length * 100) : 0
-              const isNeg = ['Carico di lavoro', 'Rapporto con il/la responsabile'].includes(topCausa)
-              const sev = isNeg ? 'red' : 'amber'
-              const statusText = isNeg
-                ? `"${topCausa}" è la causa principale (${topPct}%)`
-                : `Causa prevalente: "${topCausa}" (${topPct}%)`
-              return (
-                <div className={`db-card alert-${sev}`}>
-                  <div className={`db-card-badge sev-${sev}`}>🔍 Cause dell&apos;energia · Oggi</div>
-                  <div className="db-card-title">Cosa influenza di più l&apos;energia?</div>
-                  <div className="db-card-status">{statusText}</div>
-                  <div className="db-dist-list">
-                    {causeTop.map(([label, count]) => (
-                      <DistBar key={label} label={label} count={count} total={all.length} color="#FFB648" />
-                    ))}
-                  </div>
-                </div>
-              )
-            })()}
-
-            {(() => {
-              const recuperoPct = 100 - descrPositivoPct
-              const sev = recuperoPct >= 50 ? 'red' : recuperoPct >= 30 ? 'amber' : 'green'
-              const statusText = sev === 'red'
-                ? `${recuperoPct}% in recupero o assestamento`
-                : sev === 'amber'
-                ? `${recuperoPct}% ha vissuto un anno faticoso`
-                : `${descrPositivoPct}% descrive un anno positivo`
-              return (
-                <div className={`db-card alert-${sev}`}>
-                  <div className={`db-card-badge sev-${sev}`}>🌱 Descrizione energia · Ultimo anno</div>
-                  <div className="db-card-title">Come è andata quest&apos;anno?</div>
-                  <div className="db-card-status">{statusText}</div>
-                  <div className="db-dist-list">
-                    {descOpts.map(o => {
-                      const n = descrCount[o.key] ?? 0
-                      const pct = all.length ? Math.round(n / all.length * 100) : 0
-                      return (
-                        <div key={o.label} className="db-dist-row">
-                          <span className="db-dist-label">{o.icon} {o.label}</span>
-                          <div className="db-dist-track">
-                            <div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} />
-                          </div>
-                          <span className="db-dist-count">{n}</span>
-                          <span className="db-dist-pct">{pct}%</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })()}
-            </div>
-
-            <div className="db-area-box">
-              <div className="db-area-header">
-                <div className="db-area-title">🔋 Energia per BU & Team</div>
-                <div className="db-area-sub">Media termometro per BU e team</div>
-                <div className="db-area-legend">
-                  <span className="db-area-legend-pill" style={{ color: '#FF6E86', background: 'rgba(255,110,134,.14)', border: '1px solid rgba(255,110,134,.35)' }}>● Bassa · 1–4</span>
-                  <span className="db-area-legend-pill" style={{ color: '#4B6BCC', background: 'rgba(75,107,204,.12)', border: '1px solid rgba(75,107,204,.30)' }}>● Media · 5–7</span>
-                  <span className="db-area-legend-pill" style={{ color: '#17B8A6', background: 'rgba(23,184,166,.12)', border: '1px solid rgba(23,184,166,.30)' }}>● Alta · 8–10</span>
-                </div>
-              </div>
-              <div className="db-area-list">
-                {COMPANY_GROUPS.map(group => {
-                  const groupStats = buStats.filter(b => group.bus.includes(b.name))
-                  if (groupStats.length === 0) return null
-                  return (
-                    <div key={group.label} className="db-area-group">
-                      <div className="db-area-company-label" style={{ color: group.color, background: group.bg }}>{group.label}</div>
-                      {groupStats.map(bu => {
-                        const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
-                        const expanded = !!expandedBu[bu.name]
-                        return (
-                          <div key={bu.name} className="db-area-bu">
-                            <button
-                              className="db-area-bu-row"
-                              onClick={() => setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] }))}
-                            >
-                              <span className="db-area-chevron" style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
-                              <span className="db-area-bu-name">{bu.name}</span>
-                              <span className="db-area-count">{bu.n} pers.</span>
-                              <span className="db-area-score" style={{ color: tc }}>{bu.avg.toFixed(1)}</span>
-                              <div className="db-area-bar-wrap">
-                                <div className="db-area-bar-fill" style={{ width: `${bu.avg * 10}%`, background: tc }} />
-                              </div>
-                            </button>
-                            {expanded && (
-                              <div className="db-area-teams">
-                                {bu.teams.map(t => {
-                                  const ttc = t.avg >= 8 ? '#17B8A6' : t.avg >= 5 ? '#4B6BCC' : '#FF6E86'
-                                  return (
-                                    <div key={t.name} className="db-area-team-row">
-                                      <span className="db-area-team-name">{t.name}</span>
-                                      <span className="db-area-count">{t.n} pers.</span>
-                                      <span className="db-area-score" style={{ color: ttc }}>{t.avg > 0 ? t.avg.toFixed(1) : '—'}</span>
-                                      <div className="db-area-bar-wrap">
-                                        <div className="db-area-bar-fill" style={{ width: `${t.avg * 10}%`, background: ttc }} />
-                                      </div>
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="db-individual-box">
-              <div className="db-individual-header">
-                <div>
-                  <div className="db-individual-title">👤 Report my energy</div>
-                  <div className="db-individual-sub">Scarica il report di un dipendente per preparare il colloquio</div>
-                  <div className="db-area-legend" style={{ marginTop: 8 }}>
-                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter('all')} style={{ color: q1EnergyFilter === 'all' ? '#2A2338' : '#9A93A8', background: q1EnergyFilter === 'all' ? 'rgba(42,35,56,.10)' : 'rgba(42,35,56,.05)', border: `1.5px solid ${q1EnergyFilter === 'all' ? '#2A2338' : 'rgba(42,35,56,.15)'}`, fontWeight: q1EnergyFilter === 'all' ? 900 : 700 }}>Tutti</button>
-                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'low' ? 'all' : 'low')} style={{ color: '#FF6E86', background: q1EnergyFilter === 'low' ? 'rgba(255,110,134,.28)' : 'rgba(255,110,134,.14)', border: `1.5px solid ${q1EnergyFilter === 'low' ? '#FF6E86' : 'rgba(255,110,134,.35)'}`, fontWeight: q1EnergyFilter === 'low' ? 900 : 700 }}>● Bassa · 1–4</button>
-                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'mid' ? 'all' : 'mid')} style={{ color: '#4B6BCC', background: q1EnergyFilter === 'mid' ? 'rgba(75,107,204,.25)' : 'rgba(75,107,204,.12)', border: `1.5px solid ${q1EnergyFilter === 'mid' ? '#4B6BCC' : 'rgba(75,107,204,.30)'}`, fontWeight: q1EnergyFilter === 'mid' ? 900 : 700 }}>● Media · 5–7</button>
-                    <button className="db-area-legend-pill db-legend-filter" onClick={() => setQ1EnergyFilter(q1EnergyFilter === 'high' ? 'all' : 'high')} style={{ color: '#17B8A6', background: q1EnergyFilter === 'high' ? 'rgba(23,184,166,.25)' : 'rgba(23,184,166,.12)', border: `1.5px solid ${q1EnergyFilter === 'high' ? '#17B8A6' : 'rgba(23,184,166,.30)'}`, fontWeight: q1EnergyFilter === 'high' ? 900 : 700 }}>● Alta · 8–10</button>
-                  </div>
-                </div>
-              </div>
-              <div className="db-individual-filters">
-                <div className="db-individual-search-wrap">
-                  <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="16" height="16">
-                    <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6"/>
-                    <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round"/>
-                  </svg>
-                  <input
-                    className="db-individual-search"
-                    type="text"
-                    placeholder="Cerca per nome o cognome…"
-                    value={q1Search}
-                    onChange={e => setQ1Search(e.target.value)}
-                  />
-                  {q1Search && (
-                    <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>
                   )}
                 </div>
-                <select className="db-filter-select" value={q1BuFilter || 'Tutte le aree'} onChange={e => { setQ1BuFilter(e.target.value); setQ1TeamFilter('') }}>
-                  {BUS.map(o => <option key={o}>{o}</option>)}
-                </select>
-                {(() => {
-                  const teams = (q1BuFilter && q1BuFilter !== 'Tutte le aree') ? (TEAMS_BY_BU[q1BuFilter] ?? []) : []
-                  if (teams.length === 0) return null
-                  return (
-                    <select className="db-filter-select" value={q1TeamFilter || 'Tutti i team'} onChange={e => setQ1TeamFilter(e.target.value)}>
-                      <option>Tutti i team</option>
-                      {teams.map(t => <option key={t}>{t}</option>)}
-                    </select>
-                  )
-                })()}
-              </div>
-              <div className="db-sort-note" style={{ marginTop: 6 }}>↑ ordinate per energia</div>
 
-              {q1Search.trim().length === 0 && q1EnergyFilter === 'all' && (!q1TeamFilter || q1TeamFilter === 'Tutti i team') && (!q1BuFilter || q1BuFilter === 'Tutte le aree') ? (
-                <div className="db-individual-placeholder">
-                  <svg viewBox="0 0 48 48" fill="none" width="40" height="40">
-                    <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5"/>
-                    <path d="M30 30l10 10" stroke="#CCC8D8" strokeWidth="2.5" strokeLinecap="round"/>
-                  </svg>
-                  <div>Cerca un dipendente per nome o cognome<br/><span>Usa i filtri sopra per restringere l&apos;area o il livello di energia</span></div>
-                </div>
-              ) : q1Individuals.length === 0 ? (
-                <div className="db-individual-placeholder">
-                  <div>Nessun rispondente corrisponde alla ricerca.</div>
-                </div>
-              ) : (
-                <>
-                  <div className="db-individual-results-count">{q1Individuals.length} {q1Individuals.length === 1 ? 'risultato' : 'risultati'}</div>
-                  <div className="db-quickview-list">
-                    {q1Individuals.map((r, i) => {
-                      const t = r.termometro ?? 0
-                      const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
-                      const termBg = t >= 8 ? 'rgba(23,184,166,.10)' : t >= 5 ? 'rgba(75,107,204,.10)' : 'rgba(255,110,134,.10)'
-                      const termLabel = t >= 8 ? 'Alta' : t >= 5 ? 'Media' : 'Bassa'
-                      const avatarBg = t >= 8 ? 'rgba(23,184,166,.15)' : t >= 5 ? 'rgba(75,107,204,.15)' : 'rgba(255,110,134,.15)'
-                      const avatarColor = t >= 8 ? '#0A7A6B' : t >= 5 ? '#2A4A99' : '#B8003A'
-                      const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
-                      const descrShort: Record<string, string> = { 'Crescita': '⚡ Crescita', 'Stabile': '🔋 Stabile', 'Ricarica': '🔌 Ricarica', 'Assestamento': '🌱 Assestamento' }
-                      return (
-                        <div key={i} className="db-quickview-card" style={{ borderLeft: `4px solid ${termColor}` }}>
-                          <div className="db-qv-header">
-                            <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor, width: 44, height: 44, fontSize: 15 }}>
-                              {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
-                            </div>
-                            <div className="db-qv-identity">
-                              <div className="db-individual-name">{r.nome} {r.cognome}</div>
-                              <div className="db-individual-meta">
-                                {r.bu && <span>{r.bu}</span>}
-                                {r.ruolo && <span>· {r.ruolo}</span>}
-                                {r.anzianita && <span>· {r.anzianita}</span>}
-                              </div>
-                            </div>
-                            <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
-                              <svg viewBox="0 0 20 20" fill="none" width="14" height="14">
-                                <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-                              </svg>
-                              Report
-                            </button>
-                          </div>
-                          <div className="db-qv-body">
-                            <div className="db-qv-energy" style={{ background: termBg }}>
-                              <span className="db-qv-score" style={{ color: termColor }}>{t}<span className="db-qv-score-unit">/10</span></span>
-                              <div className="db-qv-energy-right">
-                                <div className="db-qv-energy-label" style={{ color: termColor }}>Energia {termLabel}</div>
-                                <div className="db-qv-bar-wrap">
-                                  <div className="db-qv-bar-fill" style={{ width: `${t * 10}%`, background: termColor }} />
-                                </div>
-                              </div>
-                              <span className="db-qv-clima">{climaEmoji[r.clima ?? ''] ?? '—'}</span>
-                            </div>
-                            <div className="db-qv-data-row">
-                              <div className="db-qv-data-item">
-                                <div className="db-qv-data-label">Anno</div>
-                                <div className="db-qv-data-val">{r.descrizione ? descrShort[r.descrizione] ?? r.descrizione : '—'}</div>
-                              </div>
-                              <div className="db-qv-data-item">
-                                <div className="db-qv-data-label">Cause</div>
-                                <div className="db-qv-tags">
-                                  {(r.causa ?? []).map(c => <span key={c} className="db-qv-tag">{c}</span>)}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                {/* Box 2: Termometro */}
+                <div className={`db-box${openBoxes['termometro'] ? ' expanded' : ''}`}>
+                  <button className="db-box-header" onClick={() => toggleBox('termometro')}>
+                    <span className="db-box-value-row">
+                      <span className="db-box-value" style={{ color: termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86' }}>
+                        {termAvg.toFixed(1)}<span style={{ fontSize: 13, fontWeight: 400, color: '#9A93A8' }}>/10</span>
+                      </span>
+                    </span>
+                    <span className="db-box-sub">media energetica del team</span>
+                    <span className="db-box-chevron">{openBoxes['termometro'] ? '▲' : '▼'}</span>
+                  </button>
+                  {openBoxes['termometro'] && (
+                    <div className="db-box-body">
+                      <div className="db-gauge-row" style={{ justifyContent: 'flex-start', gap: 12 }}>
+                        <svg viewBox="0 0 80 80" width="68" height="68">
+                          <circle cx="40" cy="40" r="33" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="8" />
+                          <circle cx="40" cy="40" r="33" fill="none"
+                            stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
+                            strokeWidth="8" strokeDasharray={`${(termAvg / 10) * 207} 207`}
+                            strokeLinecap="round" transform="rotate(-90 40 40)" />
+                          <text x="40" y="45" textAnchor="middle" fontSize="16" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
+                        </svg>
+                        <div className="db-gauge-legend">
+                          <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa</span>
+                          <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media</span>
+                          <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta</span>
                         </div>
-                      )
-                    })}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
 
-        {tab === 'q2' && (
-          <div className="db-tab-body">
-            <div className="db-filters">
-              <div className="db-filter-group">
-                <label className="db-filter-label">AREA ORGANIZZATIVA</label>
-                <select className="db-filter-select" value={buF || 'Tutte le aree'} onChange={e => setBuF(e.target.value)}>
-                  {BUS.map(o => <option key={o}>{o}</option>)}
-                </select>
+                {/* Box 3: Cause */}
+                <div className={`db-box${openBoxes['cause'] ? ' expanded' : ''}`}>
+                  <button className="db-box-header" onClick={() => toggleBox('cause')}>
+                    <span className="db-box-eyebrow">CAUSE ENERGIA · OGGI</span>
+                    <span className="db-box-value-row">
+                      <span className="db-box-value small" style={{ fontSize: 12 }}>{causeTop[0]?.[0] ?? '—'}</span>
+                    </span>
+                    <span className="db-box-sub">{causeTop[0] ? `${all.length ? Math.round(causeTop[0][1] / all.length * 100) : 0}% la cita` : 'nessun dato'}</span>
+                    <span className="db-box-chevron">{openBoxes['cause'] ? '▲' : '▼'}</span>
+                  </button>
+                  {openBoxes['cause'] && (
+                    <div className="db-box-body">
+                      <div className="db-dist-list">
+                        {causeTop.map(([label, count]) => (
+                          <DistBar key={label} label={label} count={count} total={all.length} color="#FFB648" />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Box 4: Descrizione energia anno */}
+                <div className={`db-box${openBoxes['descrizione'] ? ' expanded' : ''}`}>
+                  <button className="db-box-header" onClick={() => toggleBox('descrizione')}>
+                    <span className="db-box-eyebrow">ENERGIA · ULTIMO ANNO</span>
+                    <span className="db-box-value-row">
+                      <span className="db-box-icon">{descrTop.icon}</span>
+                      <span className="db-box-value small">{descrTop.label}</span>
+                    </span>
+                    <span className="db-box-sub">{descrPositivoPct}% positivo (Crescita o Stabile)</span>
+                    <span className="db-box-chevron">{openBoxes['descrizione'] ? '▲' : '▼'}</span>
+                  </button>
+                  {openBoxes['descrizione'] && (
+                    <div className="db-box-body">
+                      <div className="db-dist-list">
+                        {descOpts.map(o => {
+                          const n = descrCount[o.key] ?? 0
+                          const pct = all.length ? Math.round(n / all.length * 100) : 0
+                          return (
+                            <div key={o.key} className="db-dist-row">
+                              <span className="db-dist-label">{o.icon} {o.label}</span>
+                              <div className="db-dist-track"><div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} /></div>
+                              <span className="db-dist-count">{n}</span>
+                              <span className="db-dist-pct">{pct}%</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Box 5: Energia per area */}
+                <div className={`db-box${openBoxes['area'] ? ' expanded' : ''}`}>
+                  <button className="db-box-header" onClick={() => toggleBox('area')}>
+                    <span className="db-box-eyebrow">ENERGIA PER AREA</span>
+                    <span className="db-box-value-row">
+                      <span className="db-box-value" style={{ color: buStats[0]?.avg >= 7 ? '#17B8A6' : buStats[0]?.avg >= 5 ? '#FFB648' : '#FF6E86' }}>
+                        {buStats[0]?.avg.toFixed(1) ?? '—'}
+                      </span>
+                    </span>
+                    <span className="db-box-sub">area più critica: {buStats[0]?.name ?? '—'}</span>
+                    <span className="db-box-chevron">{openBoxes['area'] ? '▲' : '▼'}</span>
+                  </button>
+                  {openBoxes['area'] && (
+                    <div className="db-box-body">
+                      <div className="db-area-list" style={{ gap: 8 }}>
+                        {buStats.map(bu => {
+                          const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
+                          const exp = !!expandedBu[bu.name]
+                          return (
+                            <div key={bu.name} className="db-area-bu">
+                              <button className="db-area-bu-row" onClick={e => { e.stopPropagation(); setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] })) }}>
+                                <span className="db-area-chevron" style={{ transform: exp ? 'rotate(90deg)' : '' }}>▶</span>
+                                <span className="db-area-bu-name">{bu.name}</span>
+                                <span className="db-area-count">{bu.n} pers.</span>
+                                <span className="db-area-score" style={{ color: tc }}>{bu.avg.toFixed(1)}</span>
+                                <div className="db-area-bar-wrap"><div className="db-area-bar-fill" style={{ width: `${bu.avg * 10}%`, background: tc }} /></div>
+                              </button>
+                              {exp && (
+                                <div className="db-area-teams">
+                                  {bu.teams.map(t => {
+                                    const ttc = t.avg >= 8 ? '#17B8A6' : t.avg >= 5 ? '#4B6BCC' : '#FF6E86'
+                                    return (
+                                      <div key={t.name} className="db-area-team-row">
+                                        <span className="db-area-team-name">{t.name}</span>
+                                        <span className="db-area-count">{t.n} pers.</span>
+                                        <span className="db-area-score" style={{ color: ttc }}>{t.avg.toFixed(1)}</span>
+                                        <div className="db-area-bar-wrap"><div className="db-area-bar-fill" style={{ width: `${t.avg * 10}%`, background: ttc }} /></div>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Box 6: Report individuale */}
+                <div className={`db-box${openBoxes['report'] ? ' expanded' : ''}`}>
+                  <button className="db-box-header" onClick={() => toggleBox('report')}>
+                    <span className="db-box-eyebrow">REPORT ONE-TO-ONE</span>
+                    <span className="db-box-value-row">
+                      <span className="db-box-value">{all.length}</span>
+                    </span>
+                    <span className="db-box-sub">report per colloqui individuali</span>
+                    <span className="db-box-chevron">{openBoxes['report'] ? '▲' : '▼'}</span>
+                  </button>
+                  {openBoxes['report'] && (
+                    <div className="db-box-body">
+                      <div className="db-individual-filters" style={{ marginBottom: 8 }}>
+                        <div className="db-individual-search-wrap" style={{ flex: 1 }}>
+                          <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
+                            <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
+                            <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
+                          </svg>
+                          <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} />
+                          {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
+                        </div>
+                        <select className="db-filter-select" style={{ fontSize: 12, padding: '6px 10px' }} value={q1BuFilter || 'Tutte le aree'} onChange={e => setQ1BuFilter(e.target.value)}>
+                          {BUS.map(o => <option key={o}>{o}</option>)}
+                        </select>
+                      </div>
+                      <div className="db-energy-pills" style={{ marginBottom: 10 }}>
+                        {([['all', 'Tutti'], ['low', '🔴 Bassa'], ['mid', '🔵 Media'], ['high', '🟢 Alta']] as const).map(([val, label]) => (
+                          <button key={val} data-val={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      {q1Search.trim().length === 0 ? (
+                        <div className="db-individual-placeholder" style={{ padding: '20px 12px' }}>
+                          <svg viewBox="0 0 48 48" fill="none" width="32" height="32">
+                            <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5" />
+                            <path d="M30 30l10 10" stroke="#CCC8D8" strokeWidth="2.5" strokeLinecap="round" />
+                          </svg>
+                          <div>Cerca un dipendente per nome<br /><span>Usa i filtri per restringere la ricerca</span></div>
+                        </div>
+                      ) : q1Individuals.length === 0 ? (
+                        <div className="db-individual-placeholder"><div>Nessun risultato per questa ricerca.</div></div>
+                      ) : (
+                        <>
+                          <div className="db-individual-results-count">{q1Individuals.length} {q1Individuals.length === 1 ? 'risultato' : 'risultati'}</div>
+                          <div className="db-quickview-list">
+                            {q1Individuals.map((r, i) => {
+                              const t = r.termometro ?? 0
+                              const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
+                              const termBg = t >= 8 ? 'rgba(23,184,166,.10)' : t >= 5 ? 'rgba(75,107,204,.10)' : 'rgba(255,110,134,.10)'
+                              const termLabel = t >= 8 ? 'Alta' : t >= 5 ? 'Media' : 'Bassa'
+                              const avatarBg = t >= 8 ? 'rgba(23,184,166,.15)' : t >= 5 ? 'rgba(75,107,204,.15)' : 'rgba(255,110,134,.15)'
+                              const avatarColor = t >= 8 ? '#0A7A6B' : t >= 5 ? '#2A4A99' : '#B8003A'
+                              const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
+                              const descrShort: Record<string, string> = { 'Crescita': '⚡ Crescita', 'Stabile': '🔋 Stabile', 'Ricarica': '🔌 Ricarica', 'Assestamento': '🌱 Assestamento' }
+                              return (
+                                <div key={i} className="db-quickview-card" style={{ borderLeft: `4px solid ${termColor}` }}>
+                                  <div className="db-qv-header">
+                                    <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor, width: 36, height: 36, fontSize: 12 }}>
+                                      {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
+                                    </div>
+                                    <div className="db-qv-identity">
+                                      <div className="db-individual-name">{r.nome} {r.cognome}</div>
+                                      <div className="db-individual-meta">
+                                        {r.bu && <span>{r.bu}</span>}
+                                        {r.ruolo && <span>· {r.ruolo}</span>}
+                                      </div>
+                                    </div>
+                                    <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
+                                      <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
+                                        <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                                      </svg>
+                                      Report
+                                    </button>
+                                  </div>
+                                  <div className="db-qv-body">
+                                    <div className="db-qv-energy" style={{ background: termBg }}>
+                                      <span className="db-qv-score" style={{ color: termColor, fontSize: 24 }}>{t}<span className="db-qv-score-unit">/10</span></span>
+                                      <div className="db-qv-energy-right">
+                                        <div className="db-qv-energy-label" style={{ color: termColor }}>Energia {termLabel}</div>
+                                        <div className="db-qv-bar-wrap"><div className="db-qv-bar-fill" style={{ width: `${t * 10}%`, background: termColor }} /></div>
+                                      </div>
+                                      <span className="db-qv-clima">{climaEmoji[r.clima ?? ''] ?? '—'}</span>
+                                    </div>
+                                    <div className="db-qv-data-row">
+                                      <div className="db-qv-data-item">
+                                        <div className="db-qv-data-label">Anno</div>
+                                        <div className="db-qv-data-val">{r.descrizione ? descrShort[r.descrizione] ?? r.descrizione : '—'}</div>
+                                      </div>
+                                      <div className="db-qv-data-item">
+                                        <div className="db-qv-data-label">Cause</div>
+                                        <div className="db-qv-tags">{(r.causa ?? []).map(c => <span key={c} className="db-qv-tag">{c}</span>)}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
               </div>
-              <div className="db-filter-group">
-                <label className="db-filter-label">ANZIANITÀ</label>
-                <select className="db-filter-select" value={anzF || 'Tutte le anzianità'} onChange={e => setAnzF(e.target.value)}>
-                  {ANZS.map(o => <option key={o}>{o}</option>)}
-                </select>
-              </div>
-              <div className="db-filter-group">
-                <label className="db-filter-label">RUOLO</label>
-                <select className="db-filter-select" value={ruoloF || 'Tutti i ruoli'} onChange={e => setRuoloF(e.target.value)}>
-                  {RUOLI.map(o => <option key={o}>{o}</option>)}
-                </select>
-              </div>
-              <span className={`db-n-badge${N < PRIVACY_MIN ? ' warn' : ''}`}>{N} rispondenti</span>
             </div>
+          )}
+
+          {/* Pannello destro: Fattori Energy Battery */}
+          <div className={`db-panel-right${!isHR ? ' db-panel-full' : ''}`}>
+            <div className="db-panel-heading">🔋 Fattori Energy Battery</div>
 
             {privacyBlock ? (
               <div className="db-privacy-warn">
-                ⚠️ Meno di {PRIVACY_MIN} rispondenti per questa selezione di filtri — i dati aggregati non vengono mostrati per garantire l&apos;anonimato.
+                ⚠️ Meno di {PRIVACY_MIN} rispondenti per questa selezione — i dati aggregati non vengono mostrati per garantire l&apos;anonimato.
               </div>
             ) : (
-              <>
-                <div className="db-section-hdr">
-                  <span className="db-section-pill cool">🤝 Relazioni</span>
-                  <span className="db-section-title">Le tue relazioni sul lavoro</span>
-                </div>
-                <LikertCard title="Relazioni interpersonali" eyebrow="COLLEGHI"
-                  items={[{ label: 'Collaborazione e supporto tra colleghi', short: 'Supporto colleghi', key: 'relazioni_q' }]}
-                  data={filtered} />
-                <LikertCard title="Relazione con il/la responsabile" eyebrow="RESPONSABILE"
-                  items={[
-                    { label: 'Il/la mio/a responsabile mi supporta nella crescita professionale', short: 'Supporto crescita', key: 'referente_crescita' },
-                    { label: 'Il/la mio/a responsabile mi dà obiettivi chiari', short: 'Chiarezza obiettivi', key: 'referente_obiettivi' },
-                  ]}
-                  data={filtered} />
-                <LikertCard title="Relazione con HR" eyebrow="HR"
-                  items={[
-                    { label: 'È facile contattare HR quando ne ho bisogno', short: 'Accessibilità HR', key: 'hr_access' },
-                    { label: 'HR aggiunge valore reale al mio percorso lavorativo', short: 'Valore HR', key: 'hr_valore' },
-                  ]}
-                  data={filtered} />
-                <LikertCard title="Management e fiducia" eyebrow="MANAGEMENT"
-                  items={[
-                    { label: 'Il management comunica in modo trasparente', short: 'Trasparenza', key: 'mgmt_trasp' },
-                    { label: 'Mi fido delle decisioni del management', short: 'Fiducia management', key: 'mgmt_fiducia' },
-                  ]}
-                  data={filtered} />
+              <div className="db-factors-list">
 
-                <div className="db-section-hdr">
-                  <span className="db-section-pill cool">🌱 Crescita</span>
-                  <span className="db-section-title">Autonomia e crescita professionale</span>
-                </div>
-                <LikertCard title="Job crafting" eyebrow="AUTONOMIA"
-                  items={[
-                    { label: 'Riesco a organizzare il lavoro in modo da renderlo più significativo', short: 'Significatività', key: 'jc_task' },
-                    { label: 'Riesco a lavorare in modo che si adatti alle mie competenze', short: 'Adattamento competenze', key: 'jc_schemi' },
-                  ]}
-                  data={filtered} />
-                <div className="db-card">
-                  <div className="db-card-eyebrow">CRESCITA</div>
-                  <div className="db-card-title">A cosa attribuiscono la loro crescita professionale?</div>
-                  <div className="db-dist-list">
-                    {crescitaTop.length ? crescitaTop.map(([label, count]) => (
-                      <DistBar key={label} label={label} count={count} total={N} color="#FFB648" />
-                    )) : <p className="db-empty">Nessun dato</p>}
-                  </div>
-                </div>
-                <LikertCard title="Engagement" eyebrow="COINVOLGIMENTO"
-                  items={[{ label: 'Mi sento coinvolto/a e motivato/a nel mio lavoro quotidiano', short: 'Coinvolgimento', key: 'engagement' }]}
-                  data={filtered} />
-
-                <div className="db-section-hdr">
-                  <span className="db-section-pill cool">💻 Tecnologia & Valori</span>
-                  <span className="db-section-title">Strumenti e cultura aziendale</span>
-                </div>
-                <LikertCard title="Percezione investimento in innovazione" eyebrow="TECNOLOGIA"
-                  items={[{ label: "OT investe in modo adeguato nell'innovazione tecnologica", short: 'Innovazione tech', key: 'tecnologia' }]}
-                  data={filtered} />
-
-                <div className="db-section-hdr">
-                  <span className="db-section-pill cool">⚡ Stress</span>
-                  <span className="db-section-title">Carico ed energia lavorativa</span>
-                </div>
-                <LikertCard title="Stress" eyebrow="SOSTENIBILITÀ E RECUPERO"
-                  items={[
-                    { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', short: 'Sostenibilità del carico', key: 'stress_carico' },
-                    { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', short: 'Stacco e recupero', key: 'stress_recupero' },
-                  ]}
-                  data={filtered} />
-
-                <div className="db-section-hdr">
-                  <span className="db-section-pill cool">🔭 Prospettive</span>
-                  <span className="db-section-title">Follow-up e priorità di miglioramento</span>
-                </div>
-                <div className="db-card">
-                  <div className="db-card-eyebrow">PRIORITÀ DI MIGLIORAMENTO</div>
-                  <div className="db-card-title">Cosa vorresti cambiare?</div>
-                  <div className="db-dist-list">
-                    {prioTop.length ? prioTop.map(([label, count]) => (
-                      <DistBar key={label} label={label} count={count} total={N} color="#17B8A6" />
-                    )) : <p className="db-empty">Nessun dato</p>}
-                  </div>
+                {/* 1. Relazioni interpersonali */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">🤝 Relazioni interpersonali</div>
+                  <FactorRow label="Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive" fieldKey="relazioni_q" data={filtered} />
                 </div>
 
-                <div className="db-section-hdr">
-                  <span className="db-section-pill cool">🏁 Ultimo step</span>
-                  <span className="db-section-title">Soddisfazione e NPS</span>
+                {/* 2. Supporto del Manager */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">👤 Supporto del Manager</div>
+                  <FactorRow label="Il/la mio/a referente mi supporta nella mia crescita professionale" fieldKey="referente_crescita" data={filtered} />
+                  <FactorRow label="Il/la mio/a referente dà obiettivi strutturati" fieldKey="referente_obiettivi" data={filtered} />
                 </div>
-                <LikertCard title="Passione per il lavoro" eyebrow="SODDISFAZIONE LAVORATIVA"
-                  items={[{ label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' }]}
-                  data={filtered} />
-                {npsVals.length > 0 && (
-                  <div className="db-card">
-                    <div className="db-card-eyebrow">NPS · EMPLOYEE NET PROMOTER SCORE</div>
-                    <div className="db-card-title">Quanto raccomanderesti OT come posto di lavoro?</div>
-                    <div className={`db-nps-score ${npsColorClass}`}>{npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}</div>
-                    <div className="db-nps-bar-wrap">
-                      <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
-                      <div className="db-nps-bar-p" style={{ width: `${npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%` }} />
-                      <div className="db-nps-bar-pro" style={{ width: `${npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%` }} />
+
+                {/* 3. Supporto e valore percepito dell'HR */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">🏢 Supporto e valore percepito dell&apos;HR</div>
+                  <FactorRow label="L'HR è un punto di riferimento accessibile e disponibile" fieldKey="hr_access" data={filtered} />
+                  <FactorRow label="Riconosco un valore reale nel supporto che l'HR mi offre" fieldKey="hr_valore" data={filtered} />
+                </div>
+
+                {/* 4. Supporto Management */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">📊 Supporto Management</div>
+                  <FactorRow label="Il management comunica in modo trasparente la strategia e le priorità" fieldKey="mgmt_trasp" data={filtered} />
+                  <FactorRow label="Ho fiducia nelle scelte strategiche del management" fieldKey="mgmt_fiducia" data={filtered} />
+                </div>
+
+                {/* 5. Jobcrafting */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">🔧 Jobcrafting</div>
+                  <FactorRow label="Ho la possibilità di proporre nuove modalità per svolgere i miei compiti" fieldKey="jc_task" data={filtered} />
+                  <FactorRow label="Mi sento libero/a di sperimentare soluzioni diverse da quelle standard" fieldKey="jc_schemi" data={filtered} />
+                </div>
+
+                {/* 6. Sviluppo Professionale */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">🌱 Sviluppo Professionale</div>
+                  {crescitaTop.length > 0 && (
+                    <div className="db-factor-multi">
+                      <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita professionale in OT?</div>
+                      <div className="db-dist-list">
+                        {crescitaTop.map(([label, count]) => (
+                          <DistBar key={label} label={label} count={count} total={N} color="#FFB648" />
+                        ))}
+                      </div>
                     </div>
-                    <div className="db-nps-segs">
-                      <div className="db-nps-seg det"><div className="db-nps-seg-num">{det}</div><div className="db-nps-seg-label">Detrattori (0–6)</div></div>
-                      <div className="db-nps-seg pas"><div className="db-nps-seg-num">{pas}</div><div className="db-nps-seg-label">Passivi (7–8)</div></div>
-                      <div className="db-nps-seg pro"><div className="db-nps-seg-num">{pro}</div><div className="db-nps-seg-label">Promotori (9–10)</div></div>
+                  )}
+                </div>
+
+                {/* 7. Identificazione con i valori aziendali */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">💎 Identificazione con i valori aziendali</div>
+                  <FactorRow label="Mi identifico nei valori e nel modo di lavorare di OT" fieldKey="engagement" data={filtered} />
+                </div>
+
+                {/* 8. Percezione dell'investimento in innovazione */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">💻 Percezione dell&apos;investimento in innovazione</div>
+                  <FactorRow label="OT investe in modo adeguato nell'innovazione tecnologica" fieldKey="tecnologia" data={filtered} />
+                </div>
+
+                {/* 9. Stress */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">⚡ Stress</div>
+                  <FactorRow label="Il carico di lavoro che gestisco quotidianamente è sostenibile" fieldKey="stress_carico" data={filtered} />
+                  <FactorRow label="Riesco a staccare dal lavoro e recuperare le energie nel tempo libero" fieldKey="stress_recupero" data={filtered} />
+                </div>
+
+                {/* 10. Follow-up Open Listening */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">🔁 Follow-up Open Listening</div>
+                  <FactorRow label="Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)" fieldKey="open_listening" data={filtered} />
+                </div>
+
+                {/* 11. Aree prioritarie di intervento */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">🎯 Aree prioritarie di intervento</div>
+                  {prioTop.length > 0 && (
+                    <div className="db-factor-multi">
+                      <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la tua soddisfazione lavorativa?</div>
+                      <div className="db-dist-list">
+                        {prioTop.map(([label, count]) => (
+                          <DistBar key={label} label={label} count={count} total={N} color="#17B8A6" />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </>
+                  )}
+                </div>
+
+                {/* 12. Soddisfazione – Passione per il proprio lavoro */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">❤️ Soddisfazione – Passione per il proprio lavoro</div>
+                  <FactorRow label="Il lavoro che svolgo ogni giorno mi appassiona" fieldKey="soddisfazione" data={filtered} />
+                </div>
+
+                {/* 13. NPS */}
+                <div className="db-factor-section">
+                  <div className="db-factor-section-hdr">📣 NPS – Propensione a raccomandare l&apos;azienda</div>
+                  {npsVals.length > 0 && (
+                    <div className="db-factor-nps">
+                      <div className="db-factor-nps-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
+                      <div className={`db-nps-score ${npsColorClass}`} style={{ fontSize: 36, margin: '6px 0' }}>
+                        {npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}
+                      </div>
+                      <div className="db-nps-bar-wrap">
+                        <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
+                        <div className="db-nps-bar-p" style={{ width: `${npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%` }} />
+                        <div className="db-nps-bar-pro" style={{ width: `${npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%` }} />
+                      </div>
+                      <div className="db-nps-segs">
+                        <div className="db-nps-seg det"><div className="db-nps-seg-num">{det}</div><div className="db-nps-seg-label">Detrattori (0–6)</div></div>
+                        <div className="db-nps-seg pas"><div className="db-nps-seg-num">{pas}</div><div className="db-nps-seg-label">Passivi (7–8)</div></div>
+                        <div className="db-nps-seg pro"><div className="db-nps-seg-num">{pro}</div><div className="db-nps-seg-label">Promotori (9–10)</div></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+              </div>
             )}
           </div>
-        )}
+
+        </div>
       </div>
 
       {/* ---- AI Floating Button + Panel ---- */}
       <button className={`db-ai-fab${aiOpen ? ' open' : ''}`} onClick={() => { setAiOpen(o => !o); setAiAnswer(null); setAiQuestion('') }} aria-label="Analisi AI">
         <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-          <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" fill="currentColor"/>
-          <path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z" fill="currentColor" opacity=".6"/>
+          <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" fill="currentColor" />
+          <path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z" fill="currentColor" opacity=".6" />
         </svg>
       </button>
 
