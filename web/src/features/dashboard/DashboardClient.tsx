@@ -182,17 +182,22 @@ function PieChart({ slices, size = 72 }: { slices: { label: string; value: numbe
   }
   const r = (size - 4) / 2
   const cx = size / 2, cy = size / 2
-  let angle = -Math.PI / 2
+  const endAngles = slices.reduce<number[]>((acc, sl) => {
+    const prev = acc.length > 0 ? acc[acc.length - 1] : -Math.PI / 2
+    return [...acc, prev + (sl.value / total) * 2 * Math.PI]
+  }, [])
+  const startAngles = [-Math.PI / 2, ...endAngles.slice(0, -1)]
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ flexShrink: 0 }}>
       {slices.map((sl, i) => {
         if (sl.value === 0) return null
-        const sweep = (sl.value / total) * 2 * Math.PI
-        const x1 = cx + r * Math.cos(angle)
-        const y1 = cy + r * Math.sin(angle)
-        angle += sweep
-        const x2 = cx + r * Math.cos(angle)
-        const y2 = cy + r * Math.sin(angle)
+        const a1 = startAngles[i]
+        const a2 = endAngles[i]
+        const sweep = a2 - a1
+        const x1 = cx + r * Math.cos(a1)
+        const y1 = cy + r * Math.sin(a1)
+        const x2 = cx + r * Math.cos(a2)
+        const y2 = cy + r * Math.sin(a2)
         const large = sweep > Math.PI ? 1 : 0
         return (
           <path key={i}
@@ -207,13 +212,12 @@ function PieChart({ slices, size = 72 }: { slices: { label: string; value: numbe
 }
 
 /* ---- Main component ---- */
-export function DashboardClient({ userEmail, userRole }: { userEmail: string; userRole: 'hr_admin' | 'bu_manager' }) {
+export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'hr_admin' | 'bu_manager' }) {
   const [buF, setBuF] = useState('')
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
-  const [openBoxes, setOpenBoxes] = useState<Record<string, boolean>>({})
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -291,9 +295,6 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       return !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
     })
     .sort((a, b) => (a.termometro ?? 0) - (b.termometro ?? 0))
-
-  const toggleBox = (id: string) => setOpenBoxes(p => ({ ...p, [id]: !p[id] }))
-  void toggleBox
 
   async function askAI(q: string) {
     if (!q.trim()) return
