@@ -979,14 +979,26 @@
   box-shadow: 0 1px 6px rgba(42,35,56,.05);
 }
 .db-factor-section-hdr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #EDE8F5;
+}
+.db-fsh-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+.db-fsh-txt {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .1em;
   color: #4B6BCC;
   text-transform: uppercase;
-  margin-bottom: 10px;
-  padding-bottom: 7px;
-  border-bottom: 1px solid #EDE8F5;
 }
 .db-factor-row {
   display: flex;

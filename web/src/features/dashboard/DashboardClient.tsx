@@ -784,41 +784,41 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
                 {/* 1. Relazioni interpersonali */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🤝 Relazioni interpersonali</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🤝</span><span className="db-fsh-txt">Relazioni interpersonali</span></div>
                   <FactorRow label="Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive" fieldKey="relazioni_q" data={filtered} />
                 </div>
 
                 {/* 2. Supporto del Manager */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🎯 Supporto del Manager</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🎯</span><span className="db-fsh-txt">Supporto del Manager</span></div>
                   <FactorRow label="Il/la mio/a referente mi supporta nella mia crescita professionale" fieldKey="referente_crescita" data={filtered} />
                   <FactorRow label="Il/la mio/a referente dà obiettivi strutturati" fieldKey="referente_obiettivi" data={filtered} />
                 </div>
 
                 {/* 3. Supporto e valore percepito dell'HR */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🔋 Supporto e valore percepito dell&apos;HR</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🔋</span><span className="db-fsh-txt">Supporto e valore percepito dell&apos;HR</span></div>
                   <FactorRow label="L'HR è un punto di riferimento accessibile e disponibile" fieldKey="hr_access" data={filtered} />
                   <FactorRow label="Riconosco un valore reale nel supporto che l'HR mi offre" fieldKey="hr_valore" data={filtered} />
                 </div>
 
                 {/* 4. Supporto Management */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">⚡ Supporto Management</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">⚡</span><span className="db-fsh-txt">Supporto Management</span></div>
                   <FactorRow label="Il management comunica in modo trasparente la strategia e le priorità" fieldKey="mgmt_trasp" data={filtered} />
                   <FactorRow label="Ho fiducia nelle scelte strategiche del management" fieldKey="mgmt_fiducia" data={filtered} />
                 </div>
 
                 {/* 5. Jobcrafting */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🛠️ Jobcrafting</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🛠️</span><span className="db-fsh-txt">Jobcrafting</span></div>
                   <FactorRow label="Ho la possibilità di proporre nuove modalità per svolgere i miei compiti" fieldKey="jc_task" data={filtered} />
                   <FactorRow label="Mi sento libero/a di sperimentare soluzioni diverse da quelle standard" fieldKey="jc_schemi" data={filtered} />
                 </div>
 
                 {/* 6. Sviluppo Professionale */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🌱 Sviluppo Professionale</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🌱</span><span className="db-fsh-txt">Sviluppo Professionale</span></div>
                   {crescitaTop.length > 0 && (
                     <div className="db-factor-multi">
                       <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita professionale in OT?</div>
@@ -833,32 +833,32 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
                 {/* 7. Identificazione con i valori aziendali */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🏠 Identificazione con i valori aziendali</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🏠</span><span className="db-fsh-txt">Identificazione con i valori aziendali</span></div>
                   <FactorRow label="Mi identifico nei valori e nel modo di lavorare di OT" fieldKey="engagement" data={filtered} />
                 </div>
 
                 {/* 8. Percezione dell'investimento in innovazione */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🔥 Percezione dell&apos;investimento in innovazione</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🔥</span><span className="db-fsh-txt">Percezione dell&apos;investimento in innovazione</span></div>
                   <FactorRow label="OT investe in modo adeguato nell'innovazione tecnologica" fieldKey="tecnologia" data={filtered} />
                 </div>
 
                 {/* 9. Stress */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🪫 Stress</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🪫</span><span className="db-fsh-txt">Stress</span></div>
                   <FactorRow label="Il carico di lavoro che gestisco quotidianamente è sostenibile" fieldKey="stress_carico" data={filtered} />
                   <FactorRow label="Riesco a staccare dal lavoro e recuperare le energie nel tempo libero" fieldKey="stress_recupero" data={filtered} />
                 </div>
 
                 {/* 10. Follow-up Open Listening */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🙂 Follow-up Open Listening</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🙂</span><span className="db-fsh-txt">Follow-up Open Listening</span></div>
                   <FactorRow label="Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)" fieldKey="open_listening" data={filtered} />
                 </div>
 
                 {/* 11. Aree prioritarie di intervento */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">🚀 Aree prioritarie di intervento</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🚀</span><span className="db-fsh-txt">Aree prioritarie di intervento</span></div>
                   {prioTop.length > 0 && (
                     <div className="db-factor-multi">
                       <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la tua soddisfazione lavorativa?</div>
@@ -873,13 +873,13 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
 
                 {/* 12. Soddisfazione – Passione per il proprio lavoro */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">❤️ Soddisfazione – Passione per il proprio lavoro</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">❤️</span><span className="db-fsh-txt">Soddisfazione – Passione per il proprio lavoro</span></div>
                   <FactorRow label="Il lavoro che svolgo ogni giorno mi appassiona" fieldKey="soddisfazione" data={filtered} />
                 </div>
 
                 {/* 13. NPS */}
                 <div className="db-factor-section">
-                  <div className="db-factor-section-hdr">📣 NPS – Propensione a raccomandare l&apos;azienda</div>
+                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">📣</span><span className="db-fsh-txt">NPS – Propensione a raccomandare l&apos;azienda</span></div>
                   {npsVals.length > 0 && (
                     <div className="db-factor-nps">
                       <div className="db-factor-nps-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
