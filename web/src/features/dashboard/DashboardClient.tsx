@@ -40,6 +40,9 @@ const LS_SEED_KEY = 'ol_seeded'
 const PRIVACY_MIN = 5
 const TOTAL_INVITED = 80
 
+const PIE_COLORS = ['#17B8A6', '#FFB648', '#4B6BCC', '#FF6E86', '#9A93A8', '#2E86DE']
+const PRIO_COLORS = ['#4B6BCC', '#17B8A6', '#FFB648', '#FF6E86', '#6E4CAB', '#2E86DE']
+
 /* ---- Deterministic mock data (LCG) ---- */
 function mkRng(seed: number) {
   let s = seed >>> 0
@@ -114,12 +117,13 @@ function generateMockData(): SurveyResponse[] {
   return res
 }
 
-/* ---- Chart helpers ---- */
+/* ---- Helpers ---- */
 function avg(arr: (number | null | undefined)[]): number {
   const v = arr.filter((x): x is number => x != null)
   return v.length ? v.reduce((s, x) => s + x, 0) / v.length : 0
 }
 function scoreClass(v: number) { return v < 2.6 ? 'red' : v < 3.6 ? 'amber' : 'green' }
+function scoreClass10(v: number) { return v < 4 ? 'red' : v < 6.5 ? 'amber' : 'green' }
 function buildDistrib(vals: (number | null | undefined)[]) {
   const d: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
   vals.filter((v): v is number => v != null).forEach(v => { if (v >= 1 && v <= 5) d[v]++ })
@@ -142,19 +146,6 @@ function Strip({ distrib, total }: { distrib: Record<number, number>; total: num
   )
 }
 
-function DistBar({ label, count, total, color }: { label: string; count: number; total: number; color: string }) {
-  const pct = total ? Math.round((count / total) * 100) : 0
-  return (
-    <div className="db-dist-row">
-      <span className="db-dist-label">{label}</span>
-      <div className="db-dist-track">
-        <div className="db-dist-fill" style={{ width: `${pct}%`, background: color }} />
-      </div>
-      <span className="db-dist-pct">{pct}%</span>
-    </div>
-  )
-}
-
 function FactorRow({ label, fieldKey, data }: { label: string; fieldKey: keyof SurveyResponse; data: SurveyResponse[] }) {
   const vals = data.map(r => r[fieldKey] as number | null)
   const mean = avg(vals)
@@ -169,17 +160,59 @@ function FactorRow({ label, fieldKey, data }: { label: string; fieldKey: keyof S
   )
 }
 
+function LikertGroup({ items, data }: { items: { label: string; key: keyof SurveyResponse }[]; data: SurveyResponse[] }) {
+  const means = items.map(it => avg(data.map(r => r[it.key] as number | null).filter((v): v is number => v != null)))
+  const groupAvg = avg(means.filter(m => m > 0))
+  return (
+    <>
+      {items.map(it => <FactorRow key={it.key as string} label={it.label} fieldKey={it.key} data={data} />)}
+      {items.length > 1 && groupAvg > 0 && (
+        <div className="db-factor-box-avg">
+          Media variabile: <strong className={`db-avg-score ${scoreClass(groupAvg)}`}>{groupAvg.toFixed(1)}<span>/5</span></strong>
+        </div>
+      )}
+    </>
+  )
+}
+
+function PieChart({ slices, size = 72 }: { slices: { label: string; value: number; color: string }[]; size?: number }) {
+  const total = slices.reduce((s, sl) => s + sl.value, 0)
+  if (total === 0) {
+    return <svg width={size} height={size}><circle cx={size / 2} cy={size / 2} r={size / 2 - 2} fill="#EDE8F5" /></svg>
+  }
+  const r = (size - 4) / 2
+  const cx = size / 2, cy = size / 2
+  let angle = -Math.PI / 2
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ flexShrink: 0 }}>
+      {slices.map((sl, i) => {
+        if (sl.value === 0) return null
+        const sweep = (sl.value / total) * 2 * Math.PI
+        const x1 = cx + r * Math.cos(angle)
+        const y1 = cy + r * Math.sin(angle)
+        angle += sweep
+        const x2 = cx + r * Math.cos(angle)
+        const y2 = cy + r * Math.sin(angle)
+        const large = sweep > Math.PI ? 1 : 0
+        return (
+          <path key={i}
+            d={`M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`}
+            fill={sl.color}
+          />
+        )
+      })}
+      <circle cx={cx} cy={cy} r={r * 0.52} fill="white" />
+    </svg>
+  )
+}
+
 /* ---- Main component ---- */
 export function DashboardClient({ userEmail, userRole }: { userEmail: string; userRole: 'hr_admin' | 'bu_manager' }) {
-  const isHR = userRole === 'hr_admin'
   const [buF, setBuF] = useState('')
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
-  const [q1BuFilter, setQ1BuFilter] = useState('')
-  const [q1EnergyFilter, setQ1EnergyFilter] = useState<'all' | 'low' | 'mid' | 'high'>('all')
-  const [expandedBu, setExpandedBu] = useState<Record<string, boolean>>({})
   const [openBoxes, setOpenBoxes] = useState<Record<string, boolean>>({})
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
@@ -205,45 +238,32 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const N = filtered.length
   const privacyBlock = N < PRIVACY_MIN
 
-  const termVals = all.map(r => r.termometro).filter((v): v is number => v != null)
-  const termAvg = avg(termVals)
+  /* ---- Computed: filtered stats for top metric cards ---- */
+  const filteredTermVals = filtered.map(r => r.termometro).filter((v): v is number => v != null)
+  const filteredTermAvg = avg(filteredTermVals)
 
+  const filteredClimaCount: Record<string, number> = {}
+  filtered.forEach(r => { if (r.clima) filteredClimaCount[r.clima] = (filteredClimaCount[r.clima] ?? 0) + 1 })
+
+  const filteredDescrCount: Record<string, number> = {}
+  filtered.forEach(r => { if (r.descrizione) filteredDescrCount[r.descrizione] = (filteredDescrCount[r.descrizione] ?? 0) + 1 })
+  const filteredDescrPos = N > 0 ? Math.round(((filteredDescrCount['Crescita'] ?? 0) + (filteredDescrCount['Stabile'] ?? 0)) / N * 100) : 0
+
+  /* ---- Computed: icons/options ---- */
   const climaOpts = [
-    { label: 'Soleggiato', icon: '☀️', col: '#F5C842' },
-    { label: 'Parzialmente nuvoloso', icon: '⛅', col: '#90B8D4' },
-    { label: 'Piovoso', icon: '🌧️', col: '#4A9ED4' },
-    { label: 'Temporalesco', icon: '⛈️', col: '#6E4CAB' },
+    { label: 'Soleggiato',            icon: '☀️',  col: '#F5C842' },
+    { label: 'Parzialmente nuvoloso', icon: '⛅',  col: '#90B8D4' },
+    { label: 'Piovoso',               icon: '🌧️', col: '#4A9ED4' },
+    { label: 'Temporalesco',          icon: '⛈️', col: '#6E4CAB' },
   ]
-  const climaCount: Record<string, number> = {}
-  all.forEach(r => { if (r.clima) climaCount[r.clima] = (climaCount[r.clima] ?? 0) + 1 })
-
-  const causeCount: Record<string, number> = {}
-  all.forEach(r => r.causa?.forEach(c => { causeCount[c] = (causeCount[c] ?? 0) + 1 }))
-  const causeTop = Object.entries(causeCount).sort((a, b) => b[1] - a[1])
-
   const descOpts = [
-    { label: 'Energia in Crescita', key: 'Crescita', icon: '⚡', col: '#17B8A6' },
-    { label: 'Energia Stabile', key: 'Stabile', icon: '🔋', col: '#2E86DE' },
-    { label: 'Energia in Ricarica', key: 'Ricarica', icon: '🔌', col: '#FFB648' },
-    { label: 'Energia in Assestamento', key: 'Assestamento', icon: '🌱', col: '#9A93A8' },
+    { label: 'Energia in Crescita',    key: 'Crescita',    icon: '⚡', col: '#17B8A6' },
+    { label: 'Energia Stabile',        key: 'Stabile',     icon: '🔋', col: '#2E86DE' },
+    { label: 'Energia in Ricarica',    key: 'Ricarica',    icon: '🪫', col: '#FFB648' },
+    { label: 'Energia in Assestamento',key: 'Assestamento',icon: '🌱', col: '#9A93A8' },
   ]
-  const descrCount: Record<string, number> = {}
-  all.forEach(r => { if (r.descrizione) descrCount[r.descrizione] = (descrCount[r.descrizione] ?? 0) + 1 })
 
-  const buStats = Object.keys(TEAMS_BY_BU).map(buName => {
-    const buRows = all.filter(r => r.bu === buName)
-    const buAvg = avg(buRows.map(r => r.termometro))
-    const teams = TEAMS_BY_BU[buName].map(teamName => {
-      const teamRows = buRows.filter(r => r.team === teamName)
-      return { name: teamName, n: teamRows.length, avg: avg(teamRows.map(r => r.termometro)) }
-    }).filter(t => t.n > 0).sort((a, b) => a.avg - b.avg)
-    return { name: buName, n: buRows.length, avg: buAvg, teams }
-  }).filter(b => b.n > 0).sort((a, b) => a.avg - b.avg)
-
-  const descrPositivoPct = all.length ? Math.round(((descrCount['Crescita'] ?? 0) + (descrCount['Stabile'] ?? 0)) / all.length * 100) : 0
-  const descrTop = descOpts.reduce((a, b) => (descrCount[a.key] ?? 0) >= (descrCount[b.key] ?? 0) ? a : b)
-  const climaTop = climaOpts.reduce((a, b) => (climaCount[a.label] ?? 0) >= (climaCount[b.label] ?? 0) ? a : b)
-
+  /* ---- Computed: NPS ---- */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
   const det = npsVals.filter(v => v <= 6).length
   const pas = npsVals.filter(v => v >= 7 && v <= 8).length
@@ -251,6 +271,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const npsScore = npsVals.length ? Math.round(((pro - det) / npsVals.length) * 100) : null
   const npsColorClass = npsScore == null ? '' : npsScore >= 30 ? 'green' : npsScore >= 0 ? 'amber' : 'red'
 
+  /* ---- Computed: multi-choice ---- */
   const prioCount: Record<string, number> = {}
   filtered.forEach(r => r.priorita?.forEach(p => { prioCount[p] = (prioCount[p] ?? 0) + 1 }))
   const prioTop = Object.entries(prioCount).sort((a, b) => b[1] - a[1])
@@ -263,18 +284,16 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
   const ANZS = ['Tutte le anzianità', '< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const RUOLI = ['Tutti i ruoli', 'Manager', 'Worker']
 
+  /* ---- Report search ---- */
   const q1Individuals = all
     .filter(r => {
       const fullName = `${r.nome ?? ''} ${r.cognome ?? ''}`.toLowerCase()
-      const searchMatch = !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
-      const buMatch = !q1BuFilter || q1BuFilter === 'Tutte le aree' || r.bu === q1BuFilter
-      const t = r.termometro ?? 0
-      const energyMatch = q1EnergyFilter === 'all' || (q1EnergyFilter === 'low' && t <= 4) || (q1EnergyFilter === 'mid' && t >= 5 && t <= 7) || (q1EnergyFilter === 'high' && t >= 8)
-      return searchMatch && buMatch && energyMatch
+      return !q1Search.trim() || fullName.includes(q1Search.toLowerCase())
     })
     .sort((a, b) => (a.termometro ?? 0) - (b.termometro ?? 0))
 
   const toggleBox = (id: string) => setOpenBoxes(p => ({ ...p, [id]: !p[id] }))
+  void toggleBox
 
   async function askAI(q: string) {
     if (!q.trim()) return
@@ -282,16 +301,12 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     setAiAnswer(null)
     const context = {
       totaleRispondenti: all.length,
-      energiaMediaOggi: termAvg.toFixed(1),
+      energiaMediaOggi: filteredTermAvg.toFixed(1),
       distribuzioneClima: Object.fromEntries(
-        climaOpts.map(o => [o.label, `${all.length ? Math.round((climaCount[o.label] ?? 0) / all.length * 100) : 0}%`])
+        climaOpts.map(o => [o.label, `${N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0}%`])
       ),
-      causePrincipali: causeTop.slice(0, 4).map(([label, count]) => ({
-        causa: label,
-        percentuale: `${all.length ? Math.round(count / all.length * 100) : 0}%`
-      })),
       descrizioneEnergia: Object.fromEntries(
-        descOpts.map(o => [o.label, `${all.length ? Math.round((descrCount[o.key] ?? 0) / all.length * 100) : 0}%`])
+        descOpts.map(o => [o.label, `${N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0}%`])
       ),
     }
     try {
@@ -315,114 +330,35 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
     const termLabel = t >= 8 ? 'Alta' : t >= 5 ? 'Media' : 'Bassa'
     const termBg = t >= 8 ? '#E8FAF7' : t >= 5 ? '#EEF2FF' : '#FFF0F3'
     const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
-    const descrLabel: Record<string, string> = { 'Crescita': '⚡ Energia in Crescita', 'Stabile': '🔋 Energia Stabile', 'Ricarica': '🔌 Energia in Ricarica', 'Assestamento': '🌱 Energia in Assestamento' }
-
+    const descrLabel: Record<string, string> = { 'Crescita': '⚡ Energia in Crescita', 'Stabile': '🔋 Energia Stabile', 'Ricarica': '🪫 Energia in Ricarica', 'Assestamento': '🌱 Energia in Assestamento' }
     const spunti: string[] = []
-    if (t <= 4) spunti.push('Energia bassa: inizia chiedendo come sta davvero, senza presupporre nulla. Dai spazio prima di entrare nei dettagli.')
-    if (t >= 5 && t <= 7) spunti.push('Energia nella media: esplora cosa potrebbe aumentarla o cosa la frena. Chiedi cosa manca per sentirsi davvero bene al lavoro.')
-    if ((r.causa ?? []).includes('Carico di lavoro')) spunti.push('Ha citato il carico di lavoro come fattore: chiedi se ci sono priorità da rivedere insieme o attività da redistribuire.')
-    if ((r.causa ?? []).includes('Rapporto con il/la responsabile')) spunti.push('Ha citato il rapporto con il/la responsabile: ascolta senza difendersi, fai domande aperte e prenditi del tempo per capire la prospettiva.')
-    if ((r.causa ?? []).includes('Mancanza di crescita professionale') || (r.causa ?? []).includes('Crescita e sviluppo professionale')) spunti.push('La crescita professionale è un tema presente: chiedi dove si vede tra 1-2 anni e cosa potrebbe aiutarla/lo ad arrivarci.')
-    if (r.descrizione === 'Ricarica' || r.descrizione === 'Assestamento') spunti.push("L'ultimo anno è stato faticoso: chiedi cosa l'ha sostenuta/o nei momenti difficili e cosa si aspetta dal prossimo periodo.")
-    if (r.clima === 'Temporalesco' || r.clima === 'Piovoso') spunti.push('Il clima del team è percepito come difficile: esplora se ci sono dinamiche relazionali o organizzative da affrontare.')
-    if (r.descrizione === 'Crescita') spunti.push('Descrive un anno di crescita: valorizzalo, chiedi cosa ha reso possibile questo risultato e come mantenerlo.')
-    if (spunti.length === 0) spunti.push('Inizia con una domanda aperta: "Come stai vivendo questo periodo al lavoro?" — lascia che sia lei/lui a scegliere il punto di partenza.')
-
+    if (t <= 4) spunti.push('Energia bassa: inizia chiedendo come sta davvero, senza presupporre nulla.')
+    if (t >= 5 && t <= 7) spunti.push('Energia nella media: esplora cosa potrebbe aumentarla o cosa la frena.')
+    if ((r.causa ?? []).includes('Carico di lavoro')) spunti.push('Ha citato il carico di lavoro: chiedi se ci sono priorità da rivedere insieme.')
+    if ((r.causa ?? []).includes('Rapporto con il/la responsabile')) spunti.push('Ha citato il rapporto con il/la responsabile: ascolta senza difenderti, fai domande aperte.')
+    if ((r.causa ?? []).includes('Crescita e sviluppo professionale')) spunti.push('La crescita professionale è un tema: chiedi dove si vede tra 1-2 anni.')
+    if (r.descrizione === 'Ricarica' || r.descrizione === 'Assestamento') spunti.push("L'ultimo anno è stato faticoso: chiedi cosa l'ha sostenuta/o nei momenti difficili.")
+    if (r.clima === 'Temporalesco' || r.clima === 'Piovoso') spunti.push('Il clima del team è percepito come difficile: esplora le dinamiche relazionali.')
+    if (r.descrizione === 'Crescita') spunti.push('Descrive un anno di crescita: valorizzalo e chiedi come mantenerlo.')
+    if (spunti.length === 0) spunti.push('Inizia con una domanda aperta: "Come stai vivendo questo periodo al lavoro?"')
     const barFill = Math.round((t / 10) * 100)
-
     const html = `<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Report ${r.nome} ${r.cognome}</title>
-<style>
-  * { box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 680px; margin: 40px auto; padding: 0 28px; color: #2A2338; line-height: 1.5; }
-  .header-badge { display: inline-block; background: #FFF3DC; color: #C47800; border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; letter-spacing: .08em; margin-bottom: 14px; }
-  h1 { font-size: 26px; font-weight: 800; margin: 0 0 4px; }
-  .sub { color: #9A93A8; font-size: 13px; margin: 0 0 20px; }
-  .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
-  .meta-chip { background: #F4F1FA; border-radius: 8px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: #6B5F7A; }
-  .hero { background: ${termBg}; border-radius: 20px; padding: 24px 28px; margin-bottom: 20px; display: flex; align-items: center; gap: 28px; }
-  .hero-score { font-size: 56px; font-weight: 900; color: ${termColor}; line-height: 1; }
-  .hero-score span { font-size: 20px; font-weight: 400; color: #9A93A8; }
-  .hero-right { flex: 1; }
-  .hero-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #9A93A8; margin-bottom: 6px; }
-  .hero-status { font-size: 18px; font-weight: 700; color: ${termColor}; margin-bottom: 10px; }
-  .bar-wrap { background: #E8E4F0; border-radius: 100px; height: 8px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 100px; background: ${termColor}; width: ${barFill}%; }
-  .bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: #9A93A8; margin-top: 4px; }
-  .hero-vs { font-size: 12px; color: #9A93A8; margin-top: 8px; }
-  .hero-vs strong { color: #2A2338; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-  .section { border: 1px solid #EDE8F5; border-radius: 16px; padding: 18px 20px; }
-  .section.full { grid-column: 1 / -1; }
-  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; color: #9A93A8; margin: 0 0 5px; text-transform: uppercase; }
-  .section-q { font-size: 12px; color: #9A93A8; margin: 0 0 10px; }
-  .answer { font-size: 17px; font-weight: 700; color: #2A2338; margin: 0; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-  .tag { background: #F4F1FA; border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 500; }
-  .spunti { background: #F8F6FF; border: 1px solid #DDD6F8; border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; }
-  .spunti-title { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #6B5F7A; margin: 0 0 14px; text-transform: uppercase; }
-  .spunto { display: flex; gap: 10px; margin-bottom: 10px; font-size: 14px; line-height: 1.5; }
-  .spunto:last-child { margin-bottom: 0; }
-  .spunto-dot { width: 6px; height: 6px; border-radius: 50%; background: #9B8ECC; margin-top: 7px; flex-shrink: 0; }
-  .note-box { border: 1.5px dashed #CCC8D8; border-radius: 16px; padding: 20px 24px; min-height: 120px; margin-bottom: 20px; }
-  .note-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #9A93A8; margin: 0 0 10px; text-transform: uppercase; }
-  footer { margin-top: 24px; font-size: 11px; color: #9A93A8; border-top: 1px solid #EDE8F5; padding-top: 14px; display: flex; justify-content: space-between; }
-  @media print { body { margin: 16px; } .note-box { min-height: 160px; } }
-</style></head><body>
+<style>*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:680px;margin:40px auto;padding:0 28px;color:#2A2338;line-height:1.5}.header-badge{display:inline-block;background:#FFF3DC;color:#C47800;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:14px}h1{font-size:26px;font-weight:800;margin:0 0 4px}.sub{color:#9A93A8;font-size:13px;margin:0 0 20px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.meta-chip{background:#F4F1FA;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;color:#6B5F7A}.hero{background:${termBg};border-radius:20px;padding:24px 28px;margin-bottom:20px;display:flex;align-items:center;gap:28px}.hero-score{font-size:56px;font-weight:900;color:${termColor};line-height:1}.hero-score span{font-size:20px;font-weight:400;color:#9A93A8}.hero-right{flex:1}.hero-label{font-size:11px;font-weight:700;letter-spacing:.1em;color:#9A93A8;margin-bottom:6px}.hero-status{font-size:18px;font-weight:700;color:${termColor};margin-bottom:10px}.bar-wrap{background:#E8E4F0;border-radius:100px;height:8px;overflow:hidden}.bar-fill{height:100%;border-radius:100px;background:${termColor};width:${barFill}%}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}.section{border:1px solid #EDE8F5;border-radius:16px;padding:18px 20px}.section.full{grid-column:1/-1}.section-label{font-size:10px;font-weight:700;letter-spacing:.1em;color:#9A93A8;margin:0 0 5px;text-transform:uppercase}.answer{font-size:17px;font-weight:700;color:#2A2338;margin:0}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.tag{background:#F4F1FA;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:500}.spunti{background:#F8F6FF;border:1px solid #DDD6F8;border-radius:16px;padding:20px 24px;margin-bottom:20px}.spunti-title{font-size:12px;font-weight:700;letter-spacing:.08em;color:#6B5F7A;margin:0 0 14px;text-transform:uppercase}.spunto{display:flex;gap:10px;margin-bottom:10px;font-size:14px;line-height:1.5}.spunto-dot{width:6px;height:6px;border-radius:50%;background:#9B8ECC;margin-top:7px;flex-shrink:0}.note-box{border:1.5px dashed #CCC8D8;border-radius:16px;padding:20px 24px;min-height:120px;margin-bottom:20px}.note-title{font-size:11px;font-weight:700;letter-spacing:.08em;color:#9A93A8;margin:0 0 10px;text-transform:uppercase}footer{margin-top:24px;font-size:11px;color:#9A93A8;border-top:1px solid #EDE8F5;padding-top:14px;display:flex;justify-content:space-between}@media print{body{margin:16px}.note-box{min-height:160px}}</style></head><body>
 <div class="header-badge">OPEN LISTENING · ACTIVE CARE — Report one-to-one</div>
 <h1>${r.nome ?? ''} ${r.cognome ?? ''}</h1>
 <p class="sub">Generato il ${new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' })} · Documento riservato HR</p>
-<div class="meta">
-  ${r.bu ? `<span class="meta-chip">📍 ${r.bu}</span>` : ''}
-  ${r.ruolo ? `<span class="meta-chip">👤 ${r.ruolo}</span>` : ''}
-  ${r.anzianita ? `<span class="meta-chip">📅 ${r.anzianita}</span>` : ''}
-</div>
-<div class="hero">
-  <div class="hero-score">${t}<span>/10</span></div>
-  <div class="hero-right">
-    <div class="hero-label">TERMOMETRO ENERGETICO · OGGI</div>
-    <div class="hero-status">Energia ${termLabel}</div>
-    <div class="bar-wrap"><div class="bar-fill"></div></div>
-    <div class="bar-labels"><span>1</span><span>5</span><span>10</span></div>
-    <div class="hero-vs">Media del team: <strong>${termAvg.toFixed(1)}/10</strong> · Scarto: <strong style="color:${t >= termAvg ? '#17B8A6' : '#FF6E86'}">${t >= termAvg ? '+' : ''}${(t - termAvg).toFixed(1)}</strong></div>
-  </div>
-</div>
-<div class="grid">
-  <div class="section">
-    <div class="section-label">Clima del team · Oggi</div>
-    <div class="section-q">Che tempo fa nel tuo team?</div>
-    <p class="answer">${climaEmoji[r.clima ?? ''] ?? ''} ${r.clima ?? '—'}</p>
-  </div>
-  <div class="section">
-    <div class="section-label">Descrizione energia · Ultimo anno</div>
-    <div class="section-q">Come descriveresti la tua energia quest'anno?</div>
-    <p class="answer">${r.descrizione ? descrLabel[r.descrizione] ?? r.descrizione : '—'}</p>
-  </div>
-  <div class="section full">
-    <div class="section-label">Cause dell'energia · Oggi</div>
-    <div class="section-q">Cosa influenza di più la tua energia ora?</div>
-    <div class="tags">${(r.causa ?? []).map(c => `<span class="tag">${c}</span>`).join('') || '<span style="color:#9A93A8">—</span>'}</div>
-  </div>
-</div>
-<div class="spunti">
-  <div class="spunti-title">💬 Spunti per il colloquio</div>
-  ${spunti.map(s => `<div class="spunto"><div class="spunto-dot"></div><div>${s}</div></div>`).join('')}
-</div>
-<div class="note-box">
-  <div class="note-title">📝 Note HR — da compilare durante il colloquio</div>
-</div>
-<footer>
-  <span>OT Consulting — Open Listening · Active Care</span>
-  <span>Uso interno riservato · Non distribuire</span>
-</footer>
+<div class="meta">${r.bu ? `<span class="meta-chip">📍 ${r.bu}</span>` : ''}${r.ruolo ? `<span class="meta-chip">👤 ${r.ruolo}</span>` : ''}${r.anzianita ? `<span class="meta-chip">📅 ${r.anzianita}</span>` : ''}</div>
+<div class="hero"><div class="hero-score">${t}<span>/10</span></div><div class="hero-right"><div class="hero-label">TERMOMETRO ENERGETICO · OGGI</div><div class="hero-status">Energia ${termLabel}</div><div class="bar-wrap"><div class="bar-fill"></div></div></div></div>
+<div class="grid"><div class="section"><div class="section-label">Clima del team · Oggi</div><p class="answer">${climaEmoji[r.clima ?? ''] ?? ''} ${r.clima ?? '—'}</p></div><div class="section"><div class="section-label">Descrizione energia · Ultimo anno</div><p class="answer">${r.descrizione ? descrLabel[r.descrizione] ?? r.descrizione : '—'}</p></div><div class="section full"><div class="section-label">Cause dell'energia · Oggi</div><div class="tags">${(r.causa ?? []).map(c => `<span class="tag">${c}</span>`).join('') || '<span style="color:#9A93A8">—</span>'}</div></div></div>
+<div class="spunti"><div class="spunti-title">💬 Spunti per il colloquio</div>${spunti.map(s => `<div class="spunto"><div class="spunto-dot"></div><div>${s}</div></div>`).join('')}</div>
+<div class="note-box"><div class="note-title">📝 Note HR — da compilare durante il colloquio</div></div>
+<footer><span>OT Consulting — Open Listening · Active Care</span><span>Uso interno riservato · Non distribuire</span></footer>
 </body></html>`
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = url
-    a.download = `report_${r.nome ?? ''}_${r.cognome ?? ''}.html`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
+    a.href = url; a.download = `report_${r.nome ?? ''}_${r.cognome ?? ''}.html`
+    document.body.appendChild(a); a.click(); document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
 
@@ -441,6 +377,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
       </header>
 
       <div className="db-content">
+
         {/* Survey completion strip */}
         <div className="db-survey-strip">
           <div className="db-survey-stat">
@@ -463,7 +400,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           </div>
         </div>
 
-        {/* Filtri sempre visibili */}
+        {/* Filtri */}
         <div className="db-filters db-filters-persistent">
           <div className="db-filter-group">
             <label className="db-filter-label">AREA ORGANIZZATIVA</label>
@@ -485,407 +422,274 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           </div>
         </div>
 
-        {/* Layout a due pannelli */}
-        <div className="db-main-panels">
+        {/* ── 4 METRIC CARDS ── */}
+        <div className="db-metric-row">
 
-          {/* Pannello sinistro: Energy OT People (solo HR) */}
-          {isHR && (
-            <div className="db-panel-left">
-              <div className="db-panel-heading">⚡ Energy OT People</div>
-              <div className="db-boxes-grid">
+          {/* Card 1: Energia Oggi */}
+          <div className="db-metric-card">
+            <div className="db-mc-eyebrow">⚡ ENERGIA OGGI</div>
+            <div className={`db-mc-big-value ${scoreClass10(filteredTermAvg)}`}>
+              {N > 0 ? filteredTermAvg.toFixed(1) : '—'}
+              <span className="db-mc-unit">/10</span>
+            </div>
+            <div className="db-mc-gauge-wrap">
+              <div className="db-mc-gauge-fill" style={{
+                width: `${N > 0 ? filteredTermAvg * 10 : 0}%`,
+                background: filteredTermAvg >= 6.5 ? '#17B8A6' : filteredTermAvg >= 4 ? '#FFB648' : '#FF6E86'
+              }} />
+            </div>
+            <div className="db-mc-pills">
+              <span className="db-mc-pill red">🔴 {filteredTermVals.filter(v => v <= 4).length} bassa</span>
+              <span className="db-mc-pill amber">🟡 {filteredTermVals.filter(v => v >= 5 && v <= 7).length} media</span>
+              <span className="db-mc-pill green">🟢 {filteredTermVals.filter(v => v >= 8).length} alta</span>
+            </div>
+            <div className="db-mc-sub">{N} rispondenti · termometro energetico</div>
+          </div>
 
-                {/* Box 1: Clima del team */}
-                <div className={`db-box${openBoxes['clima'] ? ' expanded' : ''}`}>
-                  <button className="db-box-header" onClick={() => toggleBox('clima')}>
-                    <span className="db-box-brand-label">Open Listening Active Care</span>
-                    <span className="db-box-eyebrow">CLIMA DEL TEAM · OGGI</span>
-                    <span className="db-box-value-row">
-                      <span className="db-box-icon">{climaTop.icon}</span>
-                      <span className="db-box-value small">{climaTop.label}</span>
-                    </span>
-                    <span className="db-box-sub">{all.length ? Math.round((climaCount[climaTop.label] ?? 0) / all.length * 100) : 0}% prevalente</span>
-                    <span className="db-box-chevron">{openBoxes['clima'] ? '▲' : '▼'}</span>
-                  </button>
-                  {openBoxes['clima'] && (
-                    <div className="db-box-body">
-                      <div className="db-dist-list">
-                        {climaOpts.map(o => {
-                          const n = climaCount[o.label] ?? 0
-                          const pct = all.length ? Math.round(n / all.length * 100) : 0
-                          return (
-                            <div key={o.label} className="db-dist-row icon">
-                              <span className="db-dist-icon">{o.icon}</span>
-                              <span className="db-dist-label">{o.label}</span>
-                              <div className="db-dist-track"><div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} /></div>
-                              <span className="db-dist-count">{n}</span>
-                              <span className="db-dist-pct">{pct}%</span>
-                            </div>
-                          )
-                        })}
-                      </div>
+          {/* Card 2: Energia nell'Anno */}
+          <div className="db-metric-card">
+            <div className="db-mc-eyebrow">📅 ENERGIA NELL&apos;ANNO</div>
+            <div className="db-mc-pie-row">
+              <PieChart
+                slices={descOpts.map(o => ({ label: o.label, value: filteredDescrCount[o.key] ?? 0, color: o.col }))}
+                size={72}
+              />
+              <div className="db-mc-legend">
+                {descOpts.map(o => {
+                  const n = filteredDescrCount[o.key] ?? 0
+                  const pct = N > 0 ? Math.round(n / N * 100) : 0
+                  return (
+                    <div key={o.key} className="db-mc-legend-row">
+                      <span className="db-mc-legend-dot" style={{ background: o.col }} />
+                      <span className="db-mc-legend-label">{o.icon} {o.key}</span>
+                      <span className="db-mc-legend-pct">{pct}%</span>
                     </div>
-                  )}
-                </div>
-
-                {/* Box 2: Termometro */}
-                <div className={`db-box${openBoxes['termometro'] ? ' expanded' : ''}`}>
-                  <button className="db-box-header" onClick={() => toggleBox('termometro')}>
-                    <span className="db-box-value-row">
-                      <span className="db-box-value" style={{ color: termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86' }}>
-                        {termAvg.toFixed(1)}<span style={{ fontSize: 13, fontWeight: 400, color: '#9A93A8' }}>/10</span>
-                      </span>
-                    </span>
-                    <span className="db-box-sub">media energetica del team</span>
-                    <span className="db-box-chevron">{openBoxes['termometro'] ? '▲' : '▼'}</span>
-                  </button>
-                  {openBoxes['termometro'] && (
-                    <div className="db-box-body">
-                      <div className="db-gauge-row" style={{ justifyContent: 'flex-start', gap: 12 }}>
-                        <svg viewBox="0 0 80 80" width="68" height="68">
-                          <circle cx="40" cy="40" r="33" fill="none" stroke="rgba(42,35,56,.08)" strokeWidth="8" />
-                          <circle cx="40" cy="40" r="33" fill="none"
-                            stroke={termAvg >= 7 ? '#17B8A6' : termAvg >= 5 ? '#FFB648' : '#FF6E86'}
-                            strokeWidth="8" strokeDasharray={`${(termAvg / 10) * 207} 207`}
-                            strokeLinecap="round" transform="rotate(-90 40 40)" />
-                          <text x="40" y="45" textAnchor="middle" fontSize="16" fontWeight="700" fill="#2A2338" fontFamily="Fredoka">{termAvg.toFixed(1)}</text>
-                        </svg>
-                        <div className="db-gauge-legend">
-                          <span className="gauge-pill red">🔴 {termVals.filter(v => v <= 4).length} bassa</span>
-                          <span className="gauge-pill amber">🟡 {termVals.filter(v => v >= 5 && v <= 7).length} media</span>
-                          <span className="gauge-pill green">🟢 {termVals.filter(v => v >= 8).length} alta</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Box 3: Cause */}
-                <div className={`db-box${openBoxes['cause'] ? ' expanded' : ''}`}>
-                  <button className="db-box-header" onClick={() => toggleBox('cause')}>
-                    <span className="db-box-eyebrow">CAUSE ENERGIA · OGGI</span>
-                    <span className="db-box-value-row">
-                      <span className="db-box-value small" style={{ fontSize: 12 }}>{causeTop[0]?.[0] ?? '—'}</span>
-                    </span>
-                    <span className="db-box-sub">{causeTop[0] ? `${all.length ? Math.round(causeTop[0][1] / all.length * 100) : 0}% la cita` : 'nessun dato'}</span>
-                    <span className="db-box-chevron">{openBoxes['cause'] ? '▲' : '▼'}</span>
-                  </button>
-                  {openBoxes['cause'] && (
-                    <div className="db-box-body">
-                      <div className="db-dist-list">
-                        {causeTop.map(([label, count]) => (
-                          <DistBar key={label} label={label} count={count} total={all.length} color="#FFB648" />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Box 4: Descrizione energia anno */}
-                <div className={`db-box${openBoxes['descrizione'] ? ' expanded' : ''}`}>
-                  <button className="db-box-header" onClick={() => toggleBox('descrizione')}>
-                    <span className="db-box-eyebrow">ENERGIA · ULTIMO ANNO</span>
-                    <span className="db-box-value-row">
-                      <span className="db-box-icon">{descrTop.icon}</span>
-                      <span className="db-box-value small">{descrTop.label}</span>
-                    </span>
-                    <span className="db-box-sub">{descrPositivoPct}% positivo (Crescita o Stabile)</span>
-                    <span className="db-box-chevron">{openBoxes['descrizione'] ? '▲' : '▼'}</span>
-                  </button>
-                  {openBoxes['descrizione'] && (
-                    <div className="db-box-body">
-                      <div className="db-dist-list">
-                        {descOpts.map(o => {
-                          const n = descrCount[o.key] ?? 0
-                          const pct = all.length ? Math.round(n / all.length * 100) : 0
-                          return (
-                            <div key={o.key} className="db-dist-row">
-                              <span className="db-dist-label">{o.icon} {o.label}</span>
-                              <div className="db-dist-track"><div className="db-dist-fill" style={{ width: `${pct}%`, background: o.col }} /></div>
-                              <span className="db-dist-count">{n}</span>
-                              <span className="db-dist-pct">{pct}%</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Box 5: Energia per area */}
-                <div className={`db-box${openBoxes['area'] ? ' expanded' : ''}`}>
-                  <button className="db-box-header" onClick={() => toggleBox('area')}>
-                    <span className="db-box-eyebrow">ENERGIA PER AREA</span>
-                    <span className="db-box-value-row">
-                      <span className="db-box-value" style={{ color: buStats[0]?.avg >= 7 ? '#17B8A6' : buStats[0]?.avg >= 5 ? '#FFB648' : '#FF6E86' }}>
-                        {buStats[0]?.avg.toFixed(1) ?? '—'}
-                      </span>
-                    </span>
-                    <span className="db-box-sub">area più critica: {buStats[0]?.name ?? '—'}</span>
-                    <span className="db-box-chevron">{openBoxes['area'] ? '▲' : '▼'}</span>
-                  </button>
-                  {openBoxes['area'] && (
-                    <div className="db-box-body">
-                      <div className="db-area-list" style={{ gap: 8 }}>
-                        {buStats.map(bu => {
-                          const tc = bu.avg >= 8 ? '#17B8A6' : bu.avg >= 5 ? '#4B6BCC' : '#FF6E86'
-                          const exp = !!expandedBu[bu.name]
-                          return (
-                            <div key={bu.name} className="db-area-bu">
-                              <button className="db-area-bu-row" onClick={e => { e.stopPropagation(); setExpandedBu(p => ({ ...p, [bu.name]: !p[bu.name] })) }}>
-                                <span className="db-area-chevron" style={{ transform: exp ? 'rotate(90deg)' : '' }}>▶</span>
-                                <span className="db-area-bu-name">{bu.name}</span>
-                                <span className="db-area-count">{bu.n} pers.</span>
-                                <span className="db-area-score" style={{ color: tc }}>{bu.avg.toFixed(1)}</span>
-                                <div className="db-area-bar-wrap"><div className="db-area-bar-fill" style={{ width: `${bu.avg * 10}%`, background: tc }} /></div>
-                              </button>
-                              {exp && (
-                                <div className="db-area-teams">
-                                  {bu.teams.map(t => {
-                                    const ttc = t.avg >= 8 ? '#17B8A6' : t.avg >= 5 ? '#4B6BCC' : '#FF6E86'
-                                    return (
-                                      <div key={t.name} className="db-area-team-row">
-                                        <span className="db-area-team-name">{t.name}</span>
-                                        <span className="db-area-count">{t.n} pers.</span>
-                                        <span className="db-area-score" style={{ color: ttc }}>{t.avg.toFixed(1)}</span>
-                                        <div className="db-area-bar-wrap"><div className="db-area-bar-fill" style={{ width: `${t.avg * 10}%`, background: ttc }} /></div>
-                                      </div>
-                                    )
-                                  })}
-                                </div>
-                              )}
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Box 6: Report individuale */}
-                <div className={`db-box${openBoxes['report'] ? ' expanded' : ''}`}>
-                  <button className="db-box-header" onClick={() => toggleBox('report')}>
-                    <span className="db-box-eyebrow">REPORT ONE-TO-ONE</span>
-                    <span className="db-box-value-row">
-                      <span className="db-box-value">{all.length}</span>
-                    </span>
-                    <span className="db-box-sub">report per colloqui individuali</span>
-                    <span className="db-box-chevron">{openBoxes['report'] ? '▲' : '▼'}</span>
-                  </button>
-                  {openBoxes['report'] && (
-                    <div className="db-box-body">
-                      <div className="db-individual-filters" style={{ marginBottom: 8 }}>
-                        <div className="db-individual-search-wrap" style={{ flex: 1 }}>
-                          <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
-                            <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
-                            <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
-                          </svg>
-                          <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} />
-                          {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
-                        </div>
-                        <select className="db-filter-select" style={{ fontSize: 12, padding: '6px 10px' }} value={q1BuFilter || 'Tutte le aree'} onChange={e => setQ1BuFilter(e.target.value)}>
-                          {BUS.map(o => <option key={o}>{o}</option>)}
-                        </select>
-                      </div>
-                      <div className="db-energy-pills" style={{ marginBottom: 10 }}>
-                        {([['all', 'Tutti'], ['low', '🔴 Bassa'], ['mid', '🔵 Media'], ['high', '🟢 Alta']] as const).map(([val, label]) => (
-                          <button key={val} data-val={val} className={`db-energy-pill${q1EnergyFilter === val ? ' active' : ''}`} onClick={() => setQ1EnergyFilter(val)}>
-                            {label}
-                          </button>
-                        ))}
-                      </div>
-                      {q1Search.trim().length === 0 ? (
-                        <div className="db-individual-placeholder" style={{ padding: '20px 12px' }}>
-                          <svg viewBox="0 0 48 48" fill="none" width="32" height="32">
-                            <circle cx="20" cy="20" r="14" stroke="#CCC8D8" strokeWidth="2.5" />
-                            <path d="M30 30l10 10" stroke="#CCC8D8" strokeWidth="2.5" strokeLinecap="round" />
-                          </svg>
-                          <div>Cerca un dipendente per nome<br /><span>Usa i filtri per restringere la ricerca</span></div>
-                        </div>
-                      ) : q1Individuals.length === 0 ? (
-                        <div className="db-individual-placeholder"><div>Nessun risultato per questa ricerca.</div></div>
-                      ) : (
-                        <>
-                          <div className="db-individual-results-count">{q1Individuals.length} {q1Individuals.length === 1 ? 'risultato' : 'risultati'}</div>
-                          <div className="db-quickview-list">
-                            {q1Individuals.map((r, i) => {
-                              const t = r.termometro ?? 0
-                              const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
-                              const termBg = t >= 8 ? 'rgba(23,184,166,.10)' : t >= 5 ? 'rgba(75,107,204,.10)' : 'rgba(255,110,134,.10)'
-                              const termLabel = t >= 8 ? 'Alta' : t >= 5 ? 'Media' : 'Bassa'
-                              const avatarBg = t >= 8 ? 'rgba(23,184,166,.15)' : t >= 5 ? 'rgba(75,107,204,.15)' : 'rgba(255,110,134,.15)'
-                              const avatarColor = t >= 8 ? '#0A7A6B' : t >= 5 ? '#2A4A99' : '#B8003A'
-                              const climaEmoji: Record<string, string> = { 'Soleggiato': '☀️', 'Parzialmente nuvoloso': '⛅', 'Piovoso': '🌧️', 'Temporalesco': '⛈️' }
-                              const descrShort: Record<string, string> = { 'Crescita': '⚡ Crescita', 'Stabile': '🔋 Stabile', 'Ricarica': '🔌 Ricarica', 'Assestamento': '🌱 Assestamento' }
-                              return (
-                                <div key={i} className="db-quickview-card" style={{ borderLeft: `4px solid ${termColor}` }}>
-                                  <div className="db-qv-header">
-                                    <div className="db-individual-avatar" style={{ background: avatarBg, color: avatarColor, width: 36, height: 36, fontSize: 12 }}>
-                                      {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
-                                    </div>
-                                    <div className="db-qv-identity">
-                                      <div className="db-individual-name">{r.nome} {r.cognome}</div>
-                                      <div className="db-individual-meta">
-                                        {r.bu && <span>{r.bu}</span>}
-                                        {r.ruolo && <span>· {r.ruolo}</span>}
-                                      </div>
-                                    </div>
-                                    <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
-                                      <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
-                                        <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                                      </svg>
-                                      Report
-                                    </button>
-                                  </div>
-                                  <div className="db-qv-body">
-                                    <div className="db-qv-energy" style={{ background: termBg }}>
-                                      <span className="db-qv-score" style={{ color: termColor, fontSize: 24 }}>{t}<span className="db-qv-score-unit">/10</span></span>
-                                      <div className="db-qv-energy-right">
-                                        <div className="db-qv-energy-label" style={{ color: termColor }}>Energia {termLabel}</div>
-                                        <div className="db-qv-bar-wrap"><div className="db-qv-bar-fill" style={{ width: `${t * 10}%`, background: termColor }} /></div>
-                                      </div>
-                                      <span className="db-qv-clima">{climaEmoji[r.clima ?? ''] ?? '—'}</span>
-                                    </div>
-                                    <div className="db-qv-data-row">
-                                      <div className="db-qv-data-item">
-                                        <div className="db-qv-data-label">Anno</div>
-                                        <div className="db-qv-data-val">{r.descrizione ? descrShort[r.descrizione] ?? r.descrizione : '—'}</div>
-                                      </div>
-                                      <div className="db-qv-data-item">
-                                        <div className="db-qv-data-label">Cause</div>
-                                        <div className="db-qv-tags">{(r.causa ?? []).map(c => <span key={c} className="db-qv-tag">{c}</span>)}</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )
-                            })}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-
+                  )
+                })}
               </div>
             </div>
-          )}
+            <div className="db-mc-sub">{filteredDescrPos}% energia positiva (Crescita o Stabile)</div>
+          </div>
 
-          {/* Pannello destro: Fattori Energy Battery */}
-          <div className={`db-panel-right${!isHR ? ' db-panel-full' : ''}`}>
-            <div className="db-panel-heading">🔋 Fattori Energy Battery</div>
-
-            {privacyBlock ? (
-              <div className="db-privacy-warn">
-                ⚠️ Meno di {PRIVACY_MIN} rispondenti per questa selezione — i dati aggregati non vengono mostrati per garantire l&apos;anonimato.
+          {/* Card 3: Clima del Team */}
+          <div className="db-metric-card">
+            <div className="db-mc-eyebrow">🌤️ CLIMA DEL TEAM</div>
+            <div className="db-mc-pie-row">
+              <PieChart
+                slices={climaOpts.map(o => ({ label: o.label, value: filteredClimaCount[o.label] ?? 0, color: o.col }))}
+                size={72}
+              />
+              <div className="db-mc-legend">
+                {climaOpts.map(o => {
+                  const n = filteredClimaCount[o.label] ?? 0
+                  const pct = N > 0 ? Math.round(n / N * 100) : 0
+                  return (
+                    <div key={o.label} className="db-mc-legend-row">
+                      <span className="db-mc-legend-dot" style={{ background: o.col }} />
+                      <span className="db-mc-legend-label">{o.icon} {o.label}</span>
+                      <span className="db-mc-legend-pct">{pct}%</span>
+                    </div>
+                  )
+                })}
               </div>
-            ) : (
-              <div className="db-factors-list">
+            </div>
+            <div className="db-mc-sub">percezione clima · media energia {N > 0 ? filteredTermAvg.toFixed(1) : '—'}/10</div>
+          </div>
 
-                {/* 1. Relazioni interpersonali */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🤝</span><span className="db-fsh-txt">Relazioni interpersonali</span></div>
-                  <FactorRow label="Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive" fieldKey="relazioni_q" data={filtered} />
-                </div>
-
-                {/* 2. Supporto del Manager */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🎯</span><span className="db-fsh-txt">Supporto del Manager</span></div>
-                  <FactorRow label="Il/la mio/a referente mi supporta nella mia crescita professionale" fieldKey="referente_crescita" data={filtered} />
-                  <FactorRow label="Il/la mio/a referente dà obiettivi strutturati" fieldKey="referente_obiettivi" data={filtered} />
-                </div>
-
-                {/* 3. Supporto e valore percepito dell'HR */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🔋</span><span className="db-fsh-txt">Supporto e valore percepito dell&apos;HR</span></div>
-                  <FactorRow label="L'HR è un punto di riferimento accessibile e disponibile" fieldKey="hr_access" data={filtered} />
-                  <FactorRow label="Riconosco un valore reale nel supporto che l'HR mi offre" fieldKey="hr_valore" data={filtered} />
-                </div>
-
-                {/* 4. Supporto Management */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">⚡</span><span className="db-fsh-txt">Supporto Management</span></div>
-                  <FactorRow label="Il management comunica in modo trasparente la strategia e le priorità" fieldKey="mgmt_trasp" data={filtered} />
-                  <FactorRow label="Ho fiducia nelle scelte strategiche del management" fieldKey="mgmt_fiducia" data={filtered} />
-                </div>
-
-                {/* 5. Jobcrafting */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🛠️</span><span className="db-fsh-txt">Jobcrafting</span></div>
-                  <FactorRow label="Ho la possibilità di proporre nuove modalità per svolgere i miei compiti" fieldKey="jc_task" data={filtered} />
-                  <FactorRow label="Mi sento libero/a di sperimentare soluzioni diverse da quelle standard" fieldKey="jc_schemi" data={filtered} />
-                </div>
-
-                {/* 6. Sviluppo Professionale */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🌱</span><span className="db-fsh-txt">Sviluppo Professionale</span></div>
-                  {crescitaTop.length > 0 && (
-                    <div className="db-factor-multi">
-                      <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita professionale in OT?</div>
-                      <div className="db-dist-list">
-                        {crescitaTop.map(([label, count]) => (
-                          <DistBar key={label} label={label} count={count} total={N} color="#FFB648" />
-                        ))}
+          {/* Card 4: Report One-to-One */}
+          <div className="db-metric-card db-mc-report">
+            <div className="db-mc-eyebrow">📄 REPORT ONE-TO-ONE</div>
+            <div className="db-mc-report-desc">Scarica il report individuale per il colloquio 1:1</div>
+            <div className="db-individual-search-wrap" style={{ marginBottom: 8 }}>
+              <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
+                <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
+                <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+              <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} />
+              {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
+            </div>
+            <div className="db-mc-report-list">
+              {q1Search.trim().length === 0 ? (
+                <div className="db-mc-report-placeholder">Cerca un dipendente per generare il report</div>
+              ) : q1Individuals.length === 0 ? (
+                <div className="db-mc-report-placeholder">Nessun risultato.</div>
+              ) : (
+                q1Individuals.slice(0, 5).map((r, i) => {
+                  const t = r.termometro ?? 0
+                  const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
+                  return (
+                    <div key={i} className="db-mc-report-row">
+                      <div className="db-mc-report-avatar" style={{ background: termColor + '22', color: termColor }}>
+                        {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
                       </div>
+                      <div className="db-mc-report-name">
+                        <span>{r.nome} {r.cognome}</span>
+                        <span className="db-mc-report-bu">{r.bu}</span>
+                      </div>
+                      <span className="db-mc-report-score" style={{ color: termColor }}>{t}/10</span>
+                      <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
+                        <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
+                          <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                        </svg>
+                      </button>
                     </div>
-                  )}
-                </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
 
-                {/* 7. Identificazione con i valori aziendali */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🏠</span><span className="db-fsh-txt">Identificazione con i valori aziendali</span></div>
-                  <FactorRow label="Mi identifico nei valori e nel modo di lavorare di OT" fieldKey="engagement" data={filtered} />
-                </div>
+        </div>
 
-                {/* 8. Percezione dell'investimento in innovazione */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🔥</span><span className="db-fsh-txt">Percezione dell&apos;investimento in innovazione</span></div>
-                  <FactorRow label="OT investe in modo adeguato nell'innovazione tecnologica" fieldKey="tecnologia" data={filtered} />
-                </div>
+        {/* ── FATTORI ENERGY BATTERY ── */}
+        <div className="db-section-title-bar">
+          <span className="db-fsh-icon" style={{ fontSize: 22 }}>🔋</span>
+          <span className="db-section-title-text">Fattori Energy Battery</span>
+          {N > 0 && !privacyBlock && <span className="db-section-title-sub">{N} rispondenti · filtro attivo</span>}
+          {privacyBlock && <span className="db-privacy-chip">⚠️ meno di {PRIVACY_MIN} rispondenti — dati non mostrati per anonimato</span>}
+        </div>
 
-                {/* 9. Stress */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🪫</span><span className="db-fsh-txt">Stress</span></div>
-                  <FactorRow label="Il carico di lavoro che gestisco quotidianamente è sostenibile" fieldKey="stress_carico" data={filtered} />
-                  <FactorRow label="Riesco a staccare dal lavoro e recuperare le energie nel tempo libero" fieldKey="stress_recupero" data={filtered} />
-                </div>
+        {!privacyBlock && (
+          <div className="db-factors-grid">
 
-                {/* 10. Follow-up Open Listening */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🙂</span><span className="db-fsh-txt">Follow-up Open Listening</span></div>
-                  <FactorRow label="Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)" fieldKey="open_listening" data={filtered} />
-                </div>
+            {/* 1. Relazioni interpersonali */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🤝</span><span className="db-fsh-txt">Relazioni interpersonali</span></div>
+              <LikertGroup items={[
+                { label: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive', key: 'relazioni_q' },
+              ]} data={filtered} />
+            </div>
 
-                {/* 11. Aree prioritarie di intervento */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">🚀</span><span className="db-fsh-txt">Aree prioritarie di intervento</span></div>
-                  {prioTop.length > 0 && (
-                    <div className="db-factor-multi">
-                      <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la tua soddisfazione lavorativa?</div>
-                      <div className="db-dist-list">
-                        {prioTop.map(([label, count]) => (
-                          <DistBar key={label} label={label} count={count} total={N} color="#17B8A6" />
-                        ))}
+            {/* 2. Supporto del Manager */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🎯</span><span className="db-fsh-txt">Supporto del Manager</span></div>
+              <LikertGroup items={[
+                { label: 'Mi supporta nella mia crescita professionale', key: 'referente_crescita' },
+                { label: 'Dà obiettivi strutturati', key: 'referente_obiettivi' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 3. Supporto HR */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🔋</span><span className="db-fsh-txt">Supporto e valore percepito dell&apos;HR</span></div>
+              <LikertGroup items={[
+                { label: "L'HR è un punto di riferimento accessibile e disponibile", key: 'hr_access' },
+                { label: "Riconosco un valore reale nel supporto che l'HR mi offre", key: 'hr_valore' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 4. Supporto Management */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">⚡</span><span className="db-fsh-txt">Supporto Management</span></div>
+              <LikertGroup items={[
+                { label: 'Il management comunica in modo trasparente la strategia e le priorità', key: 'mgmt_trasp' },
+                { label: 'Ho fiducia nelle scelte strategiche del management', key: 'mgmt_fiducia' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 5. Jobcrafting */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🛠️</span><span className="db-fsh-txt">Jobcrafting</span></div>
+              <LikertGroup items={[
+                { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
+                { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 6. Sviluppo Professionale — pie */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🌱</span><span className="db-fsh-txt">Sviluppo Professionale</span></div>
+              <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita in OT?</div>
+              {crescitaTop.length > 0 ? (
+                <div className="db-factor-pie-row">
+                  <PieChart slices={crescitaTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: PIE_COLORS[i % PIE_COLORS.length] }))} size={64} />
+                  <div className="db-pie-legend">
+                    {crescitaTop.slice(0, 5).map(([lbl, cnt], i) => (
+                      <div key={lbl} className="db-pie-legend-row">
+                        <span className="db-pie-dot" style={{ background: PIE_COLORS[i % PIE_COLORS.length] }} />
+                        <span className="db-pie-label">{lbl}</span>
+                        <span className="db-pie-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
                       </div>
+                    ))}
+                  </div>
+                </div>
+              ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
+            </div>
+
+            {/* 7. Identificazione valori */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🏠</span><span className="db-fsh-txt">Identificazione con i valori aziendali</span></div>
+              <LikertGroup items={[
+                { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 8. Percezione innovazione */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🔥</span><span className="db-fsh-txt">Percezione dell&apos;investimento in innovazione</span></div>
+              <LikertGroup items={[
+                { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 9. Stress */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🪫</span><span className="db-fsh-txt">Stress</span></div>
+              <LikertGroup items={[
+                { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
+                { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 10. Follow-up Open Listening */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🙂</span><span className="db-fsh-txt">Follow-up Open Listening</span></div>
+              <LikertGroup items={[
+                { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 11. Aree prioritarie — pie */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🚀</span><span className="db-fsh-txt">Aree prioritarie di intervento</span></div>
+              <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la soddisfazione?</div>
+              {prioTop.length > 0 ? (
+                <div className="db-factor-pie-row">
+                  <PieChart slices={prioTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: PRIO_COLORS[i % PRIO_COLORS.length] }))} size={64} />
+                  <div className="db-pie-legend">
+                    {prioTop.slice(0, 5).map(([lbl, cnt], i) => (
+                      <div key={lbl} className="db-pie-legend-row">
+                        <span className="db-pie-dot" style={{ background: PRIO_COLORS[i % PRIO_COLORS.length] }} />
+                        <span className="db-pie-label">{lbl}</span>
+                        <span className="db-pie-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
+            </div>
+
+            {/* 12. Soddisfazione */}
+            <div className="db-factor-box">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">❤️</span><span className="db-fsh-txt">Soddisfazione – Passione per il lavoro</span></div>
+              <LikertGroup items={[
+                { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
+              ]} data={filtered} />
+            </div>
+
+            {/* 13. NPS — largo */}
+            <div className="db-factor-box db-factor-box-wide">
+              <div className="db-factor-box-hdr"><span className="db-fsh-icon">📣</span><span className="db-fsh-txt">NPS – Propensione a raccomandare l&apos;azienda</span></div>
+              {npsVals.length > 0 ? (
+                <>
+                  <div className="db-factor-multi-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
+                  <div className="db-nps-layout">
+                    <div className={`db-nps-score ${npsColorClass}`}>
+                      {npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}
+                      <div className="db-nps-score-label">NPS Score</div>
                     </div>
-                  )}
-                </div>
-
-                {/* 12. Soddisfazione – Passione per il proprio lavoro */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">❤️</span><span className="db-fsh-txt">Soddisfazione – Passione per il proprio lavoro</span></div>
-                  <FactorRow label="Il lavoro che svolgo ogni giorno mi appassiona" fieldKey="soddisfazione" data={filtered} />
-                </div>
-
-                {/* 13. NPS */}
-                <div className="db-factor-section">
-                  <div className="db-factor-section-hdr"><span className="db-fsh-icon">📣</span><span className="db-fsh-txt">NPS – Propensione a raccomandare l&apos;azienda</span></div>
-                  {npsVals.length > 0 && (
-                    <div className="db-factor-nps">
-                      <div className="db-factor-nps-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
-                      <div className={`db-nps-score ${npsColorClass}`} style={{ fontSize: 36, margin: '6px 0' }}>
-                        {npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}
-                      </div>
+                    <div className="db-nps-bar-block">
                       <div className="db-nps-bar-wrap">
                         <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
                         <div className="db-nps-bar-p" style={{ width: `${npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%` }} />
@@ -897,14 +701,18 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
                         <div className="db-nps-seg pro"><div className="db-nps-seg-num">{pro}</div><div className="db-nps-seg-label">Promotori (9–10)</div></div>
                       </div>
                     </div>
-                  )}
-                </div>
+                    <PieChart slices={[
+                      { label: 'Detrattori', value: det, color: '#FF6E86' },
+                      { label: 'Passivi',    value: pas, color: '#FFB648' },
+                      { label: 'Promotori', value: pro, color: '#17B8A6' },
+                    ]} size={72} />
+                  </div>
+                </>
+              ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
+            </div>
 
-              </div>
-            )}
           </div>
-
-        </div>
+        )}
       </div>
 
       {/* ---- AI Floating Button + Panel ---- */}
@@ -926,7 +734,7 @@ export function DashboardClient({ userEmail, userRole }: { userEmail: string; us
           <div className="db-ai-suggestions">
             {[
               'Quali sono i principali segnali di rischio?',
-              'Com\'è l\'andamento generale dell\'energia?',
+              "Com'è l'andamento generale dell'energia?",
               'Quale causa di bassa energia emerge più spesso?',
               'Come preparo i colloqui one-to-one?',
             ].map(s => (
