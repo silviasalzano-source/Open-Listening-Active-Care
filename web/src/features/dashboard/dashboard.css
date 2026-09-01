@@ -1303,6 +1303,18 @@
 .db-factor-box-wide {
   grid-column: span 2;
 }
+.db-factor-box-full {
+  grid-column: 1 / -1;
+}
+.db-nps-full-layout {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.db-nps-full-layout .db-nps-bar-block {
+  flex: 1;
+  min-width: 0;
+}
 .db-factor-box-hdr {
   display: flex;
   align-items: center;
@@ -1436,6 +1448,7 @@
 .db-nps-segs { display: flex; gap: 12px; margin-top: 8px; }
 .db-nps-seg { flex: 1; }
 .db-nps-seg-num { font-family: var(--font-fredoka), sans-serif; font-size: 22px; font-weight: 700; }
+.db-nps-seg-pct { font-size: 13px; font-weight: 400; opacity: .6; }
 .db-nps-seg-label { font-size: 10px; color: rgba(42,35,56,.5); }
 .db-nps-seg.det .db-nps-seg-num { color: #FF6E86; }
 .db-nps-seg.pas .db-nps-seg-num { color: #E88A00; }

@@ -161,12 +161,13 @@ function FactorRow({ label, fieldKey, data }: { label: string; fieldKey: keyof S
 }
 
 function FactorBox({
-  title, items, data, wide, children,
+  title, items, data, wide, full, children,
 }: {
   title: string
   items?: { label: string; key: keyof SurveyResponse }[]
   data: SurveyResponse[]
   wide?: boolean
+  full?: boolean
   children?: React.ReactNode
 }) {
   const means = (items ?? []).map(it =>
@@ -174,8 +175,9 @@ function FactorBox({
   )
   const groupAvg = avg(means.filter(m => m > 0))
   const showAvg = (items?.length ?? 0) > 1 && groupAvg > 0
+  const cls = full ? 'db-factor-box db-factor-box-full' : wide ? 'db-factor-box db-factor-box-wide' : 'db-factor-box'
   return (
-    <div className={`db-factor-box${wide ? ' db-factor-box-wide' : ''}`}>
+    <div className={cls}>
       <div className="db-factor-box-hdr">
         <span className="db-fsh-txt">{title}</span>
         {showAvg && (
@@ -689,35 +691,36 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
               { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
             ]} />
 
-            {/* 13. NPS — largo */}
-            <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} wide>
+            {/* 13. NPS — full width */}
+            <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} full>
               {npsVals.length > 0 ? (
-                <>
-                  <div className="db-factor-multi-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
-                  <div className="db-nps-layout">
-                    <div className={`db-nps-score ${npsColorClass}`}>
-                      {npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}
-                      <div className="db-nps-score-label">NPS Score</div>
-                    </div>
-                    <div className="db-nps-bar-block">
-                      <div className="db-nps-bar-wrap">
-                        <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
-                        <div className="db-nps-bar-p" style={{ width: `${npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%` }} />
-                        <div className="db-nps-bar-pro" style={{ width: `${npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%` }} />
-                      </div>
-                      <div className="db-nps-segs">
-                        <div className="db-nps-seg det"><div className="db-nps-seg-num">{det}</div><div className="db-nps-seg-label">Detrattori (0–6)</div></div>
-                        <div className="db-nps-seg pas"><div className="db-nps-seg-num">{pas}</div><div className="db-nps-seg-label">Passivi (7–8)</div></div>
-                        <div className="db-nps-seg pro"><div className="db-nps-seg-num">{pro}</div><div className="db-nps-seg-label">Promotori (9–10)</div></div>
-                      </div>
-                    </div>
-                    <PieChart slices={[
-                      { label: 'Detrattori', value: det, color: '#FF6E86' },
-                      { label: 'Passivi',    value: pas, color: '#FFB648' },
-                      { label: 'Promotori', value: pro, color: '#17B8A6' },
-                    ]} size={72} />
+                <div className="db-nps-full-layout">
+                  <div className={`db-nps-score ${npsColorClass}`}>
+                    {npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}
+                    <div className="db-nps-score-label">NPS Score</div>
                   </div>
-                </>
+                  <div className="db-nps-bar-block">
+                    <div className="db-nps-bar-wrap">
+                      <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
+                      <div className="db-nps-bar-p" style={{ width: `${npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%` }} />
+                      <div className="db-nps-bar-pro" style={{ width: `${npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%` }} />
+                    </div>
+                    <div className="db-nps-segs">
+                      <div className="db-nps-seg det">
+                        <div className="db-nps-seg-num">{det} <span className="db-nps-seg-pct">({npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%)</span></div>
+                        <div className="db-nps-seg-label">Detrattori (0–6)</div>
+                      </div>
+                      <div className="db-nps-seg pas">
+                        <div className="db-nps-seg-num">{pas} <span className="db-nps-seg-pct">({npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%)</span></div>
+                        <div className="db-nps-seg-label">Passivi (7–8)</div>
+                      </div>
+                      <div className="db-nps-seg pro">
+                        <div className="db-nps-seg-num">{pro} <span className="db-nps-seg-pct">({npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%)</span></div>
+                        <div className="db-nps-seg-label">Promotori (9–10)</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
             </FactorBox>
 
