@@ -232,7 +232,7 @@ function PieChart({ slices, size = 72 }: { slices: { label: string; value: numbe
 }
 
 /* ---- Main component ---- */
-export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'hr_admin' | 'bu_manager' }) {
+export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmail: string; userRole?: 'hr_admin' | 'bu_manager' }) {
   const [buF, setBuF] = useState('')
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
@@ -547,8 +547,8 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
             ) : <div className="db-factor-empty">Nessun dato</div>}
           </div>
 
-          {/* Card 5: Report One-to-One */}
-          <div className="db-metric-card db-mc-report">
+          {/* Card 5: Report My Energy — solo HR admin */}
+          {userRole === 'hr_admin' && <div className="db-metric-card db-mc-report">
             <div className="db-mc-eyebrow db-tooltip" data-tooltip="Cerca un dipendente per generare il report individuale My Energy da usare nel colloquio 1:1.">REPORT MY ENERGY</div>
             <div className="db-individual-search-wrap" style={{ marginBottom: 8, width: '100%' }}>
               <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
@@ -586,7 +586,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                 })
               )}
             </div>
-          </div>
+          </div>}
 
         </div>
 
