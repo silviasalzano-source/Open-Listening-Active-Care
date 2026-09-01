@@ -649,15 +649,15 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ]} />
 
-            {/* 8. Percezione innovazione */}
-            <FactorBox title="Percezione dell'investimento in innovazione" data={filtered} items={[
-              { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
-            ]} />
-
-            {/* 9. Stress */}
+            {/* 8. Stress */}
             <FactorBox title="Stress" data={filtered} items={[
               { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
               { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
+            ]} />
+
+            {/* 9. Percezione innovazione */}
+            <FactorBox title="Percezione dell'investimento in innovazione" data={filtered} items={[
+              { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
             ]} />
 
             {/* 10. Follow-up Open Listening */}
