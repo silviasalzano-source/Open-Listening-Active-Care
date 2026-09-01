@@ -545,7 +545,6 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
         {/* ── FATTORI ENERGY BATTERY ── */}
         <div className="db-section-title-bar">
-          <span className="db-fsh-icon" style={{ fontSize: 22 }}>🔋</span>
           <span className="db-section-title-text">Fattori Energy Battery</span>
           {N > 0 && !privacyBlock && <span className="db-section-title-sub">{N} rispondenti · filtro attivo</span>}
           {privacyBlock && <span className="db-privacy-chip">⚠️ meno di {PRIVACY_MIN} rispondenti — dati non mostrati per anonimato</span>}
@@ -556,7 +555,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 1. Relazioni interpersonali */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🤝</span><span className="db-fsh-txt">Relazioni interpersonali</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Relazioni interpersonali</span></div>
               <LikertGroup items={[
                 { label: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive', key: 'relazioni_q' },
               ]} data={filtered} />
@@ -564,7 +563,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 2. Supporto del Manager */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🎯</span><span className="db-fsh-txt">Supporto del Manager</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Supporto del Manager</span></div>
               <LikertGroup items={[
                 { label: 'Mi supporta nella mia crescita professionale', key: 'referente_crescita' },
                 { label: 'Dà obiettivi strutturati', key: 'referente_obiettivi' },
@@ -573,7 +572,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 3. Supporto HR */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🔋</span><span className="db-fsh-txt">Supporto e valore percepito dell&apos;HR</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Supporto e valore percepito dell&apos;HR</span></div>
               <LikertGroup items={[
                 { label: "L'HR è un punto di riferimento accessibile e disponibile", key: 'hr_access' },
                 { label: "Riconosco un valore reale nel supporto che l'HR mi offre", key: 'hr_valore' },
@@ -582,7 +581,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 4. Supporto Management */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">⚡</span><span className="db-fsh-txt">Supporto Management</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Supporto Management</span></div>
               <LikertGroup items={[
                 { label: 'Il management comunica in modo trasparente la strategia e le priorità', key: 'mgmt_trasp' },
                 { label: 'Ho fiducia nelle scelte strategiche del management', key: 'mgmt_fiducia' },
@@ -591,7 +590,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 5. Jobcrafting */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🛠️</span><span className="db-fsh-txt">Jobcrafting</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Jobcrafting</span></div>
               <LikertGroup items={[
                 { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
                 { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
@@ -600,7 +599,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 6. Sviluppo Professionale — pie */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🌱</span><span className="db-fsh-txt">Sviluppo Professionale</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Sviluppo Professionale</span></div>
               <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita in OT?</div>
               {crescitaTop.length > 0 ? (
                 <div className="db-factor-pie-row">
@@ -620,7 +619,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 7. Identificazione valori */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🏠</span><span className="db-fsh-txt">Identificazione con i valori aziendali</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Identificazione con i valori aziendali</span></div>
               <LikertGroup items={[
                 { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
               ]} data={filtered} />
@@ -628,7 +627,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 8. Percezione innovazione */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🔥</span><span className="db-fsh-txt">Percezione dell&apos;investimento in innovazione</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Percezione dell&apos;investimento in innovazione</span></div>
               <LikertGroup items={[
                 { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
               ]} data={filtered} />
@@ -636,7 +635,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 9. Stress */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🪫</span><span className="db-fsh-txt">Stress</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Stress</span></div>
               <LikertGroup items={[
                 { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
                 { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
@@ -645,7 +644,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 10. Follow-up Open Listening */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🙂</span><span className="db-fsh-txt">Follow-up Open Listening</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Follow-up Open Listening</span></div>
               <LikertGroup items={[
                 { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
               ]} data={filtered} />
@@ -653,7 +652,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 11. Aree prioritarie — pie */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">🚀</span><span className="db-fsh-txt">Aree prioritarie di intervento</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Aree prioritarie di intervento</span></div>
               <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la soddisfazione?</div>
               {prioTop.length > 0 ? (
                 <div className="db-factor-pie-row">
@@ -673,7 +672,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 12. Soddisfazione */}
             <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">❤️</span><span className="db-fsh-txt">Soddisfazione – Passione per il lavoro</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Soddisfazione – Passione per il lavoro</span></div>
               <LikertGroup items={[
                 { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
               ]} data={filtered} />
@@ -681,7 +680,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
             {/* 13. NPS — largo */}
             <div className="db-factor-box db-factor-box-wide">
-              <div className="db-factor-box-hdr"><span className="db-fsh-icon">📣</span><span className="db-fsh-txt">NPS – Propensione a raccomandare l&apos;azienda</span></div>
+              <div className="db-factor-box-hdr"><span className="db-fsh-txt">NPS – Propensione a raccomandare l&apos;azienda</span></div>
               {npsVals.length > 0 ? (
                 <>
                   <div className="db-factor-multi-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
