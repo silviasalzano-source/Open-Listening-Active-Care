@@ -694,18 +694,13 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
             ]} />
 
             {/* 13. NPS — full width */}
-            <FactorBox
-              title="NPS – Propensione a raccomandare l'azienda"
-              data={filtered}
-              full
-              headerRight={npsScore != null ? (
-                <span className="db-nps-header-score">
-                  {(npsScore > 0 ? '+' : '') + npsScore}
-                </span>
-              ) : undefined}
-            >
+            <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} full>
               {npsVals.length > 0 ? (
                 <div className="db-nps-full-layout">
+                  <div className="db-nps-center-score">
+                    <span className="db-nps-big">{npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}</span>
+                    <span className="db-nps-center-label">NPS Score</span>
+                  </div>
                   <div className="db-nps-bar-block">
                     <div className="db-nps-bar-wrap">
                       <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />

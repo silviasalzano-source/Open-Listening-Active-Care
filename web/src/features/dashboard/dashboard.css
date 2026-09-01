@@ -1306,22 +1306,36 @@
 .db-factor-box-full {
   grid-column: 1 / -1;
 }
-.db-nps-header-score {
-  margin-left: auto;
-  font-family: var(--font-fredoka), sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: #2A2338;
-  flex-shrink: 0;
-}
 .db-nps-full-layout {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
 }
 .db-nps-full-layout .db-nps-bar-block {
   flex: 1;
   min-width: 0;
+}
+.db-nps-center-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 72px;
+}
+.db-nps-big {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+  color: #6E4CAB;
+}
+.db-nps-center-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #9A93A8;
 }
 .db-factor-box-hdr {
   display: flex;
