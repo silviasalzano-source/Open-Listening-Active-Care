@@ -434,7 +434,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 1: Termometro Energia Oggi */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione del termometro energetico (scala 1–10) compilato nel giorno della survey. Bassa = 1–4, Media = 5–7, Alta = 8–10.">TERMOMETRO ENERGIA OGGI</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione del termometro energetico (scala 1–10). Bassa = 1–4, Media = 5–7, Alta = 8–10.">TERMOMETRO ENERGIA OGGI</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={[
@@ -462,7 +462,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 2: Energia nell'Anno */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Come descriveresti la tua energia quest'anno?' Categorie: Crescita, Stabile, Ricarica, Assestamento.">ENERGIA NELL&apos;ANNO</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Come descriveresti la tua energia quest'anno?'">ENERGIA NELL&apos;ANNO</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={descOpts.map(o => ({ label: o.label, value: filteredDescrCount[o.key] ?? 0, color: o.col }))}
@@ -486,7 +486,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 3: Clima del Team */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Che tempo fa nel tuo team?' Opzioni: Soleggiato, Parzialmente nuvoloso, Piovoso, Temporalesco. Riflette la percezione del clima relazionale nel team.">CLIMA DEL TEAM</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Che tempo fa nel tuo team?' Riflette la percezione del clima relazionale nel team.">CLIMA DEL TEAM</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={climaOpts.map(o => ({ label: o.label, value: filteredClimaCount[o.label] ?? 0, color: o.col }))}
@@ -510,7 +510,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 4: Causa energia */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Cosa influenza di più la tua energia ora?' (selezione multipla, max 2 scelte). Le percentuali sono calcolate sul numero di rispondenti.">CAUSE ENERGIA</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Cosa influenza di più la tua energia ora?'">CAUSE ENERGIA</div>
             {causaTop.length > 0 ? (
               <div className="db-factor-pie-row">
                 <PieChart slices={causaTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: CAUSA_COLORS[i % CAUSA_COLORS.length] }))} size={60} />
