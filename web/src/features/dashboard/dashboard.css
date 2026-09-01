@@ -1306,6 +1306,14 @@
 .db-factor-box-full {
   grid-column: 1 / -1;
 }
+.db-nps-header-score {
+  margin-left: auto;
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2A2338;
+  flex-shrink: 0;
+}
 .db-nps-full-layout {
   display: flex;
   align-items: center;

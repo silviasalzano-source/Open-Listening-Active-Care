@@ -161,13 +161,14 @@ function FactorRow({ label, fieldKey, data }: { label: string; fieldKey: keyof S
 }
 
 function FactorBox({
-  title, items, data, wide, full, children,
+  title, items, data, wide, full, headerRight, children,
 }: {
   title: string
   items?: { label: string; key: keyof SurveyResponse }[]
   data: SurveyResponse[]
   wide?: boolean
   full?: boolean
+  headerRight?: React.ReactNode
   children?: React.ReactNode
 }) {
   const means = (items ?? []).map(it =>
@@ -185,6 +186,7 @@ function FactorBox({
             {groupAvg.toFixed(1)}<small>/5</small>
           </span>
         )}
+        {headerRight}
       </div>
       {items
         ? items.map(it => <FactorRow key={it.key as string} label={it.label} fieldKey={it.key} data={data} />)
@@ -692,13 +694,18 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
             ]} />
 
             {/* 13. NPS — full width */}
-            <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} full>
+            <FactorBox
+              title="NPS – Propensione a raccomandare l'azienda"
+              data={filtered}
+              full
+              headerRight={npsScore != null ? (
+                <span className="db-nps-header-score">
+                  {(npsScore > 0 ? '+' : '') + npsScore}
+                </span>
+              ) : undefined}
+            >
               {npsVals.length > 0 ? (
                 <div className="db-nps-full-layout">
-                  <div className={`db-nps-score ${npsColorClass}`}>
-                    {npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}
-                    <div className="db-nps-score-label">NPS Score</div>
-                  </div>
                   <div className="db-nps-bar-block">
                     <div className="db-nps-bar-wrap">
                       <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
