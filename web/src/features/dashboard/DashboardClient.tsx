@@ -435,22 +435,32 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
           {/* Card 1: Energia Oggi */}
           <div className="db-metric-card">
             <div className="db-mc-eyebrow">ENERGIA OGGI</div>
-            <div className={`db-mc-big-value ${scoreClass10(filteredTermAvg)}`}>
-              {N > 0 ? filteredTermAvg.toFixed(1) : '—'}
-              <span className="db-mc-unit">/10</span>
+            <div className="db-mc-pie-row">
+              <PieChart
+                slices={[
+                  { label: 'Bassa', value: filteredTermVals.filter(v => v <= 4).length, color: '#FF6E86' },
+                  { label: 'Media', value: filteredTermVals.filter(v => v >= 5 && v <= 7).length, color: '#FFB648' },
+                  { label: 'Alta', value: filteredTermVals.filter(v => v >= 8).length, color: '#17B8A6' },
+                ]}
+                size={72}
+              />
+              <div className="db-mc-legend">
+                {[
+                  { label: 'Bassa (1–4)', color: '#FF6E86', count: filteredTermVals.filter(v => v <= 4).length },
+                  { label: 'Media (5–7)', color: '#FFB648', count: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
+                  { label: 'Alta (8–10)', color: '#17B8A6', count: filteredTermVals.filter(v => v >= 8).length },
+                ].map(row => (
+                  <div key={row.label} className="db-mc-legend-row">
+                    <span className="db-mc-legend-dot" style={{ background: row.color }} />
+                    <span className="db-mc-legend-label">{row.label}</span>
+                    <span className="db-mc-legend-pct">{N > 0 ? Math.round(row.count / N * 100) : 0}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="db-mc-gauge-wrap">
-              <div className="db-mc-gauge-fill" style={{
-                width: `${N > 0 ? filteredTermAvg * 10 : 0}%`,
-                background: filteredTermAvg >= 6.5 ? '#17B8A6' : filteredTermAvg >= 4 ? '#FFB648' : '#FF6E86'
-              }} />
+            <div className="db-mc-sub">
+              Media: <strong className={scoreClass10(filteredTermAvg)}>{N > 0 ? filteredTermAvg.toFixed(1) : '—'}/10</strong> · {N} rispondenti
             </div>
-            <div className="db-mc-pills">
-              <span className="db-mc-pill red">{filteredTermVals.filter(v => v <= 4).length} bassa</span>
-              <span className="db-mc-pill amber">{filteredTermVals.filter(v => v >= 5 && v <= 7).length} media</span>
-              <span className="db-mc-pill green">{filteredTermVals.filter(v => v >= 8).length} alta</span>
-            </div>
-            <div className="db-mc-sub">{N} rispondenti · termometro energetico</div>
           </div>
 
           {/* Card 2: Energia nell'Anno */}
