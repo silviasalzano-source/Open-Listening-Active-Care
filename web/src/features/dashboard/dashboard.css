@@ -1328,7 +1328,7 @@
   margin-left: 1px;
 }
 .db-factor-avg-badge.green { background: rgba(23,184,166,.15); color: #0A7A6B; }
-.db-factor-avg-badge.amber { background: rgba(255,182,72,.20); color: #9B5E00; }
+.db-factor-avg-badge.amber { background: rgba(75,107,204,.13); color: #2B4CB0; }
 .db-factor-avg-badge.red   { background: rgba(255,110,134,.15); color: #B8003A; }
 
 .db-factor-box-avg {
