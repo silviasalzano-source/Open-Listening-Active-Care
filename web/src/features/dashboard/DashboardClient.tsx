@@ -572,7 +572,6 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
         {/* ── FATTORI ENERGY BATTERY ── */}
         <div className="db-section-title-bar">
-          <span className="db-section-title-text">Fattori Energy Battery</span>
           {N > 0 && !privacyBlock && <span className="db-section-title-sub">{N} rispondenti · filtro attivo</span>}
           {privacyBlock && <span className="db-privacy-chip">⚠️ meno di {PRIVACY_MIN} rispondenti — dati non mostrati per anonimato</span>}
         </div>
