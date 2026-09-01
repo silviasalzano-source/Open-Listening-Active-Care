@@ -395,7 +395,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
         <div className="db-brand-row">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/ot-logo-icon.svg" alt="OT Consulting" className="db-header-logo" />
-          <span className="db-brand">Dashboard HR</span>
+          <span className="db-brand">OT Energy</span>
         </div>
         <div className="db-user-row">
           <span className="db-user-chip">👤 {userEmail}</span>

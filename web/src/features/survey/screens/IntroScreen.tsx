@@ -11,14 +11,14 @@ export function IntroScreen({ onStart }: { onStart: () => void }) {
       <div className="intro-topbar">
         {/* eslint-disable-next-line @next/next/no-img-element -- fixed static asset, no next/image sizing needed */}
         <img src="/ot-logo-full.svg" alt="OT Consulting" className="intro-logo" />
-        <button className="intro-db-btn" onClick={() => setShowLogin(true)} title="Accesso Dashboard HR">
+        <button className="intro-db-btn" onClick={() => setShowLogin(true)} title="Accesso OT Energy">
           <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="18" width="5" height="10" rx="2" fill="#FFB648"/>
             <rect x="10" y="12" width="5" height="16" rx="2" fill="#FF6E86"/>
             <rect x="17" y="7" width="5" height="21" rx="2" fill="#17B8A6"/>
             <rect x="24" y="14" width="5" height="14" rx="2" fill="#2E86DE"/>
           </svg>
-          <span className="intro-db-label">Dashboard HR</span>
+          <span className="intro-db-label">OT Energy</span>
         </button>
       </div>
       <div className="intro-badge">Open Listening · Active Care</div>

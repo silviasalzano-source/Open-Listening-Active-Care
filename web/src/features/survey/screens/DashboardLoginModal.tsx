@@ -59,7 +59,7 @@ export function DashboardLoginModal({ onClose }: Props) {
           </div>
         </div>
 
-        <h2 className="db-login-title">Dashboard HR</h2>
+        <h2 className="db-login-title">OT Energy</h2>
 
         <form onSubmit={handleSubmit} className="db-login-form">
           <div className="db-login-field">
