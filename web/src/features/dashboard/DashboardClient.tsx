@@ -267,6 +267,12 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
     { label: 'Energia in Assestamento',key: 'Assestamento',icon: '🌱', col: '#9A93A8' },
   ]
 
+  /* ---- Computed: causa ---- */
+  const causaCount: Record<string, number> = {}
+  filtered.forEach(r => r.causa?.forEach(c => { causaCount[c] = (causaCount[c] ?? 0) + 1 }))
+  const causaTop = Object.entries(causaCount).sort((a, b) => b[1] - a[1])
+  const CAUSA_COLORS = ['#FFB648', '#FF6E86', '#4B6BCC', '#17B8A6', '#9A93A8', '#6E4CAB']
+
   /* ---- Computed: NPS ---- */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
   const det = npsVals.filter(v => v <= 6).length
@@ -497,7 +503,28 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
             <div className="db-mc-sub">percezione clima · media energia {N > 0 ? filteredTermAvg.toFixed(1) : '—'}/10</div>
           </div>
 
-          {/* Card 4: Report One-to-One */}
+          {/* Card 4: Causa energia */}
+          <div className="db-metric-card">
+            <div className="db-mc-eyebrow">CAUSA ENERGIA</div>
+            <div className="db-factor-multi-label" style={{ fontSize: 12, marginBottom: 6 }}>Cosa influenza di più la tua energia ora?</div>
+            {causaTop.length > 0 ? (
+              <div className="db-factor-pie-row">
+                <PieChart slices={causaTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: CAUSA_COLORS[i % CAUSA_COLORS.length] }))} size={60} />
+                <div className="db-pie-legend">
+                  {causaTop.slice(0, 5).map(([lbl, cnt], i) => (
+                    <div key={lbl} className="db-pie-legend-row">
+                      <span className="db-pie-dot" style={{ background: CAUSA_COLORS[i % CAUSA_COLORS.length] }} />
+                      <span className="db-pie-label">{lbl}</span>
+                      <span className="db-pie-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : <div className="db-factor-empty">Nessun dato</div>}
+            <div className="db-mc-sub">{N} rispondenti · selezione multipla</div>
+          </div>
+
+          {/* Card 5: Report One-to-One */}
           <div className="db-metric-card db-mc-report">
             <div className="db-mc-eyebrow">REPORT ONE-TO-ONE</div>
             <div className="db-mc-report-desc">Scarica il report individuale per il colloquio 1:1</div>
