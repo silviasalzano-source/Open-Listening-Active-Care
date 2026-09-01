@@ -432,9 +432,9 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
         {/* ── 4 METRIC CARDS ── */}
         <div className="db-metric-row">
 
-          {/* Card 1: Energia Oggi */}
+          {/* Card 1: Termometro Energia Oggi */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">ENERGIA OGGI</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione del termometro energetico (scala 1–10) compilato nel giorno della survey. Bassa = 1–4, Media = 5–7, Alta = 8–10.">TERMOMETRO ENERGIA OGGI</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={[
@@ -458,14 +458,11 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                 ))}
               </div>
             </div>
-            <div className="db-mc-sub">
-              Media: <strong className={scoreClass10(filteredTermAvg)}>{N > 0 ? filteredTermAvg.toFixed(1) : '—'}/10</strong> · {N} rispondenti
-            </div>
           </div>
 
           {/* Card 2: Energia nell'Anno */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">ENERGIA NELL&apos;ANNO</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Come descriveresti la tua energia quest'anno?' Categorie: Crescita, Stabile, Ricarica, Assestamento.">ENERGIA NELL&apos;ANNO</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={descOpts.map(o => ({ label: o.label, value: filteredDescrCount[o.key] ?? 0, color: o.col }))}
@@ -485,12 +482,11 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                 })}
               </div>
             </div>
-            <div className="db-mc-sub">{filteredDescrPos}% energia positiva (Crescita o Stabile)</div>
           </div>
 
           {/* Card 3: Clima del Team */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">CLIMA DEL TEAM</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Che tempo fa nel tuo team?' Opzioni: Soleggiato, Parzialmente nuvoloso, Piovoso, Temporalesco. Riflette la percezione del clima relazionale nel team.">CLIMA DEL TEAM</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={climaOpts.map(o => ({ label: o.label, value: filteredClimaCount[o.label] ?? 0, color: o.col }))}
@@ -510,13 +506,11 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                 })}
               </div>
             </div>
-            <div className="db-mc-sub">percezione clima · media energia {N > 0 ? filteredTermAvg.toFixed(1) : '—'}/10</div>
           </div>
 
           {/* Card 4: Causa energia */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">CAUSA ENERGIA</div>
-            <div className="db-factor-multi-label" style={{ fontSize: 12, marginBottom: 6 }}>Cosa influenza di più la tua energia ora?</div>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Cosa influenza di più la tua energia ora?' (selezione multipla, max 2 scelte). Le percentuali sono calcolate sul numero di rispondenti.">CAUSE ENERGIA</div>
             {causaTop.length > 0 ? (
               <div className="db-factor-pie-row">
                 <PieChart slices={causaTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: CAUSA_COLORS[i % CAUSA_COLORS.length] }))} size={60} />
@@ -531,14 +525,12 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                 </div>
               </div>
             ) : <div className="db-factor-empty">Nessun dato</div>}
-            <div className="db-mc-sub">{N} rispondenti · selezione multipla</div>
           </div>
 
           {/* Card 5: Report One-to-One */}
           <div className="db-metric-card db-mc-report">
-            <div className="db-mc-eyebrow">REPORT ONE-TO-ONE</div>
-            <div className="db-mc-report-desc">Scarica il report individuale per il colloquio 1:1</div>
-            <div className="db-individual-search-wrap" style={{ marginBottom: 8 }}>
+            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Cerca un dipendente per generare il report individuale My Energy da usare nel colloquio 1:1.">REPORT MY ENERGY</div>
+            <div className="db-individual-search-wrap" style={{ marginBottom: 8, width: '100%' }}>
               <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
                 <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
                 <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
@@ -547,9 +539,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
               {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
             </div>
             <div className="db-mc-report-list">
-              {q1Search.trim().length === 0 ? (
-                <div className="db-mc-report-placeholder">Cerca un dipendente per generare il report</div>
-              ) : q1Individuals.length === 0 ? (
+              {q1Search.trim().length === 0 ? null : q1Individuals.length === 0 ? (
                 <div className="db-mc-report-placeholder">Nessun risultato.</div>
               ) : (
                 q1Individuals.slice(0, 5).map((r, i) => {

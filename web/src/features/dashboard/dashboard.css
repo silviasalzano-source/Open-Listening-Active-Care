@@ -1183,7 +1183,7 @@
   font-family: var(--font-fredoka), sans-serif;
   font-size: 12px;
   font-weight: 700;
-  color: #6B5F7A;
+  color: #2A2338;
   flex-shrink: 0;
 }
 .db-mc-report { gap: 8px; }
@@ -1373,7 +1373,7 @@
   font-family: var(--font-fredoka), sans-serif;
   font-size: 12px;
   font-weight: 700;
-  color: #6B5F7A;
+  color: #2A2338;
   flex-shrink: 0;
   min-width: 28px;
   text-align: right;
@@ -1422,6 +1422,44 @@
 .db-nps-score.red { color: #FF6E86; }
 .db-nps-score.amber { color: #E88A00; }
 .db-nps-score.green { color: #17B8A6; }
+
+/* ---- Tooltip sull'eyebrow ---- */
+.db-tooltip {
+  position: relative;
+  cursor: default;
+}
+.db-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: #2A2338;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: normal;
+  width: 230px;
+  box-shadow: 0 4px 16px rgba(42,35,56,.22);
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .15s, transform .15s;
+}
+.db-tooltip:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Search bar full-width nel report card ---- */
+.db-mc-report .db-individual-search-wrap {
+  align-self: stretch;
+}
 
 /* ---- Responsive nuova griglia ---- */
 @media (max-width: 1300px) {
