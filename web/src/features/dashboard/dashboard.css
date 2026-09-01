@@ -1340,6 +1340,7 @@
   align-items: center;
   gap: 12px;
   margin-top: 6px;
+  width: 100%;
 }
 .db-pie-legend {
   display: flex;
