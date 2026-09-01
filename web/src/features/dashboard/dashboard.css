@@ -1287,7 +1287,7 @@
 /* ---- Griglia 3-colonne fattori ---- */
 .db-factors-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 14px;
 }
 .db-factor-box {
@@ -1311,6 +1311,26 @@
   padding-bottom: 8px;
   border-bottom: 1px solid #EDE8F5;
 }
+.db-factor-avg-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 10px;
+  line-height: 1;
+}
+.db-factor-avg-badge small {
+  font-size: 10px;
+  font-weight: 400;
+  opacity: .65;
+  margin-left: 1px;
+}
+.db-factor-avg-badge.green { background: rgba(23,184,166,.15); color: #0A7A6B; }
+.db-factor-avg-badge.amber { background: rgba(255,182,72,.20); color: #9B5E00; }
+.db-factor-avg-badge.red   { background: rgba(255,110,134,.15); color: #B8003A; }
+
 .db-factor-box-avg {
   margin-top: 8px;
   padding-top: 8px;
@@ -1468,6 +1488,9 @@
 }
 @media (max-width: 900px) {
   .db-metric-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 1200px) {
+  .db-factors-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 900px) {
   .db-factors-grid { grid-template-columns: repeat(2, 1fr); }

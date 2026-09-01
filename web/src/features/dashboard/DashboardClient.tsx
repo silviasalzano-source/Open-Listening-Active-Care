@@ -160,18 +160,34 @@ function FactorRow({ label, fieldKey, data }: { label: string; fieldKey: keyof S
   )
 }
 
-function LikertGroup({ items, data }: { items: { label: string; key: keyof SurveyResponse }[]; data: SurveyResponse[] }) {
-  const means = items.map(it => avg(data.map(r => r[it.key] as number | null).filter((v): v is number => v != null)))
+function FactorBox({
+  title, items, data, wide, children,
+}: {
+  title: string
+  items?: { label: string; key: keyof SurveyResponse }[]
+  data: SurveyResponse[]
+  wide?: boolean
+  children?: React.ReactNode
+}) {
+  const means = (items ?? []).map(it =>
+    avg(data.map(r => r[it.key] as number | null).filter((v): v is number => v != null))
+  )
   const groupAvg = avg(means.filter(m => m > 0))
+  const showAvg = (items?.length ?? 0) > 1 && groupAvg > 0
   return (
-    <>
-      {items.map(it => <FactorRow key={it.key as string} label={it.label} fieldKey={it.key} data={data} />)}
-      {items.length > 1 && groupAvg > 0 && (
-        <div className="db-factor-box-avg">
-          Media variabile: <strong className={`db-avg-score ${scoreClass(groupAvg)}`}>{groupAvg.toFixed(1)}<span>/5</span></strong>
-        </div>
-      )}
-    </>
+    <div className={`db-factor-box${wide ? ' db-factor-box-wide' : ''}`}>
+      <div className="db-factor-box-hdr">
+        <span className="db-fsh-txt">{title}</span>
+        {showAvg && (
+          <span className={`db-factor-avg-badge ${scoreClass(groupAvg)}`}>
+            {groupAvg.toFixed(1)}<small>/5</small>
+          </span>
+        )}
+      </div>
+      {items
+        ? items.map(it => <FactorRow key={it.key as string} label={it.label} fieldKey={it.key} data={data} />)
+        : children}
+    </div>
   )
 }
 
@@ -581,52 +597,36 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
           <div className="db-factors-grid">
 
             {/* 1. Relazioni interpersonali */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Relazioni interpersonali</span></div>
-              <LikertGroup items={[
-                { label: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive', key: 'relazioni_q' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Relazioni interpersonali" data={filtered} items={[
+              { label: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive', key: 'relazioni_q' },
+            ]} />
 
             {/* 2. Supporto del Manager */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Supporto del Manager</span></div>
-              <LikertGroup items={[
-                { label: 'Mi supporta nella mia crescita professionale', key: 'referente_crescita' },
-                { label: 'Dà obiettivi strutturati', key: 'referente_obiettivi' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Supporto del Manager" data={filtered} items={[
+              { label: 'Mi supporta nella mia crescita professionale', key: 'referente_crescita' },
+              { label: 'Dà obiettivi strutturati', key: 'referente_obiettivi' },
+            ]} />
 
             {/* 3. Supporto HR */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Supporto e valore percepito dell&apos;HR</span></div>
-              <LikertGroup items={[
-                { label: "L'HR è un punto di riferimento accessibile e disponibile", key: 'hr_access' },
-                { label: "Riconosco un valore reale nel supporto che l'HR mi offre", key: 'hr_valore' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Supporto e valore percepito dell'HR" data={filtered} items={[
+              { label: "L'HR è un punto di riferimento accessibile e disponibile", key: 'hr_access' },
+              { label: "Riconosco un valore reale nel supporto che l'HR mi offre", key: 'hr_valore' },
+            ]} />
 
             {/* 4. Supporto Management */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Supporto Management</span></div>
-              <LikertGroup items={[
-                { label: 'Il management comunica in modo trasparente la strategia e le priorità', key: 'mgmt_trasp' },
-                { label: 'Ho fiducia nelle scelte strategiche del management', key: 'mgmt_fiducia' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Supporto Management" data={filtered} items={[
+              { label: 'Il management comunica in modo trasparente la strategia e le priorità', key: 'mgmt_trasp' },
+              { label: 'Ho fiducia nelle scelte strategiche del management', key: 'mgmt_fiducia' },
+            ]} />
 
             {/* 5. Jobcrafting */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Jobcrafting</span></div>
-              <LikertGroup items={[
-                { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
-                { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Jobcrafting" data={filtered} items={[
+              { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
+              { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
+            ]} />
 
             {/* 6. Sviluppo Professionale — pie */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Sviluppo Professionale</span></div>
+            <FactorBox title="Sviluppo Professionale" data={filtered}>
               <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita in OT?</div>
               {crescitaTop.length > 0 ? (
                 <div className="db-factor-pie-row">
@@ -642,44 +642,31 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                   </div>
                 </div>
               ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
-            </div>
+            </FactorBox>
 
             {/* 7. Identificazione valori */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Identificazione con i valori aziendali</span></div>
-              <LikertGroup items={[
-                { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Identificazione con i valori aziendali" data={filtered} items={[
+              { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
+            ]} />
 
             {/* 8. Percezione innovazione */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Percezione dell&apos;investimento in innovazione</span></div>
-              <LikertGroup items={[
-                { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Percezione dell'investimento in innovazione" data={filtered} items={[
+              { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
+            ]} />
 
             {/* 9. Stress */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Stress</span></div>
-              <LikertGroup items={[
-                { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
-                { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Stress" data={filtered} items={[
+              { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
+              { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
+            ]} />
 
             {/* 10. Follow-up Open Listening */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Follow-up Open Listening</span></div>
-              <LikertGroup items={[
-                { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Follow-up Open Listening" data={filtered} items={[
+              { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
+            ]} />
 
             {/* 11. Aree prioritarie — pie */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Aree prioritarie di intervento</span></div>
+            <FactorBox title="Aree prioritarie di intervento" data={filtered}>
               <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la soddisfazione?</div>
               {prioTop.length > 0 ? (
                 <div className="db-factor-pie-row">
@@ -695,19 +682,15 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                   </div>
                 </div>
               ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
-            </div>
+            </FactorBox>
 
             {/* 12. Soddisfazione */}
-            <div className="db-factor-box">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">Soddisfazione – Passione per il lavoro</span></div>
-              <LikertGroup items={[
-                { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
-              ]} data={filtered} />
-            </div>
+            <FactorBox title="Soddisfazione – Passione per il lavoro" data={filtered} items={[
+              { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
+            ]} />
 
             {/* 13. NPS — largo */}
-            <div className="db-factor-box db-factor-box-wide">
-              <div className="db-factor-box-hdr"><span className="db-fsh-txt">NPS – Propensione a raccomandare l&apos;azienda</span></div>
+            <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} wide>
               {npsVals.length > 0 ? (
                 <>
                   <div className="db-factor-multi-label">Su una scala da 0 a 10, quanto raccomanderesti OT come un buon posto di lavoro?</div>
@@ -736,7 +719,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                   </div>
                 </>
               ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
-            </div>
+            </FactorBox>
 
           </div>
         )}
