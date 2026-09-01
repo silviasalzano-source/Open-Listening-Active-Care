@@ -428,7 +428,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 1: Energia Oggi */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">⚡ ENERGIA OGGI</div>
+            <div className="db-mc-eyebrow">ENERGIA OGGI</div>
             <div className={`db-mc-big-value ${scoreClass10(filteredTermAvg)}`}>
               {N > 0 ? filteredTermAvg.toFixed(1) : '—'}
               <span className="db-mc-unit">/10</span>
@@ -449,7 +449,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 2: Energia nell'Anno */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">📅 ENERGIA NELL&apos;ANNO</div>
+            <div className="db-mc-eyebrow">ENERGIA NELL&apos;ANNO</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={descOpts.map(o => ({ label: o.label, value: filteredDescrCount[o.key] ?? 0, color: o.col }))}
@@ -474,7 +474,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 3: Clima del Team */}
           <div className="db-metric-card">
-            <div className="db-mc-eyebrow">🌤️ CLIMA DEL TEAM</div>
+            <div className="db-mc-eyebrow">CLIMA DEL TEAM</div>
             <div className="db-mc-pie-row">
               <PieChart
                 slices={climaOpts.map(o => ({ label: o.label, value: filteredClimaCount[o.label] ?? 0, color: o.col }))}
@@ -499,7 +499,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
 
           {/* Card 4: Report One-to-One */}
           <div className="db-metric-card db-mc-report">
-            <div className="db-mc-eyebrow">📄 REPORT ONE-TO-ONE</div>
+            <div className="db-mc-eyebrow">REPORT ONE-TO-ONE</div>
             <div className="db-mc-report-desc">Scarica il report individuale per il colloquio 1:1</div>
             <div className="db-individual-search-wrap" style={{ marginBottom: 8 }}>
               <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
