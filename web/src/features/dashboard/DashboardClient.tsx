@@ -440,9 +440,9 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
               }} />
             </div>
             <div className="db-mc-pills">
-              <span className="db-mc-pill red">🔴 {filteredTermVals.filter(v => v <= 4).length} bassa</span>
-              <span className="db-mc-pill amber">🟡 {filteredTermVals.filter(v => v >= 5 && v <= 7).length} media</span>
-              <span className="db-mc-pill green">🟢 {filteredTermVals.filter(v => v >= 8).length} alta</span>
+              <span className="db-mc-pill red">{filteredTermVals.filter(v => v <= 4).length} bassa</span>
+              <span className="db-mc-pill amber">{filteredTermVals.filter(v => v >= 5 && v <= 7).length} media</span>
+              <span className="db-mc-pill green">{filteredTermVals.filter(v => v >= 8).length} alta</span>
             </div>
             <div className="db-mc-sub">{N} rispondenti · termometro energetico</div>
           </div>
@@ -462,7 +462,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                   return (
                     <div key={o.key} className="db-mc-legend-row">
                       <span className="db-mc-legend-dot" style={{ background: o.col }} />
-                      <span className="db-mc-legend-label">{o.icon} {o.key}</span>
+                      <span className="db-mc-legend-label">{o.key}</span>
                       <span className="db-mc-legend-pct">{pct}%</span>
                     </div>
                   )
@@ -487,7 +487,7 @@ export function DashboardClient({ userEmail }: { userEmail: string; userRole: 'h
                   return (
                     <div key={o.label} className="db-mc-legend-row">
                       <span className="db-mc-legend-dot" style={{ background: o.col }} />
-                      <span className="db-mc-legend-label">{o.icon} {o.label}</span>
+                      <span className="db-mc-legend-label">{o.label}</span>
                       <span className="db-mc-legend-pct">{pct}%</span>
                     </div>
                   )
