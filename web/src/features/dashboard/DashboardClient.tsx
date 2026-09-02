@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import './dashboard.css'
+import { CampagneTab } from './CampagneTab'
 
 /* ---- Types ---- */
 interface SurveyResponse {
@@ -233,6 +234,7 @@ function PieChart({ slices, size = 72 }: { slices: { label: string; value: numbe
 
 /* ---- Main component ---- */
 export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmail: string; userRole?: 'hr_admin' | 'bu_manager' }) {
+  const [activeTab, setActiveTab] = useState<'dati' | 'campagne'>('dati')
   const [buF, setBuF] = useState('')
   const [anzF, setAnzF] = useState('')
   const [ruoloF, setRuoloF] = useState('')
@@ -403,7 +405,31 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
         </div>
       </header>
 
-      <div className="db-content">
+      {/* Tab bar */}
+      <div className="db-tab-bar">
+        <button
+          className={`db-tab-btn${activeTab === 'dati' ? ' active' : ''}`}
+          onClick={() => setActiveTab('dati')}
+        >
+          Analisi survey
+        </button>
+        {userRole === 'hr_admin' && (
+          <button
+            className={`db-tab-btn${activeTab === 'campagne' ? ' active' : ''}`}
+            onClick={() => setActiveTab('campagne')}
+          >
+            Campagne
+          </button>
+        )}
+      </div>
+
+      {activeTab === 'campagne' && userRole === 'hr_admin' && (
+        <div className="db-content">
+          <CampagneTab />
+        </div>
+      )}
+
+      {activeTab === 'dati' && <div className="db-content">
 
         {/* Survey completion strip */}
         <div className="db-survey-strip">
@@ -728,7 +754,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
           </div>
         )}
-      </div>
+      </div>}
 
       {/* ---- AI Floating Button + Panel ---- */}
       <button className={`db-ai-fab${aiOpen ? ' open' : ''}`} onClick={() => { setAiOpen(o => !o); setAiAnswer(null); setAiQuestion('') }} aria-label="Analisi AI">
