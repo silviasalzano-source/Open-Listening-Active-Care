@@ -17,10 +17,9 @@ export const step2: Step2Item[] = [
     id: 'bu',
     chapter: 'profilo',
     type: 'single',
-    title: 'La tua area di appartenenza',
-    sub: 'BU / CDC principale',
+    title: 'La tua area principale di appartenenza',
     options: [
-      'Operation & Delivery (tutti i team di lavoro, SYS, APA, ...)',
+      'Operation & Delivery (SYS Banking, Cross, Fashion, APA, e tutti i team di lavoro non citati)',
       'Sales & Marketing',
       'IT (interno, helpdesk...)',
       'HR (HR payroll; Recruiting & Development; Language Specialist)',
