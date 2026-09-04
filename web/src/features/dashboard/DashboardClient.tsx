@@ -75,7 +75,6 @@ const TEAMS_BY_BU: Record<string, string[]> = {
   'IT (interno, helpdesk)':        ['Helpdesk', 'IT Infrastructure'],
   'HR':                            ['HR Payroll', 'Recruiting & Development', 'Language Specialist'],
   'Servizi generali':              ['Amministrazione', 'Office Coordinator'],
-  'Consulenti esterni su One sys': ['Consulenti One sys'],
 }
 
 function generateMockData(): SurveyResponse[] {
@@ -312,7 +311,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   filtered.forEach(r => r.sv_crescita?.forEach(p => { crescitaCount[p] = (crescitaCount[p] ?? 0) + 1 }))
   const crescitaTop = Object.entries(crescitaCount).sort((a, b) => b[1] - a[1])
 
-  const BUS = ['Tutte le aree', 'Operation & Delivery', 'Sales & Marketing', 'IT (interno, helpdesk)', 'HR', 'Servizi generali', 'Consulenti esterni su One sys']
+  const BUS = ['Tutte le aree', ...Object.keys(TEAMS_BY_BU)]
   const ANZS = ['Tutte le anzianità', '< 1 anno', '1-2 anni', '3-4 anni', '5-6 anni', '7-8-9 anni', '>= 10 anni']
   const RUOLI = ['Tutti i ruoli', 'Manager', 'Worker']
 
