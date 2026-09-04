@@ -48,16 +48,28 @@ push`), questa stessa cartella funziona senza modifiche.
    PR ha una preview automatica — non serve una pipeline custom per questo,
    lo gestisce l'integrazione nativa Vercel-GitHub.
 
-## Cosa manca ancora (fuori scope di questo scaffold)
+## Cosa è stato implementato
 
-- Porting del contenuto del prototipo HTML in `/survey`.
-- Metriche reali della dashboard `/admin` (da definire con HR).
-- Schema/migrazioni del database Supabase e relativa pipeline di CD — vedi
-  `docs/architettura-proposta-pilota.md` sezione 6 per il modello dati
-  previsto.
-- Provisioning reale di utenti dipendenti/HR (flusso di invito).
-- Migrazione da `middleware.ts` a `proxy.ts`: Next.js ha deprecato la
+- **Survey** (`/survey`): flow completo portato in React (`src/features/survey/`),
+  con tutte le schermate del prototipo HTML (intro, My Energy Battery, capitoli
+  Fattori, result screen, end screen) e le stesse mascotte SVG generate via JS.
+- **Dashboard HR** (`/admin`, accessibile ai ruoli `hr_admin` e `bu_manager`):
+  UI "OT Energy" con filtri per area/team/anzianità, metriche aggregate sul clima,
+  termometro, cause energia, fattori per capitolo, NPS, tab Campagne per gestire
+  le finestre di apertura/chiusura del survey. Attualmente usa **dati mock**
+  deterministici (localStorage) — non ancora collegata al database reale.
+- **Schema database**: migrazioni SQL scritte e pronte in `web/supabase/migrations/`
+  (campaigns, submissions, risposte nominative/anonime, RLS policy, indici).
+- **Auth**: `requireRole` server-side (`src/lib/auth/requireRole.ts`), ruoli
+  `hr_admin` e `bu_manager` letti da `app_metadata.role` del JWT Supabase.
+
+## Cosa manca ancora
+
+- **Integrazione Supabase reale**: la dashboard mostra mock data; survey e
+  dashboard vanno collegati al database (API routes + Supabase client) seguendo
+  l'architettura in `docs/architettura-proposta-pilota.md`.
+- **Provisioning utenti dipendenti/HR** (flusso di invito email).
+- **Migrazione da `middleware.ts` a `proxy.ts`**: Next.js ha deprecato la
   convenzione `middleware.ts` a favore di `proxy.ts` (stessa logica, nome
-  diverso). Nella versione di Next.js attualmente usata funziona ancora, ma
-  va migrata prima di aggiornare alla major che rimuove la vecchia
-  convenzione.
+  diverso). Nella versione attualmente usata funziona ancora, ma va migrata
+  prima di aggiornare alla major che rimuove la vecchia convenzione.

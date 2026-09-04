@@ -1,6 +1,9 @@
 # Proposta di Architettura — Open Listening · Active Care (Fase Pilota)
 
-> **Stato:** proposta per discussione, non ancora validata da DPO/IT del cliente.
+> **Stato:** architettura validata internamente e in implementazione (settembre 2026).
+> Stack adottato: Next.js + Supabase (Vercel). Survey e dashboard UI completati;
+> integrazione Supabase reale (API routes + lettura/scrittura DB) ancora da fare.
+> Non ancora validata formalmente dal DPO del cliente.
 > **Ambito:** architettura tecnica per portare il prototipo HTML
 > (`Open_Listening_Active_Care_Prototype.html`) da mockup cliccabile ad
 > applicazione reale per un **pilota** con circa 100 dipendenti.

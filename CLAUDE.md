@@ -6,23 +6,47 @@ prossimi passi, così da non dover ripartire da zero.
 
 ## 1. Cos'è questo progetto
 
-Prototipo interattivo HTML/CSS/JS (single-file, self-contained, no build step)
-di un'app di survey aziendale per **OT Consulting**, chiamata
-**"Open Listening · Active Care"**.
+App di survey aziendale per **OT Consulting**, chiamata
+**"Open Listening · Active Care"**. Nata da una consulenza di psicologia HR
+(item bank su Excel), è passata da un prototipo HTML cliccabile a un'app
+Next.js vera con dashboard HR.
 
-Il progetto nasce da una consulenza di psicologia HR (item bank su Excel) ed è
-diventato un prototipo cliccabile in HTML per validare UX/UI prima dello
-sviluppo definitivo (probabilmente su Google AI Studio o altro stack, non
-ancora deciso).
+Il repository contiene **due artefatti distinti**:
 
-**File principale:** `Open_Listening_Active_Care_Prototype.html`
-(circa 1300 righe: CSS in `<style>`, markup in `<body>`, logica in un unico
+### 1a. Prototipo HTML (reference, non più il focus principale)
+
+**File:** `Open_Listening_Active_Care_Prototype.html`  
+(~1300 righe: CSS in `<style>`, markup in `<body>`, logica in un unico
 `<script>` a fondo pagina, vanilla JS, nessuna dipendenza esterna).
 
-Esiste anche un item bank Excel collegato (`Survey_Battery_Item_Bank_v19.xlsx`)
-con le domande "ufficiali" del progetto, usato come fonte per i testi delle
-domande del prototipo — utile come riferimento se serve verificare/allineare
-la formulazione esatta delle domande.
+Usato per validare UX/UI e come reference per il porting in React. Non
+viene più sviluppato attivamente — le modifiche di prodotto vanno fatte
+sull'app Next.js in `web/`.
+
+### 1b. App Next.js (sviluppo attivo)
+
+**Cartella:** `web/` — Next.js App Router, TypeScript, Supabase.
+
+Struttura di rilievo:
+- `web/src/features/survey/` — flow survey completo portato in React
+- `web/src/features/dashboard/` — dashboard "OT Energy" per `hr_admin` /
+  `bu_manager` con filtri area/team, metriche aggregate, tab Campagne
+- `web/src/lib/auth/` — `requireRole` server-side, ruoli `hr_admin` /
+  `bu_manager` via `app_metadata.role` nel JWT Supabase
+- `web/src/lib/campaigns/` — logica apertura/chiusura finestre di campagna
+- `web/supabase/migrations/` — schema SQL pronto (campaigns, submissions,
+  risposte nominative/anonime, RLS policy, indici), da applicare via
+  SQL Editor di Supabase
+- `web/README.md` — istruzioni di setup, test e deploy
+
+**Stato attuale** (settembre 2026): survey e dashboard UI sono completi;
+la dashboard usa ancora dati mock deterministici (localStorage); l'integrazione
+Supabase reale (lettura/scrittura risposte via API routes) è il prossimo
+passo tecnico aperto.
+
+Esiste anche un item bank Excel (`Survey_Battery_Item_Bank_v19.xlsx`)
+con le domande "ufficiali" — utile come riferimento per verificare la
+formulazione esatta.
 
 ## 2. Flusso complessivo dell'app
 
@@ -185,41 +209,46 @@ design del cliente, non solo tecnica.
 - **GDPR/Privacy**: i dati di My Energy Battery sono nominativi + benessere
   → dati sensibili. Serve consultare il DPO prima del deploy reale. I
   manager non devono poter accedere ai dati individuali. Soglia minima di
-  anonimato per gli aggregati: 5 risposte per segmento.
+  anonimato per gli aggregati: 5 risposte per segmento (già applicata nei
+  mock della dashboard; da riportare nelle query SQL reali).
 - **Skip logic reale** per la domanda `open_listening` ("Rispondi solo se hai
   partecipato alla sessione di Open Listening 2025") — al momento è solo
-  "opzionale" (`optional: true`, non blocca l'avanzamento), ma non c'è una
-  vera logica condizionale che la nasconde a chi non ha partecipato. Da
+  "opzionale" (`optional: true`), non c'è una vera logica condizionale. Da
   implementare se serve per la versione reale.
-- **BU/CDC e fasce di anzianità**: il cliente deve far rivedere/aggiornare
-  queste liste dal responsabile competente (opzioni della domanda `bu` e
-  `anzianita` in `step2`) — potrebbero non essere definitive.
-- **Sviluppo definitivo**: il prototipo HTML è solo per validare UX/UI. Lo
-  sviluppo vero probabilmente andrà su un altro stack (Google AI Studio è
-  stato menzionato in una fase iniziale del progetto, ma non è stata presa
-  una decisione definitiva) con backend reale e separazione tecnica tra dati
-  nominativi e anonimi.
-- **Dashboard analytics HR**: non ancora specificata nel dettaglio (medie,
-  percentuali, conteggi per area) — solo menzionata come next step.
-- **Nome del capitolo "Area e ruolo"**: era originariamente "Anagrafica", il
-  cliente ha chiesto di cambiarlo ma senza indicare il nome definitivo nella
-  stessa richiesta; è stato scelto "Area e ruolo" come default ragionevole
-  ma non è stato confermato esplicitamente dal cliente.
+- **BU/CDC e fasce di anzianità**: l'ultima revisione (commit `b107fcc`) ha
+  aggiornato la domanda BU e rimosso "Consulenti esterni su One sys" dal
+  filtro area (`95551ef`), ma le liste potrebbero non essere ancora definitive
+  — da riconfirmare col cliente.
+- **Integrazione Supabase reale**: la dashboard mostra dati mock; il prossimo
+  passo tecnico è collegare survey e dashboard al database tramite API routes
+  (vedi `web/README.md` sezione "Cosa manca ancora").
+- **Provisioning utenti**: flusso di invito email per dipendenti e HR non
+  ancora implementato (vedi `docs/architettura-proposta-pilota.md` §5).
+- **Stack definitivo**: lo sviluppo è su Next.js + Supabase (vedi §1b e
+  `docs/architettura-proposta-pilota.md`). Google AI Studio non è più
+  l'ipotesi principale.
 
 ## 8. Come continuare a lavorarci
 
-- Il file è abbastanza grande (>1300 righe) ma diviso in sezioni chiare via
-  commenti `/* ======================= NOME SEZIONE ======================= */`
-  nel JS — usarli per orientarsi rapidamente (es. `RENDER`, `CHAPTER
-  MASCOTS`, `Question rendering`).
-- Per testare rapidamente le modifiche: è un file HTML statico, basta aprirlo
-  in un browser (nessun server/build necessario).
+### Sul prototipo HTML (`Open_Listening_Active_Care_Prototype.html`)
+
+- Diviso in sezioni via commenti `/* === NOME SEZIONE === */` nel JS —
+  usarli per orientarsi (es. `RENDER`, `CHAPTER MASCOTS`, `Question rendering`).
+- Per testare: è un file HTML statico, basta aprirlo in un browser (nessun
+  build necessario).
 - Prima di ogni modifica strutturale (es. aggiungere una domanda, un
   capitolo, un tipo di widget), verificare sempre `buildFlow()` e
   `updateHud()` insieme, perché entrambi devono conoscere ogni nuovo `kind`
-  di step per calcolare correttamente la percentuale di avanzamento e la
-  fase caldo/freddo.
-- Quando si aggiunge testo, il cliente ha mostrato più volte preferenza per
-  un tono colloquiale, poco "corporate", con frasi brevi e dirette (vedi le
-  riscritture ripetute del testo della result screen come esempio di tono
-  target).
+  di step.
+
+### Sull'app Next.js (`web/`)
+
+- `npm run dev` da dentro `web/` per avviare il dev server.
+- `npm run test` per i test unitari (Vitest).
+- La dashboard (`/admin`) usa dati mock — cambiare qualcosa nel layout o
+  nelle metriche non richiede un Supabase reale, basta `npm run dev`.
+- Per modifiche al survey (`/survey`), verificare che il flow e le mascotte
+  SVG si comportino come nel prototipo HTML di riferimento.
+- Tono dei testi: colloquiale, poco "corporate", frasi brevi e dirette
+  (preferenza esplicita del cliente, mostrata nelle riscritture ripetute
+  della result screen).
