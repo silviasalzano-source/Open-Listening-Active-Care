@@ -883,41 +883,11 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
         {!privacyBlock && (
           <div className="db-factors-grid">
 
-            {/* 1. Jobcrafting */}
-            <FactorBox title="Jobcrafting" data={filtered} items={[
-              { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
-              { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
-            ]} />
-
-            {/* 6. Sviluppo Professionale — pie */}
-            <FactorBox title="Sviluppo Professionale" data={filtered}>
-              <div className="db-factor-multi-label">A cosa attribuisci principalmente la tua crescita in OT?</div>
-              {crescitaTop.length > 0 ? (
-                <div className="db-factor-pie-row">
-                  <PieChart slices={crescitaTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: PIE_COLORS[i % PIE_COLORS.length] }))} size={64} />
-                  <div className="db-pie-legend">
-                    {crescitaTop.slice(0, 5).map(([lbl, cnt], i) => (
-                      <div key={lbl} className="db-pie-legend-row">
-                        <span className="db-pie-dot" style={{ background: PIE_COLORS[i % PIE_COLORS.length] }} />
-                        <span className="db-pie-label">{lbl}</span>
-                        <span className="db-pie-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
-            </FactorBox>
-
             {/* 7. Identificazione valori */}
             <FactorBox title="Identificazione con i valori aziendali" data={filtered} items={[
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ]} />
 
-            {/* 8. Stress */}
-            <FactorBox title="Stress" data={filtered} items={[
-              { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
-              { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
-            ]} />
 
             {/* 9. Percezione innovazione */}
             <FactorBox title="Percezione dell'investimento in innovazione" data={filtered} items={[
@@ -929,24 +899,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
             ]} />
 
-            {/* 11. Aree prioritarie — pie */}
-            <FactorBox title="Aree prioritarie di intervento" data={filtered}>
-              <div className="db-factor-multi-label">Cosa vorresti cambiare per incrementare la soddisfazione?</div>
-              {prioTop.length > 0 ? (
-                <div className="db-factor-pie-row">
-                  <PieChart slices={prioTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: PRIO_COLORS[i % PRIO_COLORS.length] }))} size={64} />
-                  <div className="db-pie-legend">
-                    {prioTop.slice(0, 5).map(([lbl, cnt], i) => (
-                      <div key={lbl} className="db-pie-legend-row">
-                        <span className="db-pie-dot" style={{ background: PRIO_COLORS[i % PRIO_COLORS.length] }} />
-                        <span className="db-pie-label">{lbl}</span>
-                        <span className="db-pie-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
-            </FactorBox>
 
 
             {/* 13. NPS — full width */}
