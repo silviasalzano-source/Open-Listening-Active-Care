@@ -840,16 +840,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           return (
             <div className="db-thematic-box">
               <div className="db-thematic-col">
-                <div className="db-thematic-col-title">Relazione &amp; Supporto</div>
-                {([
-                  { label: 'Relazioni interpersonali', val: th_relazioni },
-                  { label: 'Supporto del Manager',     val: th_manager },
-                  { label: 'Supporto HR',              val: th_hr },
-                  { label: 'Supporto Management',      val: th_mgmt },
-                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-              </div>
-              <div className="db-thematic-divider" />
-              <div className="db-thematic-col">
                 <div className="db-thematic-col-title">Persona</div>
                 {([
                   { label: 'Stress',           val: th_stress },
@@ -875,6 +865,16 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     </div>
                   )
                 })()}
+              </div>
+              <div className="db-thematic-divider" />
+              <div className="db-thematic-col">
+                <div className="db-thematic-col-title">Relazione &amp; Supporto</div>
+                {([
+                  { label: 'Relazioni interpersonali', val: th_relazioni },
+                  { label: 'Supporto del Manager',     val: th_manager },
+                  { label: 'Supporto HR',              val: th_hr },
+                  { label: 'Supporto Management',      val: th_mgmt },
+                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
               </div>
             </div>
           )
