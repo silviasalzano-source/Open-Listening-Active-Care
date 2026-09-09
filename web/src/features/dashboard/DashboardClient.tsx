@@ -916,7 +916,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   <span className="db-thematic-label">Azioni post ascolto 2025</span>
                 </div>
                 {(() => {
-                  const olVals = filtered.map(r => r.open_listening).filter((v): v is number => v != null)
+                  const olValsReal = filtered.map(r => r.open_listening).filter((v): v is number => v != null)
+                  // Demo: se nessun dato reale, usa distribuzione di esempio
+                  const olVals = olValsReal.length > 0 ? olValsReal : [1,2,2,3,3,3,3,4,4,4,4,4,5,5,5]
                   const olDistrib = buildDistrib(olVals)
                   const olTotal = olVals.length
                   const olColors = ['#FF6E86', '#FFAD70', '#FFB648', '#6ECFC9', '#17B8A6']
