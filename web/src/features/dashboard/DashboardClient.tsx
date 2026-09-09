@@ -892,63 +892,42 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     { label: 'Investimento innovazione', val: th_tecnologia },
                     { label: 'Identificazione valori aziendali', val: th_sviluppo },
                   ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                  {/* NPS Radar */}
+                  {/* NPS Bar chart */}
                   {(() => {
                     const bands = [
-                      { label: 'Molto critico', range: [0, 2] },
-                      { label: 'Critico',       range: [3, 4] },
-                      { label: 'Neutro',         range: [5, 6] },
-                      { label: 'Passivo',        range: [7, 8] },
-                      { label: 'Promotore',      range: [9, 10] },
+                      { label: 'Promotore',    range: [9, 10], color: '#17B8A6' },
+                      { label: 'Passivo',      range: [7,  8], color: '#6ECFC9' },
+                      { label: 'Neutro',       range: [5,  6], color: '#FFB648' },
+                      { label: 'Critico',      range: [3,  4], color: '#FFAD70' },
+                      { label: 'Molto critico',range: [0,  2], color: '#FF6E86' },
                     ]
                     const total = npsVals.length
-                    const pcts = bands.map(b => total > 0 ? npsVals.filter(v => v >= b.range[0] && v <= b.range[1]).length / total : 0)
-                    const size = 170, cx = size / 2, cy = size / 2, r = 58
-                    const n = 5
-                    const angles = Array.from({ length: n }, (_, i) => (i * 2 * Math.PI / n) - Math.PI / 2)
-                    const pt = (scale: number, i: number) => ({ x: cx + r * scale * Math.cos(angles[i]), y: cy + r * scale * Math.sin(angles[i]) })
-                    const toPath = (pts: {x:number;y:number}[]) => pts.map((p, i) => `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + 'Z'
-                    const dataPts = pcts.map((pct, i) => pt(Math.max(pct, 0.04), i))
-                    const gridPts = (s: number) => Array.from({ length: n }, (_, i) => pt(s, i))
                     return (
                       <div style={{ marginTop: 4 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
                           <span className="db-thematic-label" style={{ fontSize: 12 }}>NPS – Propensione a raccomandare l&apos;azienda</span>
                           {npsScore != null && (
-                            <span style={{ fontSize: 12, fontWeight: 800, color: npsScore >= 30 ? '#17B8A6' : npsScore >= 0 ? '#FFB648' : '#FF6E86', flexShrink: 0 }}>
+                            <span style={{ fontSize: 13, fontWeight: 800, color: npsScore >= 30 ? '#17B8A6' : npsScore >= 0 ? '#FFB648' : '#FF6E86', flexShrink: 0 }}>
                               {npsScore > 0 ? '+' : ''}{npsScore}
                             </span>
                           )}
                         </div>
                         {total > 0 ? (
-                          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', margin: '0 auto' }}>
-                            {[0.25, 0.5, 0.75, 1].map(s => (
-                              <path key={s} d={toPath(gridPts(s))} fill="none" stroke="rgba(42,35,56,.08)" strokeWidth={1} />
-                            ))}
-                            {angles.map((a, i) => (
-                              <line key={i} x1={cx} y1={cy} x2={pt(1, i).x} y2={pt(1, i).y} stroke="rgba(42,35,56,.08)" strokeWidth={1} />
-                            ))}
-                            <path d={toPath(dataPts)} fill="rgba(110,76,171,.22)" stroke="#6E4CAB" strokeWidth={2} />
-                            {dataPts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="#6E4CAB" />)}
-                            {bands.map((b, i) => {
-                              const lp = pt(1.28, i)
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            {bands.map(b => {
+                              const cnt = npsVals.filter(v => v >= b.range[0] && v <= b.range[1]).length
+                              const pct = Math.round(cnt / total * 100)
                               return (
-                                <text key={i} x={lp.x} y={lp.y} textAnchor="middle" dominantBaseline="middle"
-                                  fontSize={9} fontWeight={600} fill="#2A2338" fontFamily="Nunito, sans-serif">
-                                  {b.label}
-                                </text>
+                                <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  <span style={{ fontSize: 11, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{b.label}</span>
+                                  <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+                                    <div style={{ width: `${pct}%`, height: '100%', background: b.color, borderRadius: 100, transition: 'width .4s ease' }} />
+                                  </div>
+                                  <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
+                                </div>
                               )
                             })}
-                            {pcts.map((pct, i) => {
-                              const lp = pt(Math.max(pct, 0.04) + 0.18, i)
-                              return pct > 0 ? (
-                                <text key={i} x={lp.x} y={lp.y} textAnchor="middle" dominantBaseline="middle"
-                                  fontSize={8} fontWeight={700} fill="#6E4CAB" fontFamily="Fredoka, sans-serif">
-                                  {Math.round(pct * 100)}%
-                                </text>
-                              ) : null
-                            })}
-                          </svg>
+                          </div>
                         ) : <div style={{ fontSize: 11, color: '#9A93A8' }}>Nessun dato</div>}
                       </div>
                     )
