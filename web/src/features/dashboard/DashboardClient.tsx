@@ -777,19 +777,19 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                       const color = STRIP_COLORS[k - 1]
                       return (
                         <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <span style={{ fontSize: 11, color: '#9A93A8', minWidth: 16, textAlign: 'right', fontWeight: 700 }}>{k}</span>
+                          <span style={{ fontSize: 11, color: '#2A2338', minWidth: 16, textAlign: 'right', fontWeight: 700 }}>{k}</span>
                           <span style={{ fontSize: 11, color: '#2A2338', flex: 1, lineHeight: 1.3 }}>{SCORE_LABELS[k]}</span>
                           <div style={{ width: 80, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden', flexShrink: 0 }}>
                             <div style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 100, transition: 'width .4s ease' }} />
                           </div>
                           <span style={{ fontSize: 11, fontWeight: 700, color, minWidth: 32, textAlign: 'right' }}>{cnt > 0 ? `${pct}%` : '—'}</span>
-                          <span style={{ fontSize: 10, color: '#9A93A8', minWidth: 36 }}>({cnt} pers.)</span>
+                          <span style={{ fontSize: 10, color: '#2A2338', minWidth: 36 }}>({cnt} pers.)</span>
                         </div>
                       )
                     })}
                   </div>
                   <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #EDE8F5', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 11, color: '#9A93A8' }}>{total} rispondenti totali</span>
+                    <span style={{ fontSize: 11, color: '#2A2338' }}>{total} rispondenti totali</span>
                     <span style={{ fontSize: 13, fontWeight: 700, color: avg(Object.entries(distrib).flatMap(([k, c]) => Array(c).fill(Number(k)))) >= 4 ? '#17B8A6' : avg(Object.entries(distrib).flatMap(([k, c]) => Array(c).fill(Number(k)))) >= 3 ? '#FFB648' : '#FF6E86' }}>
                       Media {avg(Object.entries(distrib).flatMap(([k, c]) => Array(c).fill(Number(k)))).toFixed(1)}
                     </span>
