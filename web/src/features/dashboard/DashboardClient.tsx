@@ -911,10 +911,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
               <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2, paddingTop: 16 }}>
                 <div className="db-thematic-col-title">Follow-up Open Listening 2025</div>
-                <div className="db-thematic-row db-thematic-row-btn" style={{ pointerEvents: 'none' }}>
-                  <span className="db-thematic-chevron" style={{ visibility: 'hidden' }}>▶</span>
-                  <span className="db-thematic-label">Azioni post ascolto 2025</span>
-                </div>
+                <ThematicRow label="Azioni post ascolto 2025" val={th_open_listening} />
                 {(() => {
                   const olValsReal = filtered.map(r => r.open_listening).filter((v): v is number => v != null)
                   // Demo: se nessun dato reale, usa distribuzione di esempio
