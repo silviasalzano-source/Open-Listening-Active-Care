@@ -294,6 +294,21 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const causaTop = Object.entries(causaCount).sort((a, b) => b[1] - a[1])
   const CAUSA_COLORS = ['#FFB648', '#FF6E86', '#4B6BCC', '#17B8A6', '#9A93A8', '#6E4CAB']
 
+  /* ---- Computed: thematic averages ---- */
+  function mfAvg(keys: (keyof SurveyResponse)[]) {
+    const vals = filtered.map(r => {
+      const vs = keys.map(k => r[k] as number | undefined).filter((v): v is number => v != null)
+      return vs.length > 0 ? vs.reduce((a, b) => a + b, 0) / vs.length : null
+    })
+    return avg(vals)
+  }
+  const th_relazioni  = mfAvg(['relazioni_q'])
+  const th_manager    = mfAvg(['referente_crescita', 'referente_obiettivi'])
+  const th_hr         = mfAvg(['hr_access', 'hr_valore'])
+  const th_mgmt       = mfAvg(['mgmt_trasp', 'mgmt_fiducia'])
+  const th_sodd       = mfAvg(['soddisfazione'])
+  const th_jc         = mfAvg(['jc_task', 'jc_schemi'])
+
   /* ---- Computed: NPS ---- */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
   const det = npsVals.filter(v => v <= 6).length
@@ -619,6 +634,52 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
         {privacyBlock && (
           <div className="db-section-title-bar">
             <span className="db-privacy-chip">⚠️ meno di {PRIVACY_MIN} rispondenti — dati non mostrati per anonimato</span>
+          </div>
+        )}
+
+        {!privacyBlock && (
+          <div className="db-thematic-box">
+            <div className="db-thematic-col">
+              <div className="db-thematic-col-title">🤝 Relazioni e supporto</div>
+              {([
+                { label: 'Relazioni interpersonali', val: th_relazioni },
+                { label: 'Supporto del Manager',     val: th_manager },
+                { label: 'Supporto HR',              val: th_hr },
+                { label: 'Supporto Management',      val: th_mgmt },
+              ] as { label: string; val: number }[]).map(({ label, val }) => (
+                <div key={label} className="db-thematic-row">
+                  <span className="db-thematic-label">{label}</span>
+                  <div className="db-thematic-bar-wrap">
+                    <div className="db-thematic-bar-fill" style={{ width: `${val > 0 ? (val / 5) * 100 : 0}%`, background: val >= 4 ? '#17B8A6' : val >= 3 ? '#FFB648' : '#FF6E86' }} />
+                  </div>
+                  <span className={`db-thematic-score ${val >= 4 ? 'green' : val >= 3 ? 'amber' : val > 0 ? 'red' : ''}`}>{val > 0 ? val.toFixed(1) : '—'}</span>
+                </div>
+              ))}
+            </div>
+            <div className="db-thematic-divider" />
+            <div className="db-thematic-col">
+              <div className="db-thematic-col-title">💡 Risorse personali</div>
+              {([
+                { label: 'Soddisfazione',  val: th_sodd },
+                { label: 'Job crafting',   val: th_jc },
+              ] as { label: string; val: number }[]).map(({ label, val }) => (
+                <div key={label} className="db-thematic-row">
+                  <span className="db-thematic-label">{label}</span>
+                  <div className="db-thematic-bar-wrap">
+                    <div className="db-thematic-bar-fill" style={{ width: `${val > 0 ? (val / 5) * 100 : 0}%`, background: val >= 4 ? '#17B8A6' : val >= 3 ? '#FFB648' : '#FF6E86' }} />
+                  </div>
+                  <span className={`db-thematic-score ${val >= 4 ? 'green' : val >= 3 ? 'amber' : val > 0 ? 'red' : ''}`}>{val > 0 ? val.toFixed(1) : '—'}</span>
+                </div>
+              ))}
+              <div className="db-thematic-prio-title">Aree prioritarie di intervento</div>
+              {prioTop.slice(0, 3).map(([lbl, cnt], i) => (
+                <div key={lbl} className="db-thematic-prio-row">
+                  <span className="db-thematic-prio-rank">{i + 1}</span>
+                  <span className="db-thematic-prio-label">{lbl}</span>
+                  <span className="db-thematic-prio-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
