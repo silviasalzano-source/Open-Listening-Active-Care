@@ -768,8 +768,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 {prioTop.length > 0 && (() => {
                   const total = prioTop.reduce((s, [, c]) => s + c, 0)
                   const colors = PRIO_COLORS
-                  const size = 160
-                  const r = (size - 8) / 2
+                  const size = 120
+                  const r = (size - 6) / 2
                   const cx = size / 2, cy = size / 2
                   const endAngles = prioTop.reduce<number[]>((acc, [, cnt]) => {
                     const prev = acc.length > 0 ? acc[acc.length - 1] : -Math.PI / 2
