@@ -109,7 +109,7 @@ function generateMockData(): SurveyResponse[] {
       engagement: rng.next(1, 5),
       tecnologia: rng.next(1, 5), stress_carico: rng.next(1, 5),
       stress_recupero: rng.next(1, 5),
-      open_listening: rng.next(0, 1) > 0 ? rng.next(1, 5) : undefined,
+      open_listening: rng.next(1, 5),
       priorita: rng.pickN(prioOpts, rng.next(1, 3)),
       soddisfazione: rng.next(1, 5), nps: rng.next(0, 10),
     })
