@@ -712,16 +712,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Job crafting',  val: th_jc },
                   { label: 'Soddisfazione', val: th_sodd, accentColor: '#4B6BCC' },
                 ] as { label: string; val: number; accentColor?: string }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                <div style={{ background: 'rgba(75,107,204,.08)', border: '1.5px solid rgba(75,107,204,.22)', borderRadius: 14, padding: '12px 14px', marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <div className="db-thematic-prio-title" style={{ color: '#4B6BCC', margin: 0 }}>Leve per aumentare la soddisfazione</div>
-                  {prioTop.map(([lbl, cnt], i) => (
-                    <div key={lbl} className="db-thematic-prio-row">
-                      <span className="db-thematic-prio-rank" style={{ color: '#4B6BCC' }}>{i + 1}</span>
-                      <span className="db-thematic-prio-label">{lbl}</span>
-                      <span className="db-thematic-prio-pct" style={{ color: '#4B6BCC' }}>{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           )
