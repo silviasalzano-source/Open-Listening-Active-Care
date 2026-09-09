@@ -951,38 +951,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
 
 
-            {/* 13. NPS — full width */}
-            <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} full>
-              {npsVals.length > 0 ? (
-                <div className="db-nps-full-layout">
-                  <div className="db-nps-center-score">
-                    <span className="db-nps-big">{npsScore != null ? (npsScore > 0 ? '+' : '') + npsScore : '—'}</span>
-                    <span className="db-nps-center-label">NPS Score</span>
-                  </div>
-                  <div className="db-nps-bar-block">
-                    <div className="db-nps-bar-wrap">
-                      <div className="db-nps-bar-d" style={{ width: `${npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%` }} />
-                      <div className="db-nps-bar-p" style={{ width: `${npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%` }} />
-                      <div className="db-nps-bar-pro" style={{ width: `${npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%` }} />
-                    </div>
-                    <div className="db-nps-segs">
-                      <div className="db-nps-seg det">
-                        <div className="db-nps-seg-num">{det} <span className="db-nps-seg-pct">({npsVals.length ? Math.round(det / npsVals.length * 100) : 0}%)</span></div>
-                        <div className="db-nps-seg-label">Detrattori (0–6)</div>
-                      </div>
-                      <div className="db-nps-seg pas">
-                        <div className="db-nps-seg-num">{pas} <span className="db-nps-seg-pct">({npsVals.length ? Math.round(pas / npsVals.length * 100) : 0}%)</span></div>
-                        <div className="db-nps-seg-label">Passivi (7–8)</div>
-                      </div>
-                      <div className="db-nps-seg pro">
-                        <div className="db-nps-seg-num">{pro} <span className="db-nps-seg-pct">({npsVals.length ? Math.round(pro / npsVals.length * 100) : 0}%)</span></div>
-                        <div className="db-nps-seg-label">Promotori (9–10)</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
-            </FactorBox>
 
           </div>
         )}
