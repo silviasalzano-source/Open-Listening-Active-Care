@@ -741,7 +741,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             'Sviluppo Personale': [
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ],
-            'Investimento Innovazione': [
+            'Investimento innovazione': [
               { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
             ],
             'Identificazione valori aziendali': [
@@ -885,7 +885,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div className="db-thematic-col-title">Percezione su OT</div>
                   {([
-                    { label: 'Investimento Innovazione', val: th_tecnologia },
+                    { label: 'Investimento innovazione', val: th_tecnologia },
                     { label: 'Identificazione valori aziendali', val: th_sviluppo },
                   ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 </div>
