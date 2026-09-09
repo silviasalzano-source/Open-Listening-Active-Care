@@ -239,6 +239,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const [ruoloF, setRuoloF] = useState('')
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
+  const [expandedThematic, setExpandedThematic] = useState<string | null>(null)
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -637,51 +638,92 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           </div>
         )}
 
-        {!privacyBlock && (
-          <div className="db-thematic-box">
-            <div className="db-thematic-col">
-              <div className="db-thematic-col-title">Relazioni e supporto</div>
-              {([
-                { label: 'Relazioni interpersonali', val: th_relazioni },
-                { label: 'Supporto del Manager',     val: th_manager },
-                { label: 'Supporto HR',              val: th_hr },
-                { label: 'Supporto Management',      val: th_mgmt },
-              ] as { label: string; val: number }[]).map(({ label, val }) => (
-                <div key={label} className="db-thematic-row">
+        {!privacyBlock && (() => {
+          const THEMATIC_ITEMS: Record<string, { label: string; key: keyof SurveyResponse }[]> = {
+            'Relazioni interpersonali': [
+              { label: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive', key: 'relazioni_q' },
+            ],
+            'Supporto del Manager': [
+              { label: 'Mi supporta nella mia crescita professionale', key: 'referente_crescita' },
+              { label: 'Dà obiettivi strutturati', key: 'referente_obiettivi' },
+            ],
+            'Supporto HR': [
+              { label: "L'HR è un punto di riferimento accessibile e disponibile", key: 'hr_access' },
+              { label: "Riconosco un valore reale nel supporto che l'HR mi offre", key: 'hr_valore' },
+            ],
+            'Supporto Management': [
+              { label: 'Il management comunica in modo trasparente la strategia e le priorità', key: 'mgmt_trasp' },
+              { label: 'Ho fiducia nelle scelte strategiche del management', key: 'mgmt_fiducia' },
+            ],
+            'Soddisfazione': [
+              { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
+            ],
+            'Job crafting': [
+              { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
+              { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
+            ],
+          }
+          function ThematicRow({ label, val }: { label: string; val: number }) {
+            const isOpen = expandedThematic === label
+            const items = THEMATIC_ITEMS[label] ?? []
+            return (
+              <div className="db-thematic-item">
+                <button className="db-thematic-row db-thematic-row-btn" onClick={() => setExpandedThematic(isOpen ? null : label)}>
+                  <span className="db-thematic-chevron" style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
                   <span className="db-thematic-label">{label}</span>
                   <div className="db-thematic-bar-wrap">
                     <div className="db-thematic-bar-fill" style={{ width: `${val > 0 ? (val / 5) * 100 : 0}%`, background: val >= 4 ? '#17B8A6' : val >= 3 ? '#FFB648' : '#FF6E86' }} />
                   </div>
                   <span className={`db-thematic-score ${val >= 4 ? 'green' : val >= 3 ? 'amber' : val > 0 ? 'red' : ''}`}>{val > 0 ? val.toFixed(1) : '—'}</span>
-                </div>
-              ))}
-            </div>
-            <div className="db-thematic-divider" />
-            <div className="db-thematic-col">
-              <div className="db-thematic-col-title">Risorse personali</div>
-              {([
-                { label: 'Soddisfazione',  val: th_sodd },
-                { label: 'Job crafting',   val: th_jc },
-              ] as { label: string; val: number }[]).map(({ label, val }) => (
-                <div key={label} className="db-thematic-row">
-                  <span className="db-thematic-label">{label}</span>
-                  <div className="db-thematic-bar-wrap">
-                    <div className="db-thematic-bar-fill" style={{ width: `${val > 0 ? (val / 5) * 100 : 0}%`, background: val >= 4 ? '#17B8A6' : val >= 3 ? '#FFB648' : '#FF6E86' }} />
+                </button>
+                {isOpen && items.length > 0 && (
+                  <div className="db-thematic-subitems">
+                    {items.map(it => {
+                      const v = avg(filtered.map(r => r[it.key] as number | null))
+                      const distrib = buildDistrib(filtered.map(r => r[it.key] as number | null))
+                      return (
+                        <div key={it.key as string} className="db-thematic-subrow">
+                          <span className="db-thematic-sub-label">{it.label}</span>
+                          <Strip distrib={distrib} total={filtered.filter(r => r[it.key] != null).length} />
+                          <span className={`db-thematic-score ${v >= 4 ? 'green' : v >= 3 ? 'amber' : v > 0 ? 'red' : ''}`} style={{ fontSize: 12 }}>{v > 0 ? v.toFixed(1) : '—'}</span>
+                        </div>
+                      )
+                    })}
                   </div>
-                  <span className={`db-thematic-score ${val >= 4 ? 'green' : val >= 3 ? 'amber' : val > 0 ? 'red' : ''}`}>{val > 0 ? val.toFixed(1) : '—'}</span>
-                </div>
-              ))}
-              <div className="db-thematic-prio-title">Aree prioritarie di intervento</div>
-              {prioTop.slice(0, 3).map(([lbl, cnt], i) => (
-                <div key={lbl} className="db-thematic-prio-row">
-                  <span className="db-thematic-prio-rank">{i + 1}</span>
-                  <span className="db-thematic-prio-label">{lbl}</span>
-                  <span className="db-thematic-prio-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
-                </div>
-              ))}
+                )}
+              </div>
+            )
+          }
+          return (
+            <div className="db-thematic-box">
+              <div className="db-thematic-col">
+                <div className="db-thematic-col-title">Relazioni e supporto</div>
+                {([
+                  { label: 'Relazioni interpersonali', val: th_relazioni },
+                  { label: 'Supporto del Manager',     val: th_manager },
+                  { label: 'Supporto HR',              val: th_hr },
+                  { label: 'Supporto Management',      val: th_mgmt },
+                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+              </div>
+              <div className="db-thematic-divider" />
+              <div className="db-thematic-col">
+                <div className="db-thematic-col-title">Risorse personali</div>
+                {([
+                  { label: 'Soddisfazione', val: th_sodd },
+                  { label: 'Job crafting',  val: th_jc },
+                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                <div className="db-thematic-prio-title">Aree prioritarie di intervento</div>
+                {prioTop.slice(0, 3).map(([lbl, cnt], i) => (
+                  <div key={lbl} className="db-thematic-prio-row">
+                    <span className="db-thematic-prio-rank">{i + 1}</span>
+                    <span className="db-thematic-prio-label">{lbl}</span>
+                    <span className="db-thematic-prio-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
 
         {!privacyBlock && (
           <div className="db-factors-grid">
