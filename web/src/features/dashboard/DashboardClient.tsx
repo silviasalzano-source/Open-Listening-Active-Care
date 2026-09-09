@@ -910,7 +910,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               </div>
 
               <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2, paddingTop: 16 }}>
-                <div className="db-thematic-col-title">Follow-up Open Listening</div>
+                <div className="db-thematic-col-title">Follow-up Open Listening 2025</div>
                 <div className="db-thematic-row db-thematic-row-btn" style={{ pointerEvents: 'none' }}>
                   <span className="db-thematic-chevron" style={{ visibility: 'hidden' }}>▶</span>
                   <span className="db-thematic-label">Azioni post ascolto 2025</span>
