@@ -131,11 +131,11 @@ function buildDistrib(vals: (number | null | undefined)[]) {
 }
 
 /* ---- Sub-components ---- */
-function Strip({ distrib, total }: { distrib: Record<number, number>; total: number }) {
+function Strip({ distrib, total, onClick }: { distrib: Record<number, number>; total: number; onClick?: () => void }) {
   const colors = ['#FF6E86', '#FFAD70', '#FFB648', '#6ECFC9', '#17B8A6']
-  if (total === 0) return <div className="db-strip empty" />
+  if (total === 0) return <div className="db-strip empty" style={onClick ? { cursor: 'pointer' } : undefined} onClick={onClick} />
   return (
-    <div className="db-strip">
+    <div className="db-strip" style={onClick ? { cursor: 'pointer' } : undefined} onClick={onClick} title={onClick ? 'Clicca per vedere la distribuzione' : undefined}>
       {[1, 2, 3, 4, 5].map((k, i) => {
         const pct = total ? (distrib[k] / total) * 100 : 0
         return pct > 0 ? (
@@ -821,10 +821,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                       return (
                         <div key={it.key as string} className="db-thematic-subrow">
                           <span className="db-thematic-sub-label">{it.label}</span>
-                          <div style={{ cursor: 'pointer' }} title="Clicca per vedere la distribuzione"
-                            onClick={() => setModalItem({ label: it.label, distrib, total })}>
-                            <Strip distrib={distrib} total={total} />
-                          </div>
+                          <Strip distrib={distrib} total={total} onClick={() => setModalItem({ label: it.label, distrib, total })} />
                           <span className={`db-thematic-score ${v >= 4 ? 'green' : v >= 3 ? 'amber' : v > 0 ? 'red' : ''}`} style={{ fontSize: 12 }}>{v > 0 ? v.toFixed(1) : '—'}</span>
                         </div>
                       )
