@@ -712,7 +712,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Soddisfazione', val: th_sodd },
                   { label: 'Job crafting',  val: th_jc },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                <div className="db-thematic-prio-title">Aree prioritarie di intervento</div>
+                <div className="db-thematic-prio-title">Come incrementare la soddisfazione</div>
                 {prioTop.slice(0, 3).map(([lbl, cnt], i) => (
                   <div key={lbl} className="db-thematic-prio-row">
                     <span className="db-thematic-prio-rank">{i + 1}</span>
