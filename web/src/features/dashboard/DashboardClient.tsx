@@ -663,14 +663,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
             ],
           }
-          function ThematicRow({ label, val }: { label: string; val: number }) {
+          function ThematicRow({ label, val, accentColor }: { label: string; val: number; accentColor?: string }) {
             const isOpen = expandedThematic === label
             const items = THEMATIC_ITEMS[label] ?? []
             return (
               <div className="db-thematic-item">
                 <button className="db-thematic-row db-thematic-row-btn" onClick={() => setExpandedThematic(isOpen ? null : label)}>
                   <span className="db-thematic-chevron" style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
-                  <span className="db-thematic-label">{label}</span>
+                  <span className="db-thematic-label" style={accentColor ? { color: accentColor, fontWeight: 700 } : undefined}>{label}</span>
                   <div className="db-thematic-bar-wrap">
                     <div className="db-thematic-bar-fill" style={{ width: `${val > 0 ? (val / 5) * 100 : 0}%`, background: val >= 4 ? '#17B8A6' : val >= 3 ? '#FFB648' : '#FF6E86' }} />
                   </div>
@@ -709,15 +709,15 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               <div className="db-thematic-col">
                 <div className="db-thematic-col-title">Risorse personali</div>
                 {([
-                  { label: 'Soddisfazione', val: th_sodd },
                   { label: 'Job crafting',  val: th_jc },
-                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                <div className="db-thematic-prio-title">Come incrementare la soddisfazione</div>
-                {prioTop.slice(0, 3).map(([lbl, cnt], i) => (
+                  { label: 'Soddisfazione', val: th_sodd, accentColor: '#4B6BCC' },
+                ] as { label: string; val: number; accentColor?: string }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                <div className="db-thematic-prio-title" style={{ color: '#4B6BCC', borderLeft: '3px solid #4B6BCC', paddingLeft: 8, marginTop: 4 }}>Aree di intervento per incremento della soddisfazione</div>
+                {prioTop.map(([lbl, cnt], i) => (
                   <div key={lbl} className="db-thematic-prio-row">
-                    <span className="db-thematic-prio-rank">{i + 1}</span>
+                    <span className="db-thematic-prio-rank" style={{ color: '#4B6BCC' }}>{i + 1}</span>
                     <span className="db-thematic-prio-label">{lbl}</span>
-                    <span className="db-thematic-prio-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
+                    <span className="db-thematic-prio-pct" style={{ color: '#4B6BCC' }}>{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
                   </div>
                 ))}
               </div>
