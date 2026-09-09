@@ -380,6 +380,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const th_jc         = mfAvg(['jc_task', 'jc_schemi'])
   const th_stress     = mfAvg(['stress_carico', 'stress_recupero'])
   const th_sviluppo   = mfAvg(['engagement'])
+  const th_tecnologia = mfAvg(['tecnologia'])
 
   /* ---- Computed: NPS ---- */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
@@ -740,6 +741,12 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             'Sviluppo Personale': [
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ],
+            'Investimento Innovazione': [
+              { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
+            ],
+            'Identificazione valori aziendali': [
+              { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
+            ],
           }
           const SCORE_LABELS: Record<number, string> = {
             1: 'Per niente d\'accordo',
@@ -875,6 +882,13 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Supporto HR',              val: th_hr },
                   { label: 'Supporto Management',      val: th_mgmt },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div className="db-thematic-col-title">Percezione su OT</div>
+                  {([
+                    { label: 'Investimento Innovazione', val: th_tecnologia },
+                    { label: 'Identificazione valori aziendali', val: th_sviluppo },
+                  ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                </div>
               </div>
             </div>
           )
