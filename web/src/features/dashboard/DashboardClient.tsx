@@ -897,16 +897,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
         {!privacyBlock && (
           <div className="db-factors-grid">
 
-            {/* 7. Identificazione valori */}
-            <FactorBox title="Identificazione con i valori aziendali" data={filtered} items={[
-              { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
-            ]} />
-
-
-            {/* 9. Percezione innovazione */}
-            <FactorBox title="Percezione dell'investimento in innovazione" data={filtered} items={[
-              { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
-            ]} />
 
             {/* 10. Follow-up Open Listening */}
             <FactorBox title="Follow-up Open Listening" data={filtered} items={[
