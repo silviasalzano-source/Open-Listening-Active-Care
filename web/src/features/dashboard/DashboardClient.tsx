@@ -380,7 +380,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const th_jc         = mfAvg(['jc_task', 'jc_schemi'])
   const th_stress     = mfAvg(['stress_carico', 'stress_recupero'])
   const th_sviluppo   = mfAvg(['engagement'])
-  const th_tecnologia = mfAvg(['tecnologia'])
+  const th_tecnologia    = mfAvg(['tecnologia'])
+  const th_open_listening = mfAvg(['open_listening'])
 
   /* ---- Computed: NPS ---- */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
@@ -742,6 +743,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             'Sviluppo Personale': [
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ],
+            'Azioni post ascolto 2025': [
+              { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
+            ],
             'Investimento innovazione': [
               { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
             ],
@@ -851,6 +855,11 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           return (
             <div className="db-thematic-box">
               <div className="db-thematic-col">
+                <div className="db-thematic-col-title">Follow-up Open Listening</div>
+                {([
+                  { label: 'Azioni post ascolto 2025', val: th_open_listening },
+                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                <div style={{ marginTop: 8 }}>
                 <div className="db-thematic-col-title">Persona</div>
                 {([
                   { label: 'Stress',           val: th_stress },
@@ -876,6 +885,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     </div>
                   )
                 })()}
+                </div>
               </div>
               <div className="db-thematic-divider" />
               <div className="db-thematic-col">
