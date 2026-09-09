@@ -910,7 +910,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Identificazione valori aziendali', val: th_sviluppo },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 <div style={{ marginTop: 8 }}>
-                  <div className="db-thematic-row" style={{ marginBottom: 8 }}>
+                  <div className="db-thematic-row db-thematic-row-btn" style={{ marginBottom: 8 }}>
                     <span className="db-thematic-chevron" style={{ visibility: 'hidden' }}>▶</span>
                     <span className="db-thematic-label">NPS – Propensione a raccomandare l&apos;azienda</span>
                   </div>
