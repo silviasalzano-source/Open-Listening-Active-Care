@@ -640,7 +640,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
         {!privacyBlock && (
           <div className="db-thematic-box">
             <div className="db-thematic-col">
-              <div className="db-thematic-col-title">🤝 Relazioni e supporto</div>
+              <div className="db-thematic-col-title">Relazioni e supporto</div>
               {([
                 { label: 'Relazioni interpersonali', val: th_relazioni },
                 { label: 'Supporto del Manager',     val: th_manager },
@@ -658,7 +658,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             </div>
             <div className="db-thematic-divider" />
             <div className="db-thematic-col">
-              <div className="db-thematic-col-title">💡 Risorse personali</div>
+              <div className="db-thematic-col-title">Risorse personali</div>
               {([
                 { label: 'Soddisfazione',  val: th_sodd },
                 { label: 'Job crafting',   val: th_jc },
