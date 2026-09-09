@@ -779,7 +779,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                         <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                           <span style={{
                             width: 26, height: 26, borderRadius: 8, flexShrink: 0,
-                            background: color, color: '#fff',
+                            background: '#6E4CAB', color: '#fff',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             fontSize: 13, fontWeight: 800, lineHeight: 1,
                           }}>{k}</span>
