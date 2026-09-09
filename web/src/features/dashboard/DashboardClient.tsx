@@ -894,7 +894,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Supporto HR',              val: th_hr },
                   { label: 'Supporto Management',      val: th_mgmt },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div className="db-thematic-col-title">Follow-up Open Listening</div>
                   {([
                     { label: 'Azioni post ascolto 2025', val: th_open_listening },
