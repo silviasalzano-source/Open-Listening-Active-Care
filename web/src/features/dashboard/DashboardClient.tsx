@@ -795,10 +795,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               ) : <div className="db-factor-empty">Nessun dato disponibile</div>}
             </FactorBox>
 
-            {/* 12. Soddisfazione */}
-            <FactorBox title="Soddisfazione – Passione per il lavoro" data={filtered} items={[
-              { label: 'Il lavoro che svolgo ogni giorno mi appassiona', key: 'soddisfazione' },
-            ]} />
 
             {/* 13. NPS — full width */}
             <FactorBox title="NPS – Propensione a raccomandare l'azienda" data={filtered} full>
