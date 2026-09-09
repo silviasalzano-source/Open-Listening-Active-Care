@@ -911,9 +911,33 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
               <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2, paddingTop: 16 }}>
                 <div className="db-thematic-col-title">Follow-up Open Listening</div>
-                {([
-                  { label: 'Azioni post ascolto 2025', val: th_open_listening },
-                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                <div className="db-thematic-row db-thematic-row-btn" style={{ pointerEvents: 'none' }}>
+                  <span className="db-thematic-chevron" style={{ visibility: 'hidden' }}>▶</span>
+                  <span className="db-thematic-label">Azioni post ascolto 2025</span>
+                </div>
+                {(() => {
+                  const olVals = filtered.map(r => r.open_listening).filter((v): v is number => v != null)
+                  const olDistrib = buildDistrib(olVals)
+                  const olTotal = olVals.length
+                  const olColors = ['#FF6E86', '#FFAD70', '#FFB648', '#6ECFC9', '#17B8A6']
+                  const olLabels: Record<number, string> = { 1: 'Per niente', 2: 'Poco', 3: 'Abbastanza', 4: 'D\'accordo', 5: 'Molto' }
+                  return olTotal > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {[1, 2, 3, 4, 5].map((k, i) => {
+                        const pct = Math.round(olDistrib[k] / olTotal * 100)
+                        return (
+                          <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontSize: 11, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{olLabels[k]}</span>
+                            <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+                              <div style={{ width: `${pct}%`, height: '100%', background: olColors[i], borderRadius: 100, transition: 'width .4s ease' }} />
+                            </div>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : <div style={{ fontSize: 11, color: '#9A93A8' }}>Nessun dato</div>
+                })()}
               </div>
 
               <div className="db-thematic-col" style={{ gridColumn: 5, gridRow: 2, paddingTop: 16 }}>
