@@ -763,7 +763,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 <div className="db-thematic-col-title">Risorse personali</div>
                 {([
                   { label: 'Job crafting',  val: th_jc },
-                  { label: 'Soddisfazione', val: th_sodd, accentColor: '#4B6BCC' },
+                  { label: 'Soddisfazione', val: th_sodd },
                 ] as { label: string; val: number; accentColor?: string }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 {prioTop.length > 0 && (() => {
                   const total = prioTop.reduce((s, [, c]) => s + c, 0)
