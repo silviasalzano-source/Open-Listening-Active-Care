@@ -238,18 +238,9 @@ function PrioDonut({ prioTop, total, colors, size, r, cx, cy, startAngles, endAn
   const [hovered, setHovered] = useState<string | null>(null)
   const [tooltip, setTooltip] = useState<{ label: string; pct: number; x: number; y: number } | null>(null)
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {/* Legenda a sinistra */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, flex: 1, minWidth: 0 }}>
-        {prioTop.map(([lbl], i) => (
-          <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: hovered && hovered !== lbl ? 0.4 : 1, transition: 'opacity .15s' }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
-            <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
-          </div>
-        ))}
-      </div>
-      {/* Torta a destra */}
-      <div style={{ position: 'relative', flexShrink: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      {/* Torta centrata */}
+      <div style={{ position: 'relative' }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
           onMouseLeave={() => { setHovered(null); setTooltip(null) }}>
           {prioTop.map(([lbl, cnt], i) => {
@@ -293,6 +284,15 @@ function PrioDonut({ prioTop, total, colors, size, r, cx, cy, startAngles, endAn
             {tooltip.label} — <span style={{ color: '#FFB648' }}>{tooltip.pct}%</span>
           </div>
         )}
+      </div>
+      {/* Legenda sotto */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: '100%' }}>
+        {prioTop.map(([lbl], i) => (
+          <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: hovered && hovered !== lbl ? 0.4 : 1, transition: 'opacity .15s' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
+            <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
+          </div>
+        ))}
       </div>
     </div>
   )
