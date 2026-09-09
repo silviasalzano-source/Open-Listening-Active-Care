@@ -378,6 +378,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const th_mgmt       = mfAvg(['mgmt_trasp', 'mgmt_fiducia'])
   const th_sodd       = mfAvg(['soddisfazione'])
   const th_jc         = mfAvg(['jc_task', 'jc_schemi'])
+  const th_stress     = mfAvg(['stress_carico', 'stress_recupero'])
+  const th_sviluppo   = mfAvg(['engagement'])
 
   /* ---- Computed: NPS ---- */
   const npsVals = filtered.map(r => r.nps).filter((v): v is number => v != null)
@@ -731,10 +733,75 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
               { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
             ],
+            'Stress': [
+              { label: 'Il carico di lavoro che gestisco quotidianamente è sostenibile', key: 'stress_carico' },
+              { label: 'Riesco a staccare dal lavoro e recuperare le energie nel tempo libero', key: 'stress_recupero' },
+            ],
+            'Sviluppo Personale': [
+              { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
+            ],
+          }
+          const SCORE_LABELS: Record<number, string> = {
+            1: 'Per niente d\'accordo',
+            2: 'Poco d\'accordo',
+            3: 'Abbastanza d\'accordo',
+            4: 'D\'accordo',
+            5: 'Molto d\'accordo',
+          }
+          const STRIP_COLORS = ['#FF6E86', '#FFAD70', '#FFB648', '#6ECFC9', '#17B8A6']
+          function DistribModal({ label, distrib, total, onClose }: {
+            label: string; distrib: Record<number, number>; total: number; onClose: () => void
+          }) {
+            return (
+              <div style={{
+                position: 'fixed', inset: 0, zIndex: 1000,
+                background: 'rgba(42,35,56,.45)', backdropFilter: 'blur(4px)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }} onClick={onClose}>
+                <div style={{
+                  background: '#fff', borderRadius: 20, padding: '24px 28px',
+                  maxWidth: 420, width: '90%', boxShadow: '0 12px 48px rgba(42,35,56,.22)',
+                  position: 'relative',
+                }} onClick={e => e.stopPropagation()}>
+                  <button onClick={onClose} style={{
+                    position: 'absolute', top: 14, right: 16,
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: 18, color: '#9A93A8', lineHeight: 1,
+                  }}>✕</button>
+                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: '#6E4CAB', marginBottom: 6 }}>Distribuzione risposte</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#2A2338', marginBottom: 18, lineHeight: 1.4 }}>{label}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[5, 4, 3, 2, 1].map(k => {
+                      const cnt = distrib[k] ?? 0
+                      const pct = total > 0 ? Math.round((cnt / total) * 100) : 0
+                      const color = STRIP_COLORS[k - 1]
+                      return (
+                        <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <span style={{ fontSize: 11, color: '#9A93A8', minWidth: 16, textAlign: 'right', fontWeight: 700 }}>{k}</span>
+                          <span style={{ fontSize: 11, color: '#2A2338', flex: 1, lineHeight: 1.3 }}>{SCORE_LABELS[k]}</span>
+                          <div style={{ width: 80, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden', flexShrink: 0 }}>
+                            <div style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 100, transition: 'width .4s ease' }} />
+                          </div>
+                          <span style={{ fontSize: 11, fontWeight: 700, color, minWidth: 32, textAlign: 'right' }}>{cnt > 0 ? `${pct}%` : '—'}</span>
+                          <span style={{ fontSize: 10, color: '#9A93A8', minWidth: 36 }}>({cnt} pers.)</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #EDE8F5', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 11, color: '#9A93A8' }}>{total} rispondenti totali</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: avg(Object.entries(distrib).flatMap(([k, c]) => Array(c).fill(Number(k)))) >= 4 ? '#17B8A6' : avg(Object.entries(distrib).flatMap(([k, c]) => Array(c).fill(Number(k)))) >= 3 ? '#FFB648' : '#FF6E86' }}>
+                      Media {avg(Object.entries(distrib).flatMap(([k, c]) => Array(c).fill(Number(k)))).toFixed(1)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )
           }
           function ThematicRow({ label, val, accentColor }: { label: string; val: number; accentColor?: string }) {
             const isOpen = expandedThematic === label
             const items = THEMATIC_ITEMS[label] ?? []
+            const [modalItem, setModalItem] = useState<{ label: string; distrib: Record<number, number>; total: number } | null>(null)
             return (
               <div className="db-thematic-item">
                 <button className="db-thematic-row db-thematic-row-btn" onClick={() => setExpandedThematic(isOpen ? null : label)}>
@@ -750,16 +817,21 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     {items.map(it => {
                       const v = avg(filtered.map(r => r[it.key] as number | null))
                       const distrib = buildDistrib(filtered.map(r => r[it.key] as number | null))
+                      const total = filtered.filter(r => r[it.key] != null).length
                       return (
                         <div key={it.key as string} className="db-thematic-subrow">
                           <span className="db-thematic-sub-label">{it.label}</span>
-                          <Strip distrib={distrib} total={filtered.filter(r => r[it.key] != null).length} />
+                          <div style={{ cursor: 'pointer' }} title="Clicca per vedere la distribuzione"
+                            onClick={() => setModalItem({ label: it.label, distrib, total })}>
+                            <Strip distrib={distrib} total={total} />
+                          </div>
                           <span className={`db-thematic-score ${v >= 4 ? 'green' : v >= 3 ? 'amber' : v > 0 ? 'red' : ''}`} style={{ fontSize: 12 }}>{v > 0 ? v.toFixed(1) : '—'}</span>
                         </div>
                       )
                     })}
                   </div>
                 )}
+                {modalItem && <DistribModal label={modalItem.label} distrib={modalItem.distrib} total={modalItem.total} onClose={() => setModalItem(null)} />}
               </div>
             )
           }
@@ -778,8 +850,10 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               <div className="db-thematic-col">
                 <div className="db-thematic-col-title">Risorse personali</div>
                 {([
-                  { label: 'Job crafting',  val: th_jc },
-                  { label: 'Soddisfazione', val: th_sodd },
+                  { label: 'Stress',           val: th_stress },
+                  { label: 'Sviluppo Personale', val: th_sviluppo },
+                  { label: 'Job crafting',     val: th_jc },
+                  { label: 'Soddisfazione',    val: th_sodd },
                 ] as { label: string; val: number; accentColor?: string }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 {prioTop.length > 0 && (() => {
                   const total = prioTop.reduce((s, [, c]) => s + c, 0)
