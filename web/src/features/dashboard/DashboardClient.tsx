@@ -868,7 +868,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               </div>
               <div className="db-thematic-divider" />
               <div className="db-thematic-col">
-                <div className="db-thematic-col-title">Relazione &amp; Supporto</div>
+                <div className="db-thematic-col-title">Relazioni</div>
                 {([
                   { label: 'Relazioni interpersonali', val: th_relazioni },
                   { label: 'Supporto del Manager',     val: th_manager },
