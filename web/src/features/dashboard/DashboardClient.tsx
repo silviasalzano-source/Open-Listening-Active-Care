@@ -730,30 +730,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
         {!privacyBlock && (
           <div className="db-factors-grid">
 
-            {/* 1. Relazioni interpersonali */}
-            <FactorBox title="Relazioni interpersonali" data={filtered} items={[
-              { label: 'Le relazioni interpersonali nel mio ambiente di lavoro sono costruttive', key: 'relazioni_q' },
-            ]} />
-
-            {/* 2. Supporto del Manager */}
-            <FactorBox title="Supporto del Manager" data={filtered} items={[
-              { label: 'Mi supporta nella mia crescita professionale', key: 'referente_crescita' },
-              { label: 'Dà obiettivi strutturati', key: 'referente_obiettivi' },
-            ]} />
-
-            {/* 3. Supporto HR */}
-            <FactorBox title="Supporto e valore percepito dell'HR" data={filtered} items={[
-              { label: "L'HR è un punto di riferimento accessibile e disponibile", key: 'hr_access' },
-              { label: "Riconosco un valore reale nel supporto che l'HR mi offre", key: 'hr_valore' },
-            ]} />
-
-            {/* 4. Supporto Management */}
-            <FactorBox title="Supporto Management" data={filtered} items={[
-              { label: 'Il management comunica in modo trasparente la strategia e le priorità', key: 'mgmt_trasp' },
-              { label: 'Ho fiducia nelle scelte strategiche del management', key: 'mgmt_fiducia' },
-            ]} />
-
-            {/* 5. Jobcrafting */}
+            {/* 1. Jobcrafting */}
             <FactorBox title="Jobcrafting" data={filtered} items={[
               { label: 'Ho la possibilità di proporre nuove modalità per svolgere i miei compiti', key: 'jc_task' },
               { label: 'Mi sento libero/a di sperimentare soluzioni diverse da quelle standard', key: 'jc_schemi' },
