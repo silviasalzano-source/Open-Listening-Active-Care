@@ -712,6 +712,68 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Job crafting',  val: th_jc },
                   { label: 'Soddisfazione', val: th_sodd, accentColor: '#4B6BCC' },
                 ] as { label: string; val: number; accentColor?: string }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                {prioTop.length > 0 && (() => {
+                  const total = prioTop.reduce((s, [, c]) => s + c, 0)
+                  const colors = PRIO_COLORS
+                  const size = 140
+                  const r = (size - 8) / 2
+                  const cx = size / 2, cy = size / 2
+                  const endAngles = prioTop.reduce<number[]>((acc, [, cnt]) => {
+                    const prev = acc.length > 0 ? acc[acc.length - 1] : -Math.PI / 2
+                    return [...acc, prev + (cnt / total) * 2 * Math.PI]
+                  }, [])
+                  const startAngles = [-Math.PI / 2, ...endAngles.slice(0, -1)]
+                  return (
+                    <div style={{ background: 'rgba(75,107,204,.08)', border: '1.5px solid rgba(75,107,204,.22)', borderRadius: 14, padding: '14px', marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <div className="db-thematic-prio-title" style={{ color: '#4B6BCC', margin: 0 }}>Leve per aumentare la soddisfazione</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <div style={{ position: 'relative', flexShrink: 0 }}>
+                          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+                            {prioTop.map(([lbl, cnt], i) => {
+                              const a1 = startAngles[i]
+                              const a2 = endAngles[i]
+                              const sweep = a2 - a1
+                              const x1 = cx + r * Math.cos(a1)
+                              const y1 = cy + r * Math.sin(a1)
+                              const x2 = cx + r * Math.cos(a2)
+                              const y2 = cy + r * Math.sin(a2)
+                              const large = sweep > Math.PI ? 1 : 0
+                              const midA = (a1 + a2) / 2
+                              const pct = Math.round(cnt / total * 100)
+                              return (
+                                <g key={lbl} className="db-prio-slice">
+                                  <path
+                                    d={`M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`}
+                                    fill={colors[i % colors.length]}
+                                    style={{ cursor: 'pointer', transition: 'opacity .15s' }}
+                                  />
+                                  <title>{lbl} — {pct}%</title>
+                                  {sweep > 0.35 && (
+                                    <text
+                                      x={(cx + r * 0.68 * Math.cos(midA)).toFixed(1)}
+                                      y={(cy + r * 0.68 * Math.sin(midA)).toFixed(1)}
+                                      textAnchor="middle" dominantBaseline="middle"
+                                      fontSize="11" fontWeight="700" fill="white" style={{ pointerEvents: 'none' }}
+                                    >{pct}%</text>
+                                  )}
+                                </g>
+                              )
+                            })}
+                            <circle cx={cx} cy={cy} r={r * 0.42} fill="white" />
+                          </svg>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, minWidth: 0 }}>
+                          {prioTop.map(([lbl], i) => (
+                            <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
+                              <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
           )
