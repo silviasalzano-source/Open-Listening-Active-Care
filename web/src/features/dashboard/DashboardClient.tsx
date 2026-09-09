@@ -850,7 +850,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               </div>
               <div className="db-thematic-divider" />
               <div className="db-thematic-col">
-                <div className="db-thematic-col-title">Risorse personali</div>
+                <div className="db-thematic-col-title">Persona</div>
                 {([
                   { label: 'Stress',           val: th_stress },
                   { label: 'Sviluppo Personale', val: th_sviluppo },
