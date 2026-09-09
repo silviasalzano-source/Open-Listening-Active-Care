@@ -852,42 +852,40 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               </div>
             )
           }
+          const npsBarBands = [
+            { label: 'Promotore',    range: [9, 10], color: '#17B8A6' },
+            { label: 'Passivo',      range: [7,  8], color: '#6ECFC9' },
+            { label: 'Neutro',       range: [5,  6], color: '#FFB648' },
+            { label: 'Critico',      range: [3,  4], color: '#FFAD70' },
+            { label: 'Molto critico',range: [0,  2], color: '#FF6E86' },
+          ]
+          const prioTotal = prioTop.reduce((s, [, c]) => s + c, 0)
+          const prioSize = 120, prioR = (prioSize - 6) / 2, prioCx = prioSize / 2, prioCy = prioSize / 2
+          const prioEnd = prioTop.reduce<number[]>((acc, [, cnt]) => {
+            const prev = acc.length > 0 ? acc[acc.length - 1] : -Math.PI / 2
+            return [...acc, prev + (cnt / prioTotal) * 2 * Math.PI]
+          }, [])
+          const prioStart = [-Math.PI / 2, ...prioEnd.slice(0, -1)]
           return (
             <div className="db-thematic-box">
+              {/* Colonna 1 — Persona + Leve */}
               <div className="db-thematic-col">
-                <div className="db-thematic-col-title">Follow-up Open Listening</div>
-                {([
-                  { label: 'Azioni post ascolto 2025', val: th_open_listening },
-                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                <div style={{ marginTop: 8 }}>
                 <div className="db-thematic-col-title">Persona</div>
                 {([
-                  { label: 'Stress',           val: th_stress },
+                  { label: 'Stress',             val: th_stress },
                   { label: 'Sviluppo Personale', val: th_sviluppo },
-                  { label: 'Job crafting',     val: th_jc },
-                  { label: 'Soddisfazione',    val: th_sodd },
-                ] as { label: string; val: number; accentColor?: string }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                {prioTop.length > 0 && (() => {
-                  const total = prioTop.reduce((s, [, c]) => s + c, 0)
-                  const colors = PRIO_COLORS
-                  const size = 120
-                  const r = (size - 6) / 2
-                  const cx = size / 2, cy = size / 2
-                  const endAngles = prioTop.reduce<number[]>((acc, [, cnt]) => {
-                    const prev = acc.length > 0 ? acc[acc.length - 1] : -Math.PI / 2
-                    return [...acc, prev + (cnt / total) * 2 * Math.PI]
-                  }, [])
-                  const startAngles = [-Math.PI / 2, ...endAngles.slice(0, -1)]
-                  return (
-                    <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      <div className="db-thematic-col-title" style={{ background: 'rgba(110,76,171,.13)', border: '1px solid rgba(110,76,171,.30)', color: '#6E4CAB' }}>Leve per aumentare la soddisfazione</div>
-                      <PrioDonut prioTop={prioTop} total={total} colors={colors} size={size} r={r} cx={cx} cy={cy} startAngles={startAngles} endAngles={endAngles} />
-                    </div>
-                  )
-                })()}
-                </div>
+                  { label: 'Job crafting',       val: th_jc },
+                  { label: 'Soddisfazione',      val: th_sodd },
+                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                {prioTop.length > 0 && (
+                  <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div className="db-thematic-col-title" style={{ background: 'rgba(110,76,171,.13)', border: '1px solid rgba(110,76,171,.30)', color: '#6E4CAB' }}>Leve per aumentare la soddisfazione</div>
+                    <PrioDonut prioTop={prioTop} total={prioTotal} colors={PRIO_COLORS} size={prioSize} r={prioR} cx={prioCx} cy={prioCy} startAngles={prioStart} endAngles={prioEnd} />
+                  </div>
+                )}
               </div>
               <div className="db-thematic-divider" />
+              {/* Colonna 2 — Relazioni + Follow-up */}
               <div className="db-thematic-col">
                 <div className="db-thematic-col-title">Relazioni</div>
                 {([
@@ -897,47 +895,42 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Supporto Management',      val: th_mgmt },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <div className="db-thematic-col-title">Percezione su OT</div>
+                  <div className="db-thematic-col-title">Follow-up Open Listening</div>
                   {([
-                    { label: 'Investimento innovazione', val: th_tecnologia },
-                    { label: 'Identificazione valori aziendali', val: th_sviluppo },
+                    { label: 'Azioni post ascolto 2025', val: th_open_listening },
                   ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                  {/* NPS Bar chart */}
-                  {(() => {
-                    const bands = [
-                      { label: 'Promotore',    range: [9, 10], color: '#17B8A6' },
-                      { label: 'Passivo',      range: [7,  8], color: '#6ECFC9' },
-                      { label: 'Neutro',       range: [5,  6], color: '#FFB648' },
-                      { label: 'Critico',      range: [3,  4], color: '#FFAD70' },
-                      { label: 'Molto critico',range: [0,  2], color: '#FF6E86' },
-                    ]
-                    const total = npsVals.length
-                    return (
-                      <div style={{ marginTop: 4 }}>
-                        <div className="db-thematic-row" style={{ marginBottom: 8 }}>
-                          <span className="db-thematic-chevron" style={{ visibility: 'hidden' }}>▶</span>
-                          <span className="db-thematic-label">NPS – Propensione a raccomandare l&apos;azienda</span>
-                        </div>
-                        {total > 0 ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                            {bands.map(b => {
-                              const cnt = npsVals.filter(v => v >= b.range[0] && v <= b.range[1]).length
-                              const pct = Math.round(cnt / total * 100)
-                              return (
-                                <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                  <span style={{ fontSize: 11, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{b.label}</span>
-                                  <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
-                                    <div style={{ width: `${pct}%`, height: '100%', background: b.color, borderRadius: 100, transition: 'width .4s ease' }} />
-                                  </div>
-                                  <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
-                                </div>
-                              )
-                            })}
+                </div>
+              </div>
+              <div className="db-thematic-divider" />
+              {/* Colonna 3 — Percezione su OT + NPS */}
+              <div className="db-thematic-col">
+                <div className="db-thematic-col-title">Percezione su OT</div>
+                {([
+                  { label: 'Investimento innovazione',       val: th_tecnologia },
+                  { label: 'Identificazione valori aziendali', val: th_sviluppo },
+                ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
+                <div style={{ marginTop: 8 }}>
+                  <div className="db-thematic-row" style={{ marginBottom: 8 }}>
+                    <span className="db-thematic-chevron" style={{ visibility: 'hidden' }}>▶</span>
+                    <span className="db-thematic-label">NPS – Propensione a raccomandare l&apos;azienda</span>
+                  </div>
+                  {npsVals.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {npsBarBands.map(b => {
+                        const cnt = npsVals.filter(v => v >= b.range[0] && v <= b.range[1]).length
+                        const pct = Math.round(cnt / npsVals.length * 100)
+                        return (
+                          <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontSize: 11, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{b.label}</span>
+                            <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+                              <div style={{ width: `${pct}%`, height: '100%', background: b.color, borderRadius: 100, transition: 'width .4s ease' }} />
+                            </div>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
                           </div>
-                        ) : <div style={{ fontSize: 11, color: '#9A93A8' }}>Nessun dato</div>}
-                      </div>
-                    )
-                  })()}
+                        )
+                      })}
+                    </div>
+                  ) : <div style={{ fontSize: 11, color: '#9A93A8' }}>Nessun dato</div>}
                 </div>
               </div>
             </div>

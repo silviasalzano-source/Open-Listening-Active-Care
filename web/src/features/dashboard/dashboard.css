@@ -1398,7 +1398,7 @@
 /* ---- Box tematico di sintesi ---- */
 .db-thematic-box {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
   gap: 0;
   background: #fff;
   border: 1.5px solid #6E4CAB;
