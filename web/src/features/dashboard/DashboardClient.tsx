@@ -238,18 +238,9 @@ function PrioDonut({ prioTop, total, colors, size, r, cx, cy, startAngles, endAn
   const [hovered, setHovered] = useState<string | null>(null)
   const [tooltip, setTooltip] = useState<{ label: string; pct: number; x: number; y: number } | null>(null)
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      {/* Legenda */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, minWidth: 0, flex: 1 }}>
-        {prioTop.map(([lbl], i) => (
-          <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: hovered && hovered !== lbl ? 0.4 : 1, transition: 'opacity .15s' }}>
-            <span style={{ width: 9, height: 9, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
-            <span style={{ fontSize: 11.5, color: '#2A2338', lineHeight: 1.35 }}>{lbl}</span>
-          </div>
-        ))}
-      </div>
-      {/* Torta */}
-      <div style={{ position: 'relative', flexShrink: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+      {/* Torta centrata */}
+      <div style={{ position: 'relative' }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
           onMouseLeave={() => { setHovered(null); setTooltip(null) }}>
           {prioTop.map(([lbl, cnt], i) => {
@@ -288,10 +279,20 @@ function PrioDonut({ prioTop, total, colors, size, r, cx, cy, startAngles, endAn
             padding: '5px 9px', borderRadius: 8,
             whiteSpace: 'nowrap', pointerEvents: 'none',
             boxShadow: '0 3px 10px rgba(0,0,0,.22)',
+            zIndex: 10,
           }}>
             {tooltip.label} — <span style={{ color: '#FFB648' }}>{tooltip.pct}%</span>
           </div>
         )}
+      </div>
+      {/* Legenda sotto */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: '100%' }}>
+        {prioTop.map(([lbl], i) => (
+          <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: hovered && hovered !== lbl ? 0.4 : 1, transition: 'opacity .15s' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
+            <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
+          </div>
+        ))}
       </div>
     </div>
   )
