@@ -878,7 +878,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Soddisfazione',      val: th_sodd },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 {prioTop.length > 0 && (
-                  <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <div className="db-thematic-col-title" style={{ background: 'rgba(110,76,171,.13)', border: '1px solid rgba(110,76,171,.30)', color: '#6E4CAB' }}>Leve per aumentare la soddisfazione</div>
                     <PrioDonut prioTop={prioTop} total={prioTotal} colors={PRIO_COLORS} size={prioSize} r={prioR} cx={prioCx} cy={prioCy} startAngles={prioStart} endAngles={prioEnd} />
                   </div>
@@ -909,8 +909,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   { label: 'Investimento innovazione',       val: th_tecnologia },
                   { label: 'Identificazione valori aziendali', val: th_sviluppo },
                 ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
-                <div style={{ marginTop: 8 }}>
-                  <div className="db-thematic-col-title" style={{ marginBottom: 8 }}>NPS – Propensione a raccomandare l&apos;azienda</div>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div className="db-thematic-col-title">NPS – Propensione a raccomandare l&apos;azienda</div>
                   {npsVals.length > 0 ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {npsBarBands.map(b => {
