@@ -235,51 +235,64 @@ function PrioDonut({ prioTop, total, colors, size, r, cx, cy, startAngles, endAn
   prioTop: [string, number][]; total: number; colors: string[]
   size: number; r: number; cx: number; cy: number; startAngles: number[]; endAngles: number[]
 }) {
-  const [hovered, setHovered] = useState<{ label: string; pct: number; x: number; y: number } | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
+  const [tooltip, setTooltip] = useState<{ label: string; pct: number; x: number; y: number } | null>(null)
   return (
-    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
-        onMouseLeave={() => setHovered(null)}>
-        {prioTop.map(([lbl, cnt], i) => {
-          const a1 = startAngles[i], a2 = endAngles[i]
-          const sweep = a2 - a1
-          const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1)
-          const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2)
-          const large = sweep > Math.PI ? 1 : 0
-          const midA = (a1 + a2) / 2
-          const pct = Math.round(cnt / total * 100)
-          const isHov = hovered?.label === lbl
-          return (
-            <path key={lbl}
-              d={`M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`}
-              fill={colors[i % colors.length]}
-              opacity={hovered && !isHov ? 0.45 : 1}
-              style={{ cursor: 'pointer', transition: 'opacity .15s' }}
-              onMouseEnter={e => {
-                const svg = (e.target as SVGElement).closest('svg')!.getBoundingClientRect()
-                setHovered({ label: lbl, pct, x: cx + r * 0.72 * Math.cos(midA), y: cy + r * 0.72 * Math.sin(midA) })
-              }}
-            />
-          )
-        })}
-        <circle cx={cx} cy={cy} r={r * 0.42} fill="white" />
-        {hovered && (
-          <foreignObject x={0} y={0} width={size} height={size} style={{ pointerEvents: 'none' }}>
-            <div style={{
-              position: 'absolute',
-              left: `${hovered.x - 60}px`, top: `${hovered.y - 26}px`,
-              background: '#2A2338', color: '#fff',
-              fontSize: 10, fontWeight: 600, lineHeight: 1.35,
-              padding: '5px 8px', borderRadius: 7,
-              width: 120, textAlign: 'center',
-              boxShadow: '0 3px 10px rgba(0,0,0,.25)',
-              pointerEvents: 'none',
-            }}>
-              {hovered.label}<br /><span style={{ color: '#FFB648' }}>{hovered.pct}%</span>
-            </div>
-          </foreignObject>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      {/* Legenda */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, minWidth: 0, flex: 1 }}>
+        {prioTop.map(([lbl], i) => (
+          <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: hovered && hovered !== lbl ? 0.4 : 1, transition: 'opacity .15s' }}>
+            <span style={{ width: 9, height: 9, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
+            <span style={{ fontSize: 11.5, color: '#2A2338', lineHeight: 1.35 }}>{lbl}</span>
+          </div>
+        ))}
+      </div>
+      {/* Torta */}
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
+          onMouseLeave={() => { setHovered(null); setTooltip(null) }}>
+          {prioTop.map(([lbl, cnt], i) => {
+            const a1 = startAngles[i], a2 = endAngles[i]
+            const sweep = a2 - a1
+            const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1)
+            const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2)
+            const large = sweep > Math.PI ? 1 : 0
+            const pct = Math.round(cnt / total * 100)
+            return (
+              <path key={lbl}
+                d={`M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`}
+                fill={colors[i % colors.length]}
+                opacity={hovered && hovered !== lbl ? 0.4 : 1}
+                style={{ cursor: 'pointer', transition: 'opacity .15s' }}
+                onMouseEnter={e => {
+                  setHovered(lbl)
+                  const rect = (e.target as SVGElement).closest('svg')!.getBoundingClientRect()
+                  setTooltip({ label: lbl, pct, x: e.clientX - rect.left, y: e.clientY - rect.top })
+                }}
+                onMouseMove={e => {
+                  const rect = (e.target as SVGElement).closest('svg')!.getBoundingClientRect()
+                  setTooltip(t => t ? { ...t, x: e.clientX - rect.left, y: e.clientY - rect.top } : t)
+                }}
+              />
+            )
+          })}
+          <circle cx={cx} cy={cy} r={r * 0.42} fill="white" />
+        </svg>
+        {tooltip && (
+          <div style={{
+            position: 'absolute',
+            left: tooltip.x + 10, top: tooltip.y - 28,
+            background: '#2A2338', color: '#fff',
+            fontSize: 11, fontWeight: 600, lineHeight: 1.4,
+            padding: '5px 9px', borderRadius: 8,
+            whiteSpace: 'nowrap', pointerEvents: 'none',
+            boxShadow: '0 3px 10px rgba(0,0,0,.22)',
+          }}>
+            {tooltip.label} — <span style={{ color: '#FFB648' }}>{tooltip.pct}%</span>
+          </div>
         )}
-      </svg>
+      </div>
     </div>
   )
 }
