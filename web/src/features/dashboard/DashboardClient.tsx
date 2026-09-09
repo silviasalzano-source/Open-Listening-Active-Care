@@ -777,8 +777,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   }, [])
                   const startAngles = [-Math.PI / 2, ...endAngles.slice(0, -1)]
                   return (
-                    <div style={{ background: 'rgba(75,107,204,.08)', border: '1.5px solid rgba(75,107,204,.22)', borderRadius: 14, padding: '14px', marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      <div className="db-thematic-prio-title" style={{ color: '#4B6BCC', margin: 0 }}>Leve per aumentare la soddisfazione</div>
+                    <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <div className="db-thematic-col-title" style={{ background: 'rgba(110,76,171,.13)', border: '1px solid rgba(110,76,171,.30)', color: '#6E4CAB' }}>Leve per aumentare la soddisfazione</div>
                       <PrioDonut prioTop={prioTop} total={total} colors={colors} size={size} r={r} cx={cx} cy={cy} startAngles={startAngles} endAngles={endAngles} />
                     </div>
                   )
