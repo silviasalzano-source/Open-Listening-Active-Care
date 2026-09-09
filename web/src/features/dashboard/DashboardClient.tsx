@@ -389,6 +389,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const pro = npsVals.filter(v => v >= 9).length
   const npsScore = npsVals.length ? Math.round(((pro - det) / npsVals.length) * 100) : null
   const npsColorClass = npsScore == null ? '' : npsScore >= 30 ? 'green' : npsScore >= 0 ? 'amber' : 'red'
+  const th_nps = mfAvg(['nps'])
 
   /* ---- Computed: multi-choice ---- */
   const prioCount: Record<string, number> = {}
@@ -747,6 +748,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             'Identificazione valori aziendali': [
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ],
+            'NPS': [
+              { label: 'Con quale probabilità consiglieresti OT come posto di lavoro?', key: 'nps' },
+            ],
           }
           const SCORE_LABELS: Record<number, string> = {
             1: 'Per niente d\'accordo',
@@ -887,6 +891,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   {([
                     { label: 'Investimento innovazione', val: th_tecnologia },
                     { label: 'Identificazione valori aziendali', val: th_sviluppo },
+                    { label: 'NPS', val: th_nps },
                   ] as { label: string; val: number }[]).map(row => <ThematicRow key={row.label} {...row} />)}
                 </div>
               </div>
