@@ -245,7 +245,7 @@ function PrioDonut({ prioTop, total, colors, size, r, cx, cy, startAngles, endAn
           {prioTop.map(([lbl], i) => (
             <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: hovered && hovered !== lbl ? 0.4 : 1, transition: 'opacity .15s' }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: colors[i % colors.length], flexShrink: 0 }} />
-              <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
+              <span style={{ fontSize: 13, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
             </div>
           ))}
         </div>
