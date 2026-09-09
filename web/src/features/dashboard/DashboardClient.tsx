@@ -951,10 +951,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           <div className="db-factors-grid">
 
 
-            {/* 10. Follow-up Open Listening */}
-            <FactorBox title="Follow-up Open Listening" data={filtered} items={[
-              { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
-            ]} />
 
 
 
