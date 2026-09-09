@@ -905,7 +905,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     return (
                       <div style={{ marginTop: 4 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                          <span className="db-thematic-label" style={{ fontSize: 12 }}>NPS – Propensione a raccomandare l&apos;azienda</span>
+                          <span className="db-thematic-label">NPS – Propensione a raccomandare l&apos;azienda</span>
                           {npsScore != null && (
                             <span style={{ fontSize: 13, fontWeight: 800, color: npsScore >= 30 ? '#17B8A6' : npsScore >= 0 ? '#FFB648' : '#FF6E86', flexShrink: 0 }}>
                               {npsScore > 0 ? '+' : ''}{npsScore}
