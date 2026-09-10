@@ -539,7 +539,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             <span className="db-survey-stat-label">inviti inviati</span>
           </div>
           <div className="db-survey-progress-wrap">
-            <div className="db-survey-progress-bar" style={{ width: `${Math.round(all.length / TOTAL_INVITED * 100)}%` }} />
+            <div className="db-survey-progress-track">
+              <div className="db-survey-progress-bar" style={{ width: `${Math.round(all.length / TOTAL_INVITED * 100)}%` }} />
+            </div>
             <span className="db-survey-progress-pct">{Math.round(all.length / TOTAL_INVITED * 100)}% completamento</span>
           </div>
         </div>

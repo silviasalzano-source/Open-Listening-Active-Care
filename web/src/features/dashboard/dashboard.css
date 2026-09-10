@@ -993,12 +993,16 @@
 .db-survey-progress-wrap {
   flex: 1;
   min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.db-survey-progress-track {
   position: relative;
   background: rgba(42,35,56,.07);
   border-radius: 100px;
   height: 8px;
-  display: flex;
-  align-items: center;
+  overflow: hidden;
 }
 .db-survey-progress-bar {
   position: absolute;
@@ -1010,12 +1014,9 @@
   transition: width .6s ease;
 }
 .db-survey-progress-pct {
-  position: absolute;
-  right: 0;
-  top: -20px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: #17B8A6;
+  color: #2A2338;
   white-space: nowrap;
 }
 
