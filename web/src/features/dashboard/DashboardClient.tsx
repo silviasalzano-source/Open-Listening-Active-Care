@@ -604,14 +604,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   <div style={{ marginTop: 12 }}>
                     <button
                       onClick={() => { setEnergySearchOpen(v => !v); setQ1Search('') }}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, color: '#C07000' }}
+                      style={{ background: '#fff', border: '1px solid rgba(192,112,0,.28)', borderRadius: 20, cursor: 'pointer', padding: '3px 10px', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#C07000' }}
                       title="Report My Energy"
                     >
-                      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                      <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
                         <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.8" />
                         <path d="M13 13l3.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                       </svg>
-                      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em' }}>REPORT MY ENERGY</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.04em' }}>REPORT MY ENERGY</span>
                     </button>
                     {energySearchOpen && (
                       <div style={{ marginTop: 6 }}>
