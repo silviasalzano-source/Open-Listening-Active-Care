@@ -602,17 +602,19 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 {/* Report My Energy — solo HR admin */}
                 {userRole === 'hr_admin' && (
                   <div style={{ marginTop: 12 }}>
-                    <button
-                      onClick={() => { setEnergySearchOpen(v => !v); setQ1Search('') }}
-                      style={{ background: '#fff', border: '1px solid rgba(192,112,0,.28)', borderRadius: 20, cursor: 'pointer', padding: '3px 10px', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#C07000' }}
-                      title="Report My Energy"
-                    >
-                      <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
-                        <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.8" />
-                        <path d="M13 13l3.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                      </svg>
-                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.04em' }}>REPORT MY ENERGY</span>
-                    </button>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <button
+                        onClick={() => { setEnergySearchOpen(v => !v); setQ1Search('') }}
+                        style={{ background: '#fff', border: '1px solid rgba(192,112,0,.28)', borderRadius: 20, cursor: 'pointer', padding: '3px 10px', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#C07000' }}
+                        title="Report My Energy"
+                      >
+                        <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
+                          <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.8" />
+                          <path d="M13 13l3.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                        </svg>
+                        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.04em' }}>REPORT MY ENERGY</span>
+                      </button>
+                    </div>
                     {energySearchOpen && (
                       <div style={{ marginTop: 6 }}>
                         <div className="db-individual-search-wrap" style={{ marginBottom: 6, width: '100%' }}>
