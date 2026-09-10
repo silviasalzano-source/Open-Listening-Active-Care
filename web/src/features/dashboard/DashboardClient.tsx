@@ -770,7 +770,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               </div>
             )
           }
-          function ThematicRow({ label, val, accentColor }: { label: string; val: number; accentColor?: string }) {
+          function ThematicRow({ label, val, accentColor, noBar }: { label: string; val: number; accentColor?: string; noBar?: boolean }) {
             const isOpen = expandedThematic === label
             const items = THEMATIC_ITEMS[label] ?? []
             const [modalItem, setModalItem] = useState<{ label: string; distrib: Record<number, number>; total: number } | null>(null)
@@ -779,10 +779,10 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 <button className="db-thematic-row db-thematic-row-btn" onClick={() => setExpandedThematic(isOpen ? null : label)}>
                   <span className="db-thematic-chevron" style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
                   <span className="db-thematic-label" style={accentColor ? { color: accentColor, fontWeight: 700 } : undefined}>{label}</span>
-                  <div className="db-thematic-bar-wrap">
+                  {!noBar && <div className="db-thematic-bar-wrap">
                     <div className="db-thematic-bar-fill" style={{ width: `${val > 0 ? (val / 5) * 100 : 0}%`, background: val >= 4 ? '#17B8A6' : val >= 3 ? '#FFB648' : '#FF6E86' }} />
-                  </div>
-                  <span className={`db-thematic-score ${val >= 4 ? 'green' : val >= 3 ? 'amber' : val > 0 ? 'red' : ''}`}>{val > 0 ? val.toFixed(1) : '—'}</span>
+                  </div>}
+                  {!noBar && <span className={`db-thematic-score ${val >= 4 ? 'green' : val >= 3 ? 'amber' : val > 0 ? 'red' : ''}`}>{val > 0 ? val.toFixed(1) : '—'}</span>}
                 </button>
                 {isOpen && items.length > 0 && (
                   <div className="db-thematic-subitems">
@@ -863,7 +863,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
               <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2, paddingTop: 16 }}>
                 <div className="db-thematic-col-title">Follow-up Open Listening 2025</div>
-                <ThematicRow label="Azioni post ascolto 2025" val={th_open_listening} />
+                <ThematicRow label="Azioni post ascolto 2025" val={th_open_listening} noBar />
                 {(() => {
                   const olValsReal = filtered.map(r => r.open_listening).filter((v): v is number => v != null)
                   // Demo: se nessun dato reale, usa distribuzione di esempio
