@@ -576,9 +576,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           const pct = (n: number, tot: number) => tot > 0 ? Math.round(n / tot * 100) : 0
           const Row = ({ label, color, percent, labelWidth = 80 }: { label: string; color: string; percent: number; labelWidth?: number }) => (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 11, color: '#2A2338', flex: `0 0 ${labelWidth}px`, lineHeight: 1.3 }}>{label}</span>
+              <span style={{ fontSize: 12, color: '#2A2338', flex: `0 0 ${labelWidth}px`, lineHeight: 1.3 }}>{label}</span>
               {bar(percent, color)}
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{percent > 0 ? `${percent}%` : '—'}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{percent > 0 ? `${percent}%` : '—'}</span>
             </div>
           )
           return (
@@ -901,16 +901,16 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                         const pct = Math.round(olDistrib[k] / olTotal * 100)
                         return (
                           <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <span style={{ fontSize: 11, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{olLabels[k]}</span>
+                            <span style={{ fontSize: 12, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{olLabels[k]}</span>
                             <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
                               <div style={{ width: `${pct}%`, height: '100%', background: olColors[i], borderRadius: 100, transition: 'width .4s ease' }} />
                             </div>
-                            <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
                           </div>
                         )
                       })}
                     </div>
-                  ) : <div style={{ fontSize: 11, color: '#9A93A8' }}>Nessun dato</div>
+                  ) : <div style={{ fontSize: 12, color: '#9A93A8' }}>Nessun dato</div>
                 })()}
               </div>
 
@@ -923,16 +923,16 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                       const pct = Math.round(cnt / npsVals.length * 100)
                       return (
                         <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ fontSize: 11, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{b.label}</span>
+                          <span style={{ fontSize: 12, color: '#2A2338', minWidth: 76, lineHeight: 1.2 }}>{b.label}</span>
                           <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
                             <div style={{ width: `${pct}%`, height: '100%', background: b.color, borderRadius: 100, transition: 'width .4s ease' }} />
                           </div>
-                          <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{pct > 0 ? `${pct}%` : '—'}</span>
                         </div>
                       )
                     })}
                   </div>
-                ) : <div style={{ fontSize: 11, color: '#9A93A8' }}>Nessun dato</div>}
+                ) : <div style={{ fontSize: 12, color: '#9A93A8' }}>Nessun dato</div>}
               </div>
             </div>
           )
