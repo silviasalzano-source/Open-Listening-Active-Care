@@ -564,146 +564,105 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           </div>
         </div>
 
-        {/* ── 4 METRIC CARDS ── */}
-        <div className="db-metric-row">
-
-          {/* Card 1: Termometro Energia Oggi */}
-          <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione del termometro energetico (scala 1–10). Bassa = 1–4, Media = 5–7, Alta = 8–10.">TERMOMETRO ENERGIA OGGI</div>
-            <div className="db-mc-pie-row">
-              <PieChart
-                slices={[
-                  { label: 'Bassa', value: filteredTermVals.filter(v => v <= 4).length, color: '#FF6E86' },
-                  { label: 'Media', value: filteredTermVals.filter(v => v >= 5 && v <= 7).length, color: '#FFB648' },
-                  { label: 'Alta', value: filteredTermVals.filter(v => v >= 8).length, color: '#17B8A6' },
-                ]}
-                size={72}
-              />
-              <div className="db-mc-legend">
-                {[
-                  { label: 'Bassa (1–4)', color: '#FF6E86', count: filteredTermVals.filter(v => v <= 4).length },
-                  { label: 'Media (5–7)', color: '#FFB648', count: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
-                  { label: 'Alta (8–10)', color: '#17B8A6', count: filteredTermVals.filter(v => v >= 8).length },
-                ].map(row => (
-                  <div key={row.label} className="db-mc-legend-row">
-                    <span className="db-mc-legend-dot" style={{ background: row.color }} />
-                    <span className="db-mc-legend-label">{row.label}</span>
-                    <span className="db-mc-legend-pct">{N > 0 ? Math.round(row.count / N * 100) : 0}%</span>
-                  </div>
-                ))}
-              </div>
+        {/* ── MY ENERGY BOX ── */}
+        {(() => {
+          const amberPill: React.CSSProperties = { background: 'rgba(192,112,0,.12)', border: '1px solid rgba(192,112,0,.28)', color: '#C07000' }
+          const bar = (pct: number, color: string) => (
+            <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+              <div style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 100, transition: 'width .4s ease' }} />
             </div>
-          </div>
-
-          {/* Card 2: Energia nell'Anno */}
-          <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Come descriveresti la tua energia quest'anno?'">ENERGIA NELL&apos;ANNO</div>
-            <div className="db-mc-pie-row">
-              <PieChart
-                slices={descOpts.map(o => ({ label: o.label, value: filteredDescrCount[o.key] ?? 0, color: o.col }))}
-                size={72}
-              />
-              <div className="db-mc-legend">
-                {descOpts.map(o => {
-                  const n = filteredDescrCount[o.key] ?? 0
-                  const pct = N > 0 ? Math.round(n / N * 100) : 0
-                  return (
-                    <div key={o.key} className="db-mc-legend-row">
-                      <span className="db-mc-legend-dot" style={{ background: o.col }} />
-                      <span className="db-mc-legend-label">{o.key}</span>
-                      <span className="db-mc-legend-pct">{pct}%</span>
-                    </div>
-                  )
-                })}
-              </div>
+          )
+          const pct = (n: number, tot: number) => tot > 0 ? Math.round(n / tot * 100) : 0
+          const Row = ({ label, color, percent, labelWidth = 80 }: { label: string; color: string; percent: number; labelWidth?: number }) => (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, color: '#2A2338', flex: `0 0 ${labelWidth}px`, lineHeight: 1.3 }}>{label}</span>
+              {bar(percent, color)}
+              <span style={{ fontSize: 11, fontWeight: 700, color: '#2A2338', minWidth: 30, textAlign: 'right' }}>{percent > 0 ? `${percent}%` : '—'}</span>
             </div>
-          </div>
+          )
+          return (
+            <div className="db-thematic-box" style={{ gridTemplateColumns: '1fr auto 1fr', borderColor: '#C07000', borderTopColor: '#C07000', marginBottom: 12 }}>
+              {/* Colonna sinistra: Termometro + Energia nell'anno */}
+              <div className="db-thematic-col">
+                <div className="db-thematic-col-title" style={amberPill}>Termometro energia oggi</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {[
+                    { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
+                    { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
+                    { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
+                  ].map(b => <Row key={b.label} label={b.label} color={b.color} percent={pct(b.n, N)} />)}
+                </div>
 
-          {/* Card 3: Clima del Team */}
-          <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Che tempo fa nel tuo team?' Riflette la percezione del clima relazionale nel team.">CLIMA DEL TEAM</div>
-            <div className="db-mc-pie-row">
-              <PieChart
-                slices={climaOpts.map(o => ({ label: o.label, value: filteredClimaCount[o.label] ?? 0, color: o.col }))}
-                size={72}
-              />
-              <div className="db-mc-legend">
-                {climaOpts.map(o => {
-                  const n = filteredClimaCount[o.label] ?? 0
-                  const pct = N > 0 ? Math.round(n / N * 100) : 0
-                  return (
-                    <div key={o.label} className="db-mc-legend-row">
-                      <span className="db-mc-legend-dot" style={{ background: o.col }} />
-                      <span className="db-mc-legend-label">{o.label}</span>
-                      <span className="db-mc-legend-pct">{pct}%</span>
-                    </div>
-                  )
-                })}
+                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {descOpts.map(o => <Row key={o.key} label={o.key} color={o.col} percent={pct(filteredDescrCount[o.key] ?? 0, N)} />)}
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Card 4: Causa energia */}
-          <div className="db-metric-card">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Distribuzione delle risposte a 'Cosa influenza di più la tua energia ora?'">CAUSE ENERGIA</div>
-            {causaTop.length > 0 ? (
-              <div className="db-factor-pie-row">
-                <PieChart slices={causaTop.map(([lbl, cnt], i) => ({ label: lbl, value: cnt, color: CAUSA_COLORS[i % CAUSA_COLORS.length] }))} size={60} />
-                <div className="db-pie-legend">
-                  {causaTop.slice(0, 5).map(([lbl, cnt], i) => (
-                    <div key={lbl} className="db-pie-legend-row">
-                      <span className="db-pie-dot" style={{ background: CAUSA_COLORS[i % CAUSA_COLORS.length] }} />
-                      <span className="db-pie-label">{lbl}</span>
-                      <span className="db-pie-pct">{N > 0 ? Math.round(cnt / N * 100) : 0}%</span>
-                    </div>
+              <div className="db-thematic-divider" />
+
+              {/* Colonna destra: Clima + Cause */}
+              <div className="db-thematic-col">
+                <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {climaOpts.map(o => <Row key={o.label} label={o.label} color={o.col} percent={pct(filteredClimaCount[o.label] ?? 0, N)} labelWidth={110} />)}
+                </div>
+
+                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Cause energia</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {causaTop.slice(0, 6).map(([lbl, cnt], i) => (
+                    <Row key={lbl} label={lbl} color={CAUSA_COLORS[i % CAUSA_COLORS.length]} percent={pct(cnt, N)} labelWidth={160} />
                   ))}
                 </div>
               </div>
-            ) : <div className="db-factor-empty">Nessun dato</div>}
+            </div>
+          )
+        })()}
+
+        {/* Report My Energy — solo HR admin */}
+        {userRole === 'hr_admin' && (
+          <div className="db-metric-row" style={{ marginBottom: 12 }}>
+            <div className="db-metric-card db-mc-report">
+              <div className="db-mc-eyebrow db-tooltip" data-tooltip="Cerca un dipendente per generare il report individuale My Energy da usare nel colloquio 1:1.">REPORT MY ENERGY</div>
+              <div className="db-individual-search-wrap" style={{ marginBottom: 8, width: '100%' }}>
+                <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
+                  <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
+                  <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+                <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} />
+                {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
+              </div>
+              <div className="db-mc-report-list">
+                {q1Search.trim().length === 0 ? null : q1Individuals.length === 0 ? (
+                  <div className="db-mc-report-placeholder">Nessun risultato.</div>
+                ) : (
+                  q1Individuals.slice(0, 5).map((r, i) => {
+                    const t = r.termometro ?? 0
+                    const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
+                    return (
+                      <div key={i} className="db-mc-report-row">
+                        <div className="db-mc-report-avatar" style={{ background: termColor + '22', color: termColor }}>
+                          {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
+                        </div>
+                        <div className="db-mc-report-name">
+                          <span>{r.nome} {r.cognome}</span>
+                          <span className="db-mc-report-bu">{r.bu}</span>
+                        </div>
+                        <span className="db-mc-report-score" style={{ color: termColor }}>{t}/10</span>
+                        <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
+                          <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
+                            <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+            </div>
           </div>
-
-          {/* Card 5: Report My Energy — solo HR admin */}
-          {userRole === 'hr_admin' && <div className="db-metric-card db-mc-report">
-            <div className="db-mc-eyebrow db-tooltip" data-tooltip="Cerca un dipendente per generare il report individuale My Energy da usare nel colloquio 1:1.">REPORT MY ENERGY</div>
-            <div className="db-individual-search-wrap" style={{ marginBottom: 8, width: '100%' }}>
-              <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
-                <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
-                <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-              <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} />
-              {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
-            </div>
-            <div className="db-mc-report-list">
-              {q1Search.trim().length === 0 ? null : q1Individuals.length === 0 ? (
-                <div className="db-mc-report-placeholder">Nessun risultato.</div>
-              ) : (
-                q1Individuals.slice(0, 5).map((r, i) => {
-                  const t = r.termometro ?? 0
-                  const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
-                  return (
-                    <div key={i} className="db-mc-report-row">
-                      <div className="db-mc-report-avatar" style={{ background: termColor + '22', color: termColor }}>
-                        {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
-                      </div>
-                      <div className="db-mc-report-name">
-                        <span>{r.nome} {r.cognome}</span>
-                        <span className="db-mc-report-bu">{r.bu}</span>
-                      </div>
-                      <span className="db-mc-report-score" style={{ color: termColor }}>{t}/10</span>
-                      <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
-                        <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
-                          <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                        </svg>
-                      </button>
-                    </div>
-                  )
-                })
-              )}
-            </div>
-          </div>}
-
-        </div>
+        )}
 
         {/* ── FATTORI ENERGY BATTERY ── */}
         {privacyBlock && (
