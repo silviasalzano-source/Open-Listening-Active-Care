@@ -308,6 +308,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const [ruoloF, setRuoloF] = useState('')
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
+  const [energySearchOpen, setEnergySearchOpen] = useState(false)
   const [expandedThematic, setExpandedThematic] = useState<string | null>(null)
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
@@ -597,6 +598,63 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {descOpts.map(o => <Row key={o.key} label={o.key} color={o.col} percent={pct(filteredDescrCount[o.key] ?? 0, N)} />)}
                 </div>
+
+                {/* Report My Energy — solo HR admin */}
+                {userRole === 'hr_admin' && (
+                  <div style={{ marginTop: 12 }}>
+                    <button
+                      onClick={() => { setEnergySearchOpen(v => !v); setQ1Search('') }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, color: '#C07000' }}
+                      title="Report My Energy"
+                    >
+                      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                        <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.8" />
+                        <path d="M13 13l3.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                      </svg>
+                      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em' }}>REPORT MY ENERGY</span>
+                    </button>
+                    {energySearchOpen && (
+                      <div style={{ marginTop: 6 }}>
+                        <div className="db-individual-search-wrap" style={{ marginBottom: 6, width: '100%' }}>
+                          <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
+                            <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
+                            <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
+                          </svg>
+                          <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} autoFocus />
+                          {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
+                        </div>
+                        <div className="db-mc-report-list">
+                          {q1Search.trim().length === 0 ? null : q1Individuals.length === 0 ? (
+                            <div className="db-mc-report-placeholder">Nessun risultato.</div>
+                          ) : (
+                            q1Individuals.slice(0, 5).map((r, i) => {
+                              const t = r.termometro ?? 0
+                              const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
+                              return (
+                                <div key={i} className="db-mc-report-row">
+                                  <div className="db-mc-report-avatar" style={{ background: termColor + '22', color: termColor }}>
+                                    {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
+                                  </div>
+                                  <div className="db-mc-report-name">
+                                    <span>{r.nome} {r.cognome}</span>
+                                    <span className="db-mc-report-bu">{r.bu}</span>
+                                  </div>
+                                  <span className="db-mc-report-score" style={{ color: termColor }}>{t}/10</span>
+                                  <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
+                                    <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
+                                      <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                                      <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )
+                            })
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="db-thematic-divider" />
@@ -619,50 +677,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           )
         })()}
 
-        {/* Report My Energy — solo HR admin */}
-        {userRole === 'hr_admin' && (
-          <div className="db-metric-row" style={{ marginBottom: 12 }}>
-            <div className="db-metric-card db-mc-report">
-              <div className="db-mc-eyebrow db-tooltip" data-tooltip="Cerca un dipendente per generare il report individuale My Energy da usare nel colloquio 1:1.">REPORT MY ENERGY</div>
-              <div className="db-individual-search-wrap" style={{ marginBottom: 8, width: '100%' }}>
-                <svg className="db-search-icon" viewBox="0 0 20 20" fill="none" width="14" height="14">
-                  <circle cx="8.5" cy="8.5" r="5.5" stroke="#9A93A8" strokeWidth="1.6" />
-                  <path d="M13 13l3.5 3.5" stroke="#9A93A8" strokeWidth="1.6" strokeLinecap="round" />
-                </svg>
-                <input className="db-individual-search" type="text" placeholder="Cerca nome o cognome…" value={q1Search} onChange={e => setQ1Search(e.target.value)} />
-                {q1Search && <button className="db-search-clear" onClick={() => setQ1Search('')}>✕</button>}
-              </div>
-              <div className="db-mc-report-list">
-                {q1Search.trim().length === 0 ? null : q1Individuals.length === 0 ? (
-                  <div className="db-mc-report-placeholder">Nessun risultato.</div>
-                ) : (
-                  q1Individuals.slice(0, 5).map((r, i) => {
-                    const t = r.termometro ?? 0
-                    const termColor = t >= 8 ? '#17B8A6' : t >= 5 ? '#4B6BCC' : '#FF6E86'
-                    return (
-                      <div key={i} className="db-mc-report-row">
-                        <div className="db-mc-report-avatar" style={{ background: termColor + '22', color: termColor }}>
-                          {(r.nome?.[0] ?? '?')}{(r.cognome?.[0] ?? '')}
-                        </div>
-                        <div className="db-mc-report-name">
-                          <span>{r.nome} {r.cognome}</span>
-                          <span className="db-mc-report-bu">{r.bu}</span>
-                        </div>
-                        <span className="db-mc-report-score" style={{ color: termColor }}>{t}/10</span>
-                        <button className="db-individual-dl" style={{ background: termColor }} onClick={() => downloadReport(r)}>
-                          <svg viewBox="0 0 20 20" fill="none" width="12" height="12">
-                            <path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M4 15h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                          </svg>
-                        </button>
-                      </div>
-                    )
-                  })
-                )}
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* ── FATTORI ENERGY BATTERY ── */}
         {privacyBlock && (
