@@ -563,22 +563,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           )
           return (
             <div className="db-thematic-box" style={{ gridTemplateColumns: '1fr auto 1fr', borderColor: '#C07000', borderTopColor: '#C07000', marginBottom: 12 }}>
-              {/* Colonna sinistra: Termometro + Energia nell'anno */}
+              {/* Colonna sinistra: Report My Energy + Termometro + Energia nell'anno */}
               <div className="db-thematic-col">
-                <div className="db-thematic-col-title" style={amberPill}>Termometro energia oggi</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {[
-                    { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
-                    { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
-                    { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
-                  ].map(b => <Row key={b.label} label={b.label} color={b.color} percent={pct(b.n, N)} />)}
-                </div>
-
-                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {descOpts.map(o => <Row key={o.key} label={o.key} color={o.col} percent={pct(filteredDescrCount[o.key] ?? 0, N)} />)}
-                </div>
-
                 {/* Report My Energy — solo HR admin */}
                 {userRole === 'hr_admin' && (
                   <div style={{ marginTop: 12 }}>
@@ -637,6 +623,20 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     )}
                   </div>
                 )}
+
+                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 12 }}>Termometro energia oggi</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {[
+                    { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
+                    { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
+                    { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
+                  ].map(b => <Row key={b.label} label={b.label} color={b.color} percent={pct(b.n, N)} />)}
+                </div>
+
+                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {descOpts.map(o => <Row key={o.key} label={o.key} color={o.col} percent={pct(filteredDescrCount[o.key] ?? 0, N)} />)}
+                </div>
               </div>
 
               <div className="db-thematic-divider" />
