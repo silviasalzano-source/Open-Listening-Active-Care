@@ -698,9 +698,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             'Sviluppo Personale': [
               { label: 'Mi identifico nei valori e nel modo di lavorare di OT', key: 'engagement' },
             ],
-            'Azioni post ascolto 2025': [
-              { label: 'Sono state messe in atto azioni concrete post-ascolto (solo chi ha partecipato)', key: 'open_listening' },
-            ],
             'Investimento innovazione': [
               { label: "OT investe in modo adeguato nell'innovazione tecnologica", key: 'tecnologia' },
             ],
