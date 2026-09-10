@@ -888,6 +888,63 @@
   .db-ai-fab { bottom: 20px; right: 20px; }
 }
 
+/* ---- Filter FAB (imbuto) ---- */
+.db-filter-fab {
+  position: fixed;
+  bottom: 32px;
+  left: 32px;
+  z-index: 50;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #6E4CAB;
+  color: #6E4CAB;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(42,35,56,.15);
+  transition: transform .2s, box-shadow .2s;
+}
+.db-filter-fab:hover { transform: scale(1.08); box-shadow: 0 8px 24px rgba(110,76,171,.3); }
+.db-filter-fab.active { background: #6E4CAB; color: #fff; }
+.db-filter-fab-dot {
+  position: absolute;
+  top: -2px; right: -2px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #FF6E86;
+  border: 2px solid #fff;
+}
+.db-filter-panel {
+  position: fixed;
+  bottom: 90px;
+  left: 32px;
+  z-index: 51;
+  background: #fff;
+  border: 1.5px solid rgba(110,76,171,.25);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 8px 32px rgba(42,35,56,.16);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+.db-filter-panel-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #6E4CAB;
+  margin-bottom: 2px;
+}
+.db-filter-panel .db-filter-group { display: flex; flex-direction: column; gap: 4px; }
+.db-filter-panel .db-filter-label { font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: rgba(42,35,56,.5); }
+.db-filter-panel .db-filter-select { border: 1.5px solid rgba(42,35,56,.12); border-radius: 10px; padding: 7px 10px; font-size: 13px; background: #fafafa; color: #2A2338; cursor: pointer; appearance: auto; width: 100%; }
+.db-filter-panel-reset { font-size: 11px; font-weight: 600; color: #FF6E86; background: none; border: none; cursor: pointer; text-align: left; padding: 0; margin-top: 2px; }
+
 /* ---- Alert chips in cards ---- */
 .db-alert {
   display: flex;

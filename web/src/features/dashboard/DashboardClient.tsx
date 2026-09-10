@@ -309,6 +309,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const [all, setAll] = useState<SurveyResponse[]>([])
   const [q1Search, setQ1Search] = useState('')
   const [energySearchOpen, setEnergySearchOpen] = useState(false)
+  const [filterOpen, setFilterOpen] = useState(false)
   const [expandedThematic, setExpandedThematic] = useState<string | null>(null)
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
@@ -543,27 +544,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           </div>
         </div>
 
-        {/* Filtri */}
-        <div className="db-filters db-filters-persistent">
-          <div className="db-filter-group">
-            <label className="db-filter-label">AREA ORGANIZZATIVA</label>
-            <select className="db-filter-select" value={buF || 'Tutte le aree'} onChange={e => setBuF(e.target.value)}>
-              {BUS.map(o => <option key={o}>{o}</option>)}
-            </select>
-          </div>
-          <div className="db-filter-group">
-            <label className="db-filter-label">ANZIANITÀ</label>
-            <select className="db-filter-select" value={anzF || 'Tutte le anzianità'} onChange={e => setAnzF(e.target.value)}>
-              {ANZS.map(o => <option key={o}>{o}</option>)}
-            </select>
-          </div>
-          <div className="db-filter-group">
-            <label className="db-filter-label">RUOLO</label>
-            <select className="db-filter-select" value={ruoloF || 'Tutti i ruoli'} onChange={e => setRuoloF(e.target.value)}>
-              {RUOLI.map(o => <option key={o}>{o}</option>)}
-            </select>
-          </div>
-        </div>
 
         {/* ── MY ENERGY BOX ── */}
         {(() => {
@@ -949,6 +929,53 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
           </div>
         )}
       </div>}
+
+      {/* ---- Filter FAB (imbuto) ---- */}
+      {(() => {
+        const hasFilter = !!(buF && buF !== 'Tutte le aree') || !!(anzF && anzF !== 'Tutte le anzianità') || !!(ruoloF && ruoloF !== 'Tutti i ruoli')
+        return (
+          <>
+            {filterOpen && (
+              <div className="db-filter-panel">
+                <div className="db-filter-panel-title">Filtra per</div>
+                <div className="db-filter-group">
+                  <label className="db-filter-label">Area organizzativa</label>
+                  <select className="db-filter-select" value={buF || 'Tutte le aree'} onChange={e => setBuF(e.target.value)}>
+                    {BUS.map(o => <option key={o}>{o}</option>)}
+                  </select>
+                </div>
+                <div className="db-filter-group">
+                  <label className="db-filter-label">Anzianità</label>
+                  <select className="db-filter-select" value={anzF || 'Tutte le anzianità'} onChange={e => setAnzF(e.target.value)}>
+                    {ANZS.map(o => <option key={o}>{o}</option>)}
+                  </select>
+                </div>
+                <div className="db-filter-group">
+                  <label className="db-filter-label">Ruolo</label>
+                  <select className="db-filter-select" value={ruoloF || 'Tutti i ruoli'} onChange={e => setRuoloF(e.target.value)}>
+                    {RUOLI.map(o => <option key={o}>{o}</option>)}
+                  </select>
+                </div>
+                {hasFilter && (
+                  <button className="db-filter-panel-reset" onClick={() => { setBuF(''); setAnzF(''); setRuoloF('') }}>
+                    ✕ Rimuovi filtri
+                  </button>
+                )}
+              </div>
+            )}
+            <button
+              className={`db-filter-fab${filterOpen ? ' active' : ''}`}
+              onClick={() => setFilterOpen(v => !v)}
+              aria-label="Filtra dati"
+            >
+              {hasFilter && !filterOpen && <span className="db-filter-fab-dot" />}
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <path d="M3 4h18l-7 9v6l-4-2v-4L3 4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill={filterOpen ? 'currentColor' : 'none'} fillOpacity={filterOpen ? .2 : 0} />
+              </svg>
+            </button>
+          </>
+        )
+      })()}
 
       {/* ---- AI Floating Button + Panel ---- */}
       <button className={`db-ai-fab${aiOpen ? ' open' : ''}`} onClick={() => { setAiOpen(o => !o); setAiAnswer(null); setAiQuestion('') }} aria-label="Analisi AI">
