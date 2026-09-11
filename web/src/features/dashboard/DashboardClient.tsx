@@ -697,20 +697,17 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               {/* Riga 2 sinistra: Energia nell'anno */}
               <div className="db-thematic-col" style={{ gridColumn: 1, gridRow: 3, paddingTop: 12 }}>
                 <div className="db-thematic-col-title" style={amberPill}>Energia nell&apos;anno</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginTop: 6 }}>
-                  {descOpts.map((o, i, arr) => {
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 6 }}>
+                  {descOpts.map(o => {
                     const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
                     return (
-                      <Fragment key={o.key}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 0' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                            <span style={{ fontSize: 13, color: '#2A2338' }}>{o.label}</span>
-                          </div>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
+                      <div key={o.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 13, color: '#2A2338', flex: '0 0 100px', lineHeight: 1.3 }}>{o.label}</span>
+                        <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+                          <div style={{ width: `${p}%`, height: '100%', background: o.col, borderRadius: 100, transition: 'width .4s ease' }} />
                         </div>
-                        {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
-                      </Fragment>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: o.col, minWidth: 34, textAlign: 'right' }}>{p > 0 ? `${p}%` : '—'}</span>
+                      </div>
                     )
                   })}
                 </div>
