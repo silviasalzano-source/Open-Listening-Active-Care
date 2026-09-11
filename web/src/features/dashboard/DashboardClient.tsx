@@ -627,12 +627,17 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 )}
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 12 }}>Termometro energia oggi</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                   {[
-                    { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
-                    { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
-                    { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
-                  ].map(b => <Row key={b.label} label={b.label} color={b.color} percent={pct(b.n, N)} />)}
+                    { label: 'Bassa (1–4)', n: filteredTermVals.filter(v => v <= 4).length },
+                    { label: 'Media (5–7)', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
+                    { label: 'Alta (8–10)', n: filteredTermVals.filter(v => v >= 8).length },
+                  ].map(b => (
+                    <div key={b.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: 12, color: '#2A2338' }}>{b.label}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338' }}>{N > 0 ? `${Math.round(b.n / N * 100)}%` : '—'}</span>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
@@ -656,8 +661,13 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               {/* Colonna destra: Clima + Cause */}
               <div className="db-thematic-col">
                 <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {climaOpts.map(o => <Row key={o.label} label={o.label} color={o.col} percent={pct(filteredClimaCount[o.label] ?? 0, N)} labelWidth={110} />)}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                  {climaOpts.map(o => (
+                    <div key={o.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338' }}>{N > 0 ? `${Math.round((filteredClimaCount[o.label] ?? 0) / N * 100)}%` : '—'}</span>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Cause energia</div>
