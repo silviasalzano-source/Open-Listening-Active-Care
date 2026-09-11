@@ -636,9 +636,19 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {descOpts.map(o => <Row key={o.key} label={o.key} color={o.col} percent={pct(filteredDescrCount[o.key] ?? 0, N)} />)}
-                </div>
+                {(() => {
+                  const descSlice: [string, number][] = descOpts.map(o => [o.label, filteredDescrCount[o.key] ?? 0])
+                  const descColors = descOpts.map(o => o.col)
+                  const descTotal = descSlice.reduce((s, [, c]) => s + c, 0)
+                  if (descTotal === 0) return <div style={{ fontSize: 12, color: '#9A93A8' }}>Nessun dato</div>
+                  const dSize = 110, dR = (dSize - 6) / 2, dCx = dSize / 2, dCy = dSize / 2
+                  const dEnd = descSlice.reduce<number[]>((acc, [, cnt]) => {
+                    const prev = acc.length ? acc[acc.length - 1] : -Math.PI / 2
+                    return [...acc, prev + (cnt / descTotal) * 2 * Math.PI]
+                  }, [])
+                  const dStart = [-Math.PI / 2, ...dEnd.slice(0, -1)]
+                  return <PrioDonut prioTop={descSlice} total={descTotal} colors={descColors} size={dSize} r={dR} cx={dCx} cy={dCy} startAngles={dStart} endAngles={dEnd} />
+                })()}
               </div>
 
               <div className="db-thematic-divider" />
