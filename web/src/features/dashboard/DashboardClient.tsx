@@ -549,6 +549,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
 
         {/* ── MY ENERGY BOX ── */}
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: '#C07000', marginBottom: 6 }}>My Energy</div>
         {(() => {
           const amberPill: React.CSSProperties = { background: 'rgba(192,112,0,.12)', border: '1px solid rgba(192,112,0,.28)', color: '#C07000' }
           const bar = (pct: number, color: string) => (
@@ -740,6 +741,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
 
 
         {/* ── FATTORI ENERGY BATTERY ── */}
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: '#6E4CAB', marginBottom: 6 }}>Fattori My Energy</div>
         {privacyBlock && (
           <div className="db-section-title-bar">
             <span className="db-privacy-chip">⚠️ meno di {PRIVACY_MIN} rispondenti — dati non mostrati per anonimato</span>
