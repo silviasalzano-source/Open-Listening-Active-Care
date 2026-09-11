@@ -637,8 +637,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                       <Fragment key={b.label}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
                           <span style={{ width: 7, height: 7, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
-                          <span style={{ fontSize: 12, color: '#2A2338' }}>{b.label}</span>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
+                          <span style={{ fontSize: 13, color: '#2A2338' }}>{b.label}</span>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
                       </Fragment>
@@ -660,8 +660,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                       <Fragment key={o.label}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
                           <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
+                          <span style={{ fontSize: 13, color: '#2A2338' }}>{o.label}</span>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
                       </Fragment>
@@ -681,9 +681,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 0' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                             <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                            <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
+                            <span style={{ fontSize: 13, color: '#2A2338' }}>{o.label}</span>
                           </div>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
                       </Fragment>
@@ -703,9 +703,9 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                       <div key={lbl} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '2px 6px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                           <span style={{ width: 6, height: 6, borderRadius: '50%', background: col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
+                          <span style={{ fontSize: 13, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
                         </div>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: col, paddingLeft: 10 }}>{p > 0 ? `${p}%` : '—'}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: col, paddingLeft: 10 }}>{p > 0 ? `${p}%` : '—'}</span>
                       </div>
                     )
                   })}
