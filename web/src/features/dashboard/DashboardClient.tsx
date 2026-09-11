@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import './dashboard.css'
 import { CampagneTab } from './CampagneTab'
 
@@ -635,14 +635,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   ].map((b, i, arr) => {
                     const p = N > 0 ? Math.round(b.n / N * 100) : 0
                     return (
-                      <React.Fragment key={b.label}>
+                      <Fragment key={b.label}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
                           <span style={{ width: 7, height: 7, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
                           <span style={{ fontSize: 12, color: '#2A2338' }}>{b.label}</span>
                           <span style={{ fontSize: 12, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </React.Fragment>
+                      </Fragment>
                     )
                   })}
                 </div>
@@ -652,14 +652,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   {descOpts.map((o, i, arr) => {
                     const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
                     return (
-                      <React.Fragment key={o.key}>
+                      <Fragment key={o.key}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
                           <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
                           <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
                           <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </React.Fragment>
+                      </Fragment>
                     )
                   })}
                 </div>
@@ -674,14 +674,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   {climaOpts.map((o, i, arr) => {
                     const p = N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0
                     return (
-                      <React.Fragment key={o.label}>
+                      <Fragment key={o.label}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
                           <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
                           <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
                           <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </React.Fragment>
+                      </Fragment>
                     )
                   })}
                 </div>
@@ -692,14 +692,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     const p = N > 0 ? Math.round(cnt / N * 100) : 0
                     const col = CAUSA_COLORS[i % CAUSA_COLORS.length]
                     return (
-                      <React.Fragment key={lbl}>
+                      <Fragment key={lbl}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
                           <span style={{ width: 7, height: 7, borderRadius: '50%', background: col, flexShrink: 0 }} />
                           <span style={{ fontSize: 12, color: '#2A2338' }}>{lbl}</span>
                           <span style={{ fontSize: 12, fontWeight: 700, color: col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
                         {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </React.Fragment>
+                      </Fragment>
                     )
                   })}
                 </div>
