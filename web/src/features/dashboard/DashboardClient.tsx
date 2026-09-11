@@ -648,19 +648,21 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
-                {(() => {
-                  const descSlice: [string, number][] = descOpts.map(o => [o.label, filteredDescrCount[o.key] ?? 0])
-                  const descColors = descOpts.map(o => o.col)
-                  const descTotal = descSlice.reduce((s, [, c]) => s + c, 0)
-                  if (descTotal === 0) return <div style={{ fontSize: 12, color: '#9A93A8' }}>Nessun dato</div>
-                  const dSize = 110, dR = (dSize - 6) / 2, dCx = dSize / 2, dCy = dSize / 2
-                  const dEnd = descSlice.reduce<number[]>((acc, [, cnt]) => {
-                    const prev = acc.length ? acc[acc.length - 1] : -Math.PI / 2
-                    return [...acc, prev + (cnt / descTotal) * 2 * Math.PI]
-                  }, [])
-                  const dStart = [-Math.PI / 2, ...dEnd.slice(0, -1)]
-                  return <PrioDonut prioTop={descSlice} total={descTotal} colors={descColors} size={dSize} r={dR} cx={dCx} cy={dCy} startAngles={dStart} endAngles={dEnd} />
-                })()}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
+                  {descOpts.map((o, i, arr) => {
+                    const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
+                    return (
+                      <React.Fragment key={o.key}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
+                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                          <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
+                        </div>
+                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
+                      </React.Fragment>
+                    )
+                  })}
+                </div>
               </div>
 
               <div className="db-thematic-divider" />
@@ -685,18 +687,22 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Cause energia</div>
-                {(() => {
-                  const causaSlice = causaTop.slice(0, 6)
-                  const causaTotal = causaSlice.reduce((s, [, c]) => s + c, 0)
-                  if (causaTotal === 0) return <div style={{ fontSize: 12, color: '#9A93A8' }}>Nessun dato</div>
-                  const cSize = 110, cR = (cSize - 6) / 2, cCx = cSize / 2, cCy = cSize / 2
-                  const cEnd = causaSlice.reduce<number[]>((acc, [, cnt]) => {
-                    const prev = acc.length ? acc[acc.length - 1] : -Math.PI / 2
-                    return [...acc, prev + (cnt / causaTotal) * 2 * Math.PI]
-                  }, [])
-                  const cStart = [-Math.PI / 2, ...cEnd.slice(0, -1)]
-                  return <PrioDonut prioTop={causaSlice} total={causaTotal} colors={CAUSA_COLORS} size={cSize} r={cR} cx={cCx} cy={cCy} startAngles={cStart} endAngles={cEnd} />
-                })()}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
+                  {causaTop.slice(0, 6).map(([lbl, cnt], i, arr) => {
+                    const p = N > 0 ? Math.round(cnt / N * 100) : 0
+                    const col = CAUSA_COLORS[i % CAUSA_COLORS.length]
+                    return (
+                      <React.Fragment key={lbl}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
+                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: col, flexShrink: 0 }} />
+                          <span style={{ fontSize: 12, color: '#2A2338' }}>{lbl}</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: col }}>{p > 0 ? `${p}%` : '—'}</span>
+                        </div>
+                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
+                      </React.Fragment>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           )
