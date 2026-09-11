@@ -564,9 +564,10 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             </div>
           )
           return (
-            <div className="db-thematic-box" style={{ gridTemplateColumns: '1fr auto 1fr', borderColor: '#C07000', borderTopColor: '#C07000', marginBottom: 12 }}>
-              {/* Colonna sinistra: Report My Energy + Termometro + Energia nell'anno */}
-              <div className="db-thematic-col">
+            <div className="db-thematic-box" style={{ gridTemplateColumns: '1fr auto 1fr', gridTemplateRows: '1fr auto', borderColor: '#C07000', borderTopColor: '#C07000', marginBottom: 12 }}>
+
+              {/* Riga 1 sinistra: Report My Energy + Termometro */}
+              <div className="db-thematic-col" style={{ gridColumn: 1, gridRow: 1 }}>
                 {/* Report My Energy — solo HR admin */}
                 {userRole === 'hr_admin' && (
                   <div style={{ marginTop: 12 }}>
@@ -625,7 +626,6 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     )}
                   </div>
                 )}
-
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 12 }}>Termometro energia oggi</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
                   {[
@@ -646,8 +646,34 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                     )
                   })}
                 </div>
+              </div>
 
-                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
+              {/* Divisore verticale che copre entrambe le righe */}
+              <div className="db-thematic-divider" style={{ gridColumn: 2, gridRow: '1 / 3' }} />
+
+              {/* Riga 1 destra: Clima del team */}
+              <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 1 }}>
+                <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
+                  {climaOpts.map((o, i, arr) => {
+                    const p = N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0
+                    return (
+                      <Fragment key={o.label}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
+                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                          <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
+                        </div>
+                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
+                      </Fragment>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Riga 2 sinistra: Energia nell'anno */}
+              <div className="db-thematic-col" style={{ gridColumn: 1, gridRow: 2, paddingTop: 12 }}>
+                <div className="db-thematic-col-title" style={amberPill}>Energia nell&apos;anno</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginTop: 6 }}>
                   {descOpts.map((o, i, arr) => {
                     const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
@@ -667,45 +693,26 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
               </div>
 
-              <div className="db-thematic-divider" />
-
-              {/* Colonna destra: Clima + Cause */}
-              <div className="db-thematic-col">
-                <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
-                  {climaOpts.map((o, i, arr) => {
-                    const p = N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0
-                    return (
-                      <Fragment key={o.label}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
-                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
-                        </div>
-                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </Fragment>
-                    )
-                  })}
-                </div>
-
-                <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Cause energia</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
-                  {causaTop.slice(0, 6).map(([lbl, cnt], i, arr) => {
+              {/* Riga 2 destra: Cause energia (3 colonne × 2 righe) */}
+              <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2, paddingTop: 12 }}>
+                <div className="db-thematic-col-title" style={amberPill}>Cause energia</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px 0', marginTop: 6 }}>
+                  {causaTop.slice(0, 6).map(([lbl, cnt], i) => {
                     const p = N > 0 ? Math.round(cnt / N * 100) : 0
                     const col = CAUSA_COLORS[i % CAUSA_COLORS.length]
                     return (
-                      <Fragment key={lbl}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
-                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 12, color: '#2A2338' }}>{lbl}</span>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: col }}>{p > 0 ? `${p}%` : '—'}</span>
+                      <div key={lbl} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '2px 6px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: col, flexShrink: 0 }} />
+                          <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
                         </div>
-                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </Fragment>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: col, paddingLeft: 10 }}>{p > 0 ? `${p}%` : '—'}</span>
+                      </div>
                     )
                   })}
                 </div>
               </div>
+
             </div>
           )
         })()}
