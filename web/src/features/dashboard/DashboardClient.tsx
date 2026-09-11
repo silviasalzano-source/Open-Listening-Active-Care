@@ -565,11 +565,101 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
             </div>
           )
           return (
-            <div className="db-thematic-box" style={{ gridTemplateColumns: '1fr auto 1fr', gridTemplateRows: 'auto 1fr auto', borderColor: '#C07000', borderTopColor: '#C07000', marginBottom: 12 }}>
+            <div className="db-thematic-box" style={{ gridTemplateColumns: '1fr auto 1fr', gridTemplateRows: 'auto auto auto', borderColor: '#C07000', borderTopColor: '#C07000', marginBottom: 12 }}>
 
-              {/* Riga 0 sinistra: Report My Energy */}
+              {/* Riga 1 sinistra: Energia nell'anno */}
+              <div className="db-thematic-col" style={{ gridColumn: 1, gridRow: 1 }}>
+                <div className="db-thematic-col-title" style={amberPill}>Energia nell&apos;anno</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 6 }}>
+                  {descOpts.map(o => {
+                    const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
+                    return (
+                      <div key={o.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 13, color: '#2A2338', flex: '0 0 100px', lineHeight: 1.3 }}>{o.label}</span>
+                        <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+                          <div style={{ width: `${p}%`, height: '100%', background: o.col, borderRadius: 100, transition: 'width .4s ease' }} />
+                        </div>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: o.col, minWidth: 34, textAlign: 'right' }}>{p > 0 ? `${p}%` : '—'}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Divisore verticale */}
+              <div className="db-thematic-divider" style={{ gridColumn: 2, gridRow: '1 / 4' }} />
+
+              {/* Riga 2 sinistra: Termometro + Clima sub-colonne */}
+              <div style={{ gridColumn: 1, gridRow: 2, borderTop: '1px solid rgba(42,35,56,.08)', paddingTop: 12, marginTop: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr', alignItems: 'start' }}>
+                  {/* Termometro */}
+                  <div style={{ paddingRight: 12 }}>
+                    <div className="db-thematic-col-title" style={amberPill}>Termometro energia oggi</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 6 }}>
+                      {[
+                        { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
+                        { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
+                        { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
+                      ].map(b => {
+                        const p = N > 0 ? Math.round(b.n / N * 100) : 0
+                        return (
+                          <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
+                            <span style={{ fontSize: 12, color: '#2A2338', flex: 1 }}>{b.label}</span>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  {/* Sub-divider */}
+                  <div style={{ background: 'rgba(42,35,56,.08)', alignSelf: 'stretch' }} />
+                  {/* Clima del team */}
+                  <div style={{ paddingLeft: 12 }}>
+                    <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
+                    {(() => {
+                      const climaWithPct = climaOpts.map(o => ({ ...o, p: N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0 }))
+                      const dominant = [...climaWithPct].sort((a, b) => b.p - a.p)[0]
+                      return (
+                        <div style={{ marginTop: 6 }}>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                            <button
+                              onClick={() => setClimaExpanded(v => !v)}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--font-fredoka, sans-serif)', fontSize: 22, fontWeight: 700, color: dominant.col, lineHeight: 1 }}
+                            >
+                              {dominant.p > 0 ? `${dominant.p}%` : '—'}
+                            </button>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: '#2A2338' }}>{dominant.label}</span>
+                          </div>
+                          {climaExpanded && (
+                            <div style={{ marginTop: 8 }}>
+                              {climaWithPct.map((o, i, arr) => (
+                                <Fragment key={o.label}>
+                                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 0' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                                      <span style={{ fontSize: 13, color: '#2A2338' }}>{o.label}</span>
+                                    </div>
+                                    <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{o.p > 0 ? `${o.p}%` : '—'}</span>
+                                  </div>
+                                  {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
+                                </Fragment>
+                              ))}
+                              <button onClick={() => setClimaExpanded(false)} style={{ fontSize: 10, color: '#9A93A8', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0 0', display: 'block' }}>
+                                ▲ Chiudi
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Riga 3 sinistra: Report My Energy */}
               {userRole === 'hr_admin' && (
-                <div style={{ gridColumn: 1, gridRow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 8 }}>
+                <div style={{ gridColumn: 1, gridRow: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', borderTop: '1px solid rgba(42,35,56,.08)', paddingTop: 12, marginTop: 12 }}>
                   <button
                     onClick={() => { setEnergySearchOpen(v => !v); setQ1Search('') }}
                     style={{ background: '#fff', border: '1px solid rgba(192,112,0,.28)', borderRadius: 20, cursor: 'pointer', padding: '3px 10px', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#C07000' }}
@@ -624,97 +714,8 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
               )}
 
-              {/* Riga 1 sinistra: Termometro */}
-              <div className="db-thematic-col" style={{ gridColumn: 1, gridRow: 2 }}>
-                <div className="db-thematic-col-title" style={amberPill}>Termometro energia oggi</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
-                  {[
-                    { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
-                    { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
-                    { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
-                  ].map((b, i, arr) => {
-                    const p = N > 0 ? Math.round(b.n / N * 100) : 0
-                    return (
-                      <Fragment key={b.label}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
-                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
-                          <span style={{ fontSize: 13, color: '#2A2338' }}>{b.label}</span>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
-                        </div>
-                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </Fragment>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Divisore verticale che copre tutte le righe */}
-              <div className="db-thematic-divider" style={{ gridColumn: 2, gridRow: '1 / 4' }} />
-
-              {/* Riga 1 destra: Clima del team */}
-              <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2 }}>
-                <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
-                {(() => {
-                  const climaWithPct = climaOpts.map(o => ({ ...o, p: N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0 }))
-                  const dominant = [...climaWithPct].sort((a, b) => b.p - a.p)[0]
-                  return (
-                    <div style={{ marginTop: 6 }}>
-                      {/* Dato principale */}
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                        <button
-                          onClick={() => setClimaExpanded(v => !v)}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--font-fredoka, sans-serif)', fontSize: 22, fontWeight: 700, color: dominant.col, lineHeight: 1 }}
-                        >
-                          {dominant.p > 0 ? `${dominant.p}%` : '—'}
-                        </button>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: '#2A2338' }}>{dominant.label}</span>
-                      </div>
-                      {/* Dettaglio espanso */}
-                      {climaExpanded && (
-                        <div style={{ marginTop: 8 }}>
-                          {climaWithPct.map((o, i, arr) => (
-                            <Fragment key={o.label}>
-                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 0' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                                  <span style={{ fontSize: 13, color: '#2A2338' }}>{o.label}</span>
-                                </div>
-                                <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{o.p > 0 ? `${o.p}%` : '—'}</span>
-                              </div>
-                              {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
-                            </Fragment>
-                          ))}
-                          <button onClick={() => setClimaExpanded(false)} style={{ fontSize: 10, color: '#9A93A8', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0 0', display: 'block' }}>
-                            ▲ Chiudi
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })()}
-              </div>
-
-              {/* Riga 2 sinistra: Energia nell'anno */}
-              <div className="db-thematic-col" style={{ gridColumn: 1, gridRow: 3, paddingTop: 12 }}>
-                <div className="db-thematic-col-title" style={amberPill}>Energia nell&apos;anno</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 6 }}>
-                  {descOpts.map(o => {
-                    const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
-                    return (
-                      <div key={o.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{ fontSize: 13, color: '#2A2338', flex: '0 0 100px', lineHeight: 1.3 }}>{o.label}</span>
-                        <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
-                          <div style={{ width: `${p}%`, height: '100%', background: o.col, borderRadius: 100, transition: 'width .4s ease' }} />
-                        </div>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: o.col, minWidth: 34, textAlign: 'right' }}>{p > 0 ? `${p}%` : '—'}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Riga 2 destra: Cause energia — barre orizzontali */}
-              <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 3, paddingTop: 12 }}>
+              {/* Col destra: Cause energia — barre orizzontali */}
+              <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: '1 / 4' }}>
                 <div className="db-thematic-col-title" style={amberPill}>Cause energia</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 6 }}>
                   {causaTop.slice(0, 6).map(([lbl, cnt], i) => {
