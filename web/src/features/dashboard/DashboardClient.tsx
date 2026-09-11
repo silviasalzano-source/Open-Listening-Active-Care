@@ -627,7 +627,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 )}
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 12 }}>Termometro energia oggi</div>
-                <div style={{ marginTop: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
                   {[
                     { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
                     { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
@@ -635,16 +635,14 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                   ].map((b, i, arr) => {
                     const p = N > 0 ? Math.round(b.n / N * 100) : 0
                     return (
-                      <div key={b.label}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
-                            <span style={{ fontSize: 12, color: '#2A2338' }}>{b.label}</span>
-                          </div>
+                      <React.Fragment key={b.label}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
+                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
+                          <span style={{ fontSize: 12, color: '#2A2338' }}>{b.label}</span>
                           <span style={{ fontSize: 12, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
-                        {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
-                      </div>
+                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
+                      </React.Fragment>
                     )
                   })}
                 </div>
@@ -670,20 +668,18 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               {/* Colonna destra: Clima + Cause */}
               <div className="db-thematic-col">
                 <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
-                <div style={{ marginTop: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
                   {climaOpts.map((o, i, arr) => {
                     const p = N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0
                     return (
-                      <div key={o.label}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                            <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
-                          </div>
+                      <React.Fragment key={o.label}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
+                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                          <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
                           <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
-                        {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
-                      </div>
+                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
+                      </React.Fragment>
                     )
                   })}
                 </div>
