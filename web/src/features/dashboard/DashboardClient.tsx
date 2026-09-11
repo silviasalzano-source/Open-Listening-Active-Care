@@ -716,20 +716,20 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
               </div>
 
-              {/* Riga 2 destra: Cause energia (3 colonne × 2 righe) */}
+              {/* Riga 2 destra: Cause energia — barre orizzontali */}
               <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 3, paddingTop: 12 }}>
                 <div className="db-thematic-col-title" style={amberPill}>Cause energia</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px 0', marginTop: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 6 }}>
                   {causaTop.slice(0, 6).map(([lbl, cnt], i) => {
                     const p = N > 0 ? Math.round(cnt / N * 100) : 0
                     const col = CAUSA_COLORS[i % CAUSA_COLORS.length]
                     return (
-                      <div key={lbl} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '2px 6px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 13, color: '#2A2338', lineHeight: 1.3 }}>{lbl}</span>
+                      <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 13, color: '#2A2338', flex: '0 0 160px', lineHeight: 1.3 }}>{lbl}</span>
+                        <div style={{ flex: 1, height: 7, borderRadius: 100, background: 'rgba(42,35,56,.07)', overflow: 'hidden' }}>
+                          <div style={{ width: `${p}%`, height: '100%', background: col, borderRadius: 100, transition: 'width .4s ease' }} />
                         </div>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: col, paddingLeft: 10 }}>{p > 0 ? `${p}%` : '—'}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: col, minWidth: 34, textAlign: 'right' }}>{p > 0 ? `${p}%` : '—'}</span>
                       </div>
                     )
                   })}
