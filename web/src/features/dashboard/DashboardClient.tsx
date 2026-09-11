@@ -648,17 +648,19 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginTop: 6 }}>
                   {descOpts.map((o, i, arr) => {
                     const p = N > 0 ? Math.round((filteredDescrCount[o.key] ?? 0) / N * 100) : 0
                     return (
                       <Fragment key={o.key}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
-                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 0' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                            <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
+                          </div>
                           <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
                         </div>
-                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
+                        {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
                       </Fragment>
                     )
                   })}
