@@ -627,17 +627,21 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 )}
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 12 }}>Termometro energia oggi</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
                   {[
-                    { label: 'Bassa (1–4)', n: filteredTermVals.filter(v => v <= 4).length },
-                    { label: 'Media (5–7)', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
-                    { label: 'Alta (8–10)', n: filteredTermVals.filter(v => v >= 8).length },
-                  ].map(b => (
-                    <div key={b.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 12, color: '#2A2338' }}>{b.label}</span>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338' }}>{N > 0 ? `${Math.round(b.n / N * 100)}%` : '—'}</span>
-                    </div>
-                  ))}
+                    { label: 'Bassa (1–4)', color: '#FF6E86', n: filteredTermVals.filter(v => v <= 4).length },
+                    { label: 'Media (5–7)', color: '#FFB648', n: filteredTermVals.filter(v => v >= 5 && v <= 7).length },
+                    { label: 'Alta (8–10)', color: '#17B8A6', n: filteredTermVals.filter(v => v >= 8).length },
+                  ].map(b => {
+                    const p = N > 0 ? Math.round(b.n / N * 100) : 0
+                    return (
+                      <div key={b.label} style={{ background: b.color + '1A', border: `1.5px solid ${b.color}55`, borderRadius: 20, padding: '4px 10px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: b.color, flexShrink: 0 }} />
+                        <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{b.label}</span>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: b.color }}>{p > 0 ? `${p}%` : '—'}</span>
+                      </div>
+                    )
+                  })}
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Energia nell&apos;anno</div>
@@ -661,13 +665,17 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               {/* Colonna destra: Clima + Cause */}
               <div className="db-thematic-col">
                 <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                  {climaOpts.map(o => (
-                    <div key={o.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 12, color: '#2A2338' }}>{o.label}</span>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#2A2338' }}>{N > 0 ? `${Math.round((filteredClimaCount[o.label] ?? 0) / N * 100)}%` : '—'}</span>
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
+                  {climaOpts.map(o => {
+                    const p = N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0
+                    return (
+                      <div key={o.label} style={{ background: o.col + '1A', border: `1.5px solid ${o.col}55`, borderRadius: 20, padding: '4px 10px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                        <span style={{ fontSize: 11, color: '#2A2338', lineHeight: 1.3 }}>{o.label}</span>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
+                      </div>
+                    )
+                  })}
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Cause energia</div>
