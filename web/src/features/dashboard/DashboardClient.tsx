@@ -311,6 +311,7 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
   const [energySearchOpen, setEnergySearchOpen] = useState(false)
   const [filterOpen, setFilterOpen] = useState(false)
   const [expandedThematic, setExpandedThematic] = useState<string | null>(null)
+  const [climaExpanded, setClimaExpanded] = useState(false)
   const [aiOpen, setAiOpen] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState<string | null>(null)
@@ -653,21 +654,36 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
               {/* Riga 1 destra: Clima del team */}
               <div className="db-thematic-col" style={{ gridColumn: 3, gridRow: 2 }}>
                 <div className="db-thematic-col-title" style={amberPill}>Clima del team</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: 6, flexWrap: 'wrap' }}>
-                  {climaOpts.map((o, i, arr) => {
-                    const p = N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0
-                    return (
-                      <Fragment key={o.label}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 8px' }}>
-                          <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
-                          <span style={{ fontSize: 13, color: '#2A2338' }}>{o.label}</span>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{p > 0 ? `${p}%` : '—'}</span>
-                        </div>
-                        {i < arr.length - 1 && <div style={{ width: 1, height: 14, background: 'rgba(42,35,56,.15)', flexShrink: 0 }} />}
-                      </Fragment>
-                    )
-                  })}
-                </div>
+                {(() => {
+                  const climaWithPct = climaOpts.map(o => ({ ...o, p: N > 0 ? Math.round((filteredClimaCount[o.label] ?? 0) / N * 100) : 0 }))
+                  const dominant = [...climaWithPct].sort((a, b) => b.p - a.p)[0]
+                  const visible = climaExpanded ? climaWithPct : [dominant]
+                  return (
+                    <div style={{ marginTop: 6 }}>
+                      {visible.map((o, i, arr) => (
+                        <Fragment key={o.label}>
+                          <button
+                            onClick={() => setClimaExpanded(v => !v)}
+                            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 0', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}
+                          >
+                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: o.col, flexShrink: 0 }} />
+                            <span style={{ fontSize: 13, color: '#2A2338', flex: 1 }}>{o.label}</span>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: o.col }}>{o.p > 0 ? `${o.p}%` : '—'}</span>
+                            {!climaExpanded && i === arr.length - 1 && (
+                              <span style={{ fontSize: 10, color: '#9A93A8', marginLeft: 6 }}>▶</span>
+                            )}
+                          </button>
+                          {climaExpanded && i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(42,35,56,.08)' }} />}
+                        </Fragment>
+                      ))}
+                      {climaExpanded && (
+                        <button onClick={() => setClimaExpanded(false)} style={{ fontSize: 10, color: '#9A93A8', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', marginTop: 2 }}>
+                          ▲ Chiudi
+                        </button>
+                      )}
+                    </div>
+                  )
+                })()}
               </div>
 
               {/* Riga 2 sinistra: Energia nell'anno */}
