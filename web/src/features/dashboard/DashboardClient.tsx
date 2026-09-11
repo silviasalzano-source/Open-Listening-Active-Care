@@ -651,11 +651,18 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
                 </div>
 
                 <div className="db-thematic-col-title" style={{ ...amberPill, marginTop: 8 }}>Cause energia</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {causaTop.slice(0, 6).map(([lbl, cnt], i) => (
-                    <Row key={lbl} label={lbl} color={CAUSA_COLORS[i % CAUSA_COLORS.length]} percent={pct(cnt, N)} labelWidth={160} />
-                  ))}
-                </div>
+                {(() => {
+                  const causaSlice = causaTop.slice(0, 6)
+                  const causaTotal = causaSlice.reduce((s, [, c]) => s + c, 0)
+                  if (causaTotal === 0) return <div style={{ fontSize: 12, color: '#9A93A8' }}>Nessun dato</div>
+                  const cSize = 110, cR = (cSize - 6) / 2, cCx = cSize / 2, cCy = cSize / 2
+                  const cEnd = causaSlice.reduce<number[]>((acc, [, cnt]) => {
+                    const prev = acc.length ? acc[acc.length - 1] : -Math.PI / 2
+                    return [...acc, prev + (cnt / causaTotal) * 2 * Math.PI]
+                  }, [])
+                  const cStart = [-Math.PI / 2, ...cEnd.slice(0, -1)]
+                  return <PrioDonut prioTop={causaSlice} total={causaTotal} colors={CAUSA_COLORS} size={cSize} r={cR} cx={cCx} cy={cCy} startAngles={cStart} endAngles={cEnd} />
+                })()}
               </div>
             </div>
           )
