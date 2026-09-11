@@ -354,10 +354,10 @@ export function DashboardClient({ userEmail, userRole = 'hr_admin' }: { userEmai
     { label: 'Temporalesco',          icon: '⛈️', col: '#6E4CAB' },
   ]
   const descOpts = [
-    { label: 'Energia in Crescita',    key: 'Crescita',    icon: '⚡', col: '#17B8A6' },
-    { label: 'Energia Stabile',        key: 'Stabile',     icon: '🔋', col: '#2E86DE' },
-    { label: 'Energia in Ricarica',    key: 'Ricarica',    icon: '🪫', col: '#FFB648' },
-    { label: 'Energia in Assestamento',key: 'Assestamento',icon: '🌱', col: '#9A93A8' },
+    { label: 'In crescita',    key: 'Crescita',    icon: '⚡', col: '#17B8A6' },
+    { label: 'Stabile',        key: 'Stabile',     icon: '🔋', col: '#2E86DE' },
+    { label: 'In ricarica',    key: 'Ricarica',    icon: '🪫', col: '#FFB648' },
+    { label: 'In assestamento',key: 'Assestamento',icon: '🌱', col: '#9A93A8' },
   ]
 
   /* ---- Computed: causa ---- */
